@@ -20,7 +20,7 @@ const pratyantarFixedDays: Record<string, number[]> = {
   CHANDRA: [23, 16, 41, 37, 43, 39, 16, 46, 13], 
   MANGAL:  [11, 29, 26, 30, 27, 11, 32, 10, 16], 
   RAHU:    [74, 66, 78, 70, 29, 82, 25, 41, 28], 
-  GURU:    [58, 69, 62, 26, 72, 22, 37, 26, 66], 
+  GURU:    [58, 69, 62, 26, 72, 22, 37, 27, 65], 
   SHANI:   [82, 74, 30, 87, 26, 43, 30, 78, 69], 
   BUDH:    [66, 27, 77, 23, 39, 27, 70, 62, 74], 
   KETU:    [11, 32, 10, 16, 11, 29, 26, 31, 29], 
@@ -262,6 +262,7 @@ export const calculatePreBirthPratyantarDasha = (
   const pratyantarReverseData = [];
   let currentDate = new Date(endDate);
   let usedDays = 0;
+  let lastUsedIndex = fixedDays.length;
 
   // Traverse in reverse (from last to first)
   for (let i = fixedDays.length - 1; i >= 0; i--) {
@@ -279,7 +280,7 @@ export const calculatePreBirthPratyantarDasha = (
     if (tentativeFrom < dobDate) {
       const clippedDays = Math.ceil((currentDate.getTime() - dobDate.getTime()) / (1000 * 60 * 60 * 24));
       console.log(`📍 Clipping to DOB for ${pratyantar.name}: ${clippedDays} days`);
-      
+
       pratyantarReverseData.unshift({
         title: `${mainPlanetName} – ${pratyantar.name}`,
         pratyantar: pratyantar.name,
@@ -288,6 +289,8 @@ export const calculatePreBirthPratyantarDasha = (
         to: formatDate(currentDate),
         planetNumber: getPlanetNumberFromName(pratyantar.name)
       });
+
+      lastUsedIndex = i;
       break;
     }
 
@@ -306,13 +309,28 @@ export const calculatePreBirthPratyantarDasha = (
 
     if (usedDays >= totalDays) {
       console.log('✅ Finished: Reached total Antar Dasha days.');
+      lastUsedIndex = i;
       break;
     }
+  }
+
+  // 🧩 Add placeholder rows above the used part
+  for (let j = lastUsedIndex - 1; j >= 0; j--) {
+    const pratyantar = sequence[j];
+    pratyantarReverseData.unshift({
+      title: `${mainPlanetName} – ${pratyantar.name}`,
+      pratyantar: pratyantar.name,
+      days: 0,
+      from: '–',
+      to: '–',
+      planetNumber: getPlanetNumberFromName(pratyantar.name)
+    });
   }
 
   console.log('✅ Final Pre-Birth Pratyantar Dasha Output:', pratyantarReverseData);
   return pratyantarReverseData;
 };
+
 
 
 
