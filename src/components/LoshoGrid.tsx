@@ -142,7 +142,8 @@ export const LoshoGrid = ({ gridData, userData }) => {
         data: antarDashaData,
         planet: ageIndex === 0 ? tableTitle : planetName,
         startAge: ageIndex === 0 ? 0 : startAge,
-        isPreBirth: ageIndex === 0
+        isPreBirth: ageIndex === 0,
+        dateOfBirth: userData.dateOfBirth
       });
     } catch (error) {
       console.error('Error calculating Antar Dasha:', error);
@@ -344,6 +345,7 @@ export const LoshoGrid = ({ gridData, userData }) => {
           startAge={selectedAntarDasha.startAge}
           onClose={() => setSelectedAntarDasha(null)}
           isPreBirth={selectedAntarDasha.isPreBirth}
+          dateOfBirth={selectedAntarDasha.dateOfBirth}
         />
       )}
     </div>

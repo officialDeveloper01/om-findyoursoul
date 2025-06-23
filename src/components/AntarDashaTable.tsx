@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -20,7 +19,7 @@ interface AntarDashaTableProps {
   startAge: number;
   onClose: () => void;
   isPreBirth?: boolean;
-  dateOfBirth?: string;
+  dateOfBirth: string;  // ✅ MAKE THIS REQUIRED
 }
 
 export const AntarDashaTable = ({ data, planet, startAge, onClose, isPreBirth = false, dateOfBirth }: AntarDashaTableProps) => {
@@ -43,41 +42,45 @@ export const AntarDashaTable = ({ data, planet, startAge, onClose, isPreBirth = 
   };
 
   const handleRowClick = async (index: number, row: AntarDashaRow) => {
-  if (expandedRow === index) {
-    setExpandedRow(null);
-    setPratyantarData([]);
-    return;
-  }
-
-  try {
-    let pratyantar;
-
-    if (isPreBirth && dateOfBirth && index === 0) {
-      // ✅ Use reverse calculation only for 0th row
-      pratyantar = calculatePreBirthPratyantarDasha(
-        row.from,
-        row.to,
-        row.planetNumber,
-        row.antar,
-        dateOfBirth
-      );
-    } else {
-      //  Use normal proportional calculation for all other rows
-      pratyantar = calculatePratyantarDasha(
-        row.from,
-        row.to,
-        row.planetNumber,
-        row.antar
-      );
+    if (expandedRow === index) {
+      setExpandedRow(null);
+      setPratyantarData([]);
+      return;
     }
 
-    setPratyantarData(pratyantar);
-    setExpandedRow(index);
-  } catch (error) {
-    console.error('Error calculating Pratyantar Dasha:', error);
-  }
-};
+    try {
+      let pratyantar;
 
+      console.log('🚀 handleRowClick called:', { index, isPreBirth, dateOfBirth, row });
+
+      if (isPreBirth && dateOfBirth && index === 0) {
+        console.log('✅ Calling calculatePreBirthPratyantarDasha');
+        // ✅ Use reverse calculation only for 0th row
+        pratyantar = calculatePreBirthPratyantarDasha(
+          row.from,
+          row.to,
+          row.planetNumber,
+          row.antar,
+          dateOfBirth
+        );
+      } else {
+        console.log('✅ Calling calculatePratyantarDasha');
+        //  Use normal proportional calculation for all other rows
+        pratyantar = calculatePratyantarDasha(
+          row.from,
+          row.to,
+          row.planetNumber,
+          row.antar
+        );
+      }
+
+      console.log('📊 Pratyantar result:', pratyantar);
+      setPratyantarData(pratyantar);
+      setExpandedRow(index);
+    } catch (error) {
+      console.error('Error calculating Pratyantar Dasha:', error);
+    }
+  };
 
   const handlePratyantarRowClick = async (pratyantarIndex: number, pratyantarRow: any, antarRow: AntarDashaRow) => {
     const rowKey = `${expandedRow}-${pratyantarIndex}`;
@@ -105,12 +108,11 @@ export const AntarDashaTable = ({ data, planet, startAge, onClose, isPreBirth = 
   };
 
   const getTableTitle = () => {
-  if (isPreBirth) {
-    return `Birth Maha Dasha (Age ${planet})`;
-  }
-  return `${planet} Maha Dasha (Age ${startAge - 9} - ${startAge})`;
-};
-
+    if (isPreBirth) {
+      return `Birth Maha Dasha (Age ${planet})`;
+    }
+    return `${planet} Maha Dasha (Age ${startAge - 9} - ${startAge})`;
+  };
 
   return (
     <Card className="mt-6 shadow-lg border border-amber-200 font-calibri">
