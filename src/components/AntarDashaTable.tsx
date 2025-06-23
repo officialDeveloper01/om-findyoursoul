@@ -62,7 +62,7 @@ export const AntarDashaTable = ({ data, planet, startAge, onClose, isPreBirth = 
         dateOfBirth
       );
     } else {
-      // ✅ Use normal proportional calculation for all other rows
+      //  Use normal proportional calculation for all other rows
       pratyantar = calculatePratyantarDasha(
         row.from,
         row.to,
