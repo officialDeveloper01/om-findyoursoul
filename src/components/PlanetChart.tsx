@@ -1,5 +1,5 @@
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 
 const PLANET_MAPPINGS = [
   { letters: "A I J Q Y", number: "1", planet: "SURYA" },
