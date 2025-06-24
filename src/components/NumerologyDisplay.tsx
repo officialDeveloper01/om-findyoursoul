@@ -1,5 +1,6 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { NumerologyFooter } from './NumerologyFooter';
 
 export const NumerologyDisplay = ({ numerologyData, userData }) => {
   if (!numerologyData) return null;
@@ -59,6 +60,9 @@ export const NumerologyDisplay = ({ numerologyData, userData }) => {
           {/* Conductor Series with Responsive Layout */}
         </CardContent>
       </Card>
+      
+      {/* Add the new footer */}
+      <NumerologyFooter />
     </div>
   );
 };
