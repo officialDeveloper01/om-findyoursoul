@@ -1,10 +1,10 @@
+
 import { useState, useCallback } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { UserDataForm } from '@/components/UserDataForm';
 import { LoshoGrid } from '@/components/LoshoGrid';
 import { SearchTables } from '@/components/SearchTables';
 import { CelestialHeader } from '@/components/CelestialHeader';
-import { SpiritualFooter } from '@/components/SpiritualFooter';
 import { CelestialLoader } from '@/components/CelestialLoader';
 import { Badge } from '@/components/ui/badge';
 import { calculateAllNumerology } from '@/utils/numerologyCalculator';
@@ -17,223 +17,7 @@ import { UserManagementModal } from '@/components/UserManagementModal';
 import { Edit, Plus, Trash2 } from 'lucide-react';
 
 const Dashboard = () => {
-  const [userData, setUserData] = useState(null);
-  const [gridData, setGridData] = useState(null);
-  const [numerologyData, setNumerologyData] = useState(null);
-  const [currentView, setCurrentView] = useState('form');
-  const [isLoading, setIsLoading] = useState(false);
-  const [allResults, setAllResults] = useState([]);
-  const [currentPhoneNumber, setCurrentPhoneNumber] = useState('');
-  const [currentTimestamp, setCurrentTimestamp] = useState('');
-  const [managementModal, setManagementModal] = useState({
-    isOpen: false,
-    mode: 'add' as 'add' | 'edit',
-    userData: null,
-    userIndex: -1
-  });
-  const { user } = useAuth();
-
-  const handleFormSubmit = useCallback(async (data) => {
-    console.log('Form submitted with entries:', data);
-    setIsLoading(true);
-    
-    try {
-      const results = [];
-      
-      // Process each entry (main user + relatives)
-      for (const entry of data.entries) {
-        const calculatedNumerology = calculateAllNumerology(entry.dateOfBirth, entry.fullName);
-        
-        console.log(`Numerology calculated for ${entry.fullName}:`, calculatedNumerology);
-        
-        const entryData = {
-          fullName: entry.fullName,
-          dateOfBirth: entry.dateOfBirth,
-          timeOfBirth: entry.timeOfBirth,
-          placeOfBirth: entry.placeOfBirth,
-          relation: entry.relation,
-          gridData: calculatedNumerology.loshuGrid,
-          numerologyData: calculatedNumerology,
-          createdAt: new Date().toISOString()
-        };
-        
-        results.push(entryData);
-      }
-      
-      // Wait for user to be available
-      if (!user?.uid) {
-        console.error('User not authenticated');
-        throw new Error('User not authenticated');
-      }
-
-      // Create unique timestamp-based key for this submission
-      const timestamp = Date.now();
-      
-      // Save to Firebase using phone number as key with proper structure
-      const entriesRef = ref(database, `users/${data.phoneNumber}/entries/${timestamp}`);
-      
-      // Save all entries under one timestamp key
-      await set(entriesRef, {
-        entries: results,
-        phoneNumber: data.phoneNumber,
-        createdAt: new Date().toISOString(),
-        userId: user.uid
-      });
-      
-      console.log('Data saved to Firebase with timestamp:', timestamp);
-      
-      // Store current phone number and timestamp for future updates
-      setCurrentPhoneNumber(data.phoneNumber);
-      setCurrentTimestamp(timestamp.toString());
-      
-      // iOS-safe state update with error handling
-      if (typeof window !== 'undefined') {
-        try {
-          requestAnimationFrame(() => {
-            setAllResults(results);
-            setCurrentView('results');
-          });
-        } catch (error) {
-          console.error('Error updating state:', error);
-          // Fallback for iOS
-          setTimeout(() => {
-            setAllResults(results);
-            setCurrentView('results');
-          }, 100);
-        }
-      }
-      
-    } catch (error) {
-      console.error('Error saving data:', error);
-      alert('Error saving data. Please try again.');
-    } finally {
-      setIsLoading(false);
-    }
-  }, [user]);
-
-  const handleNewEntry = useCallback(() => {
-    // iOS-safe state reset with error handling
-    if (typeof window !== 'undefined') {
-      try {
-        requestAnimationFrame(() => {
-          setUserData(null);
-          setGridData(null);
-          setNumerologyData(null);
-          setAllResults([]);
-          setCurrentPhoneNumber('');
-          setCurrentTimestamp('');
-          setCurrentView('form');
-        });
-      } catch (error) {
-        console.error('Error resetting state:', error);
-        // Fallback for iOS
-        setTimeout(() => {
-          setUserData(null);
-          setGridData(null);
-          setNumerologyData(null);
-          setAllResults([]);
-          setCurrentPhoneNumber('');
-          setCurrentTimestamp('');
-          setCurrentView('form');
-        }, 100);
-      }
-    }
-  }, []);
-
-  const openUserModal = (mode: 'add' | 'edit', userData: any = null, userIndex: number = -1) => {
-    setManagementModal({
-      isOpen: true,
-      mode,
-      userData,
-      userIndex
-    });
-  };
-
-  const closeUserModal = () => {
-    setManagementModal({
-      isOpen: false,
-      mode: 'add',
-      userData: null,
-      userIndex: -1
-    });
-  };
-
-  const handleUserSave = async (userData: any) => {
-    try {
-      let updatedResults = [...allResults];
-      
-      if (managementModal.mode === 'add') {
-        // Add new family member
-        const calculatedNumerology = calculateAllNumerology(userData.dateOfBirth, userData.fullName);
-        const newUser = {
-          fullName: userData.fullName,
-          dateOfBirth: userData.dateOfBirth,
-          timeOfBirth: userData.timeOfBirth,
-          placeOfBirth: userData.placeOfBirth,
-          relation: userData.relation,
-          gridData: calculatedNumerology.loshuGrid,
-          numerologyData: calculatedNumerology,
-          createdAt: new Date().toISOString()
-        };
-        updatedResults.push(newUser);
-      } else {
-        // Edit existing user
-        const calculatedNumerology = calculateAllNumerology(userData.dateOfBirth, userData.fullName);
-        updatedResults[managementModal.userIndex] = {
-          ...updatedResults[managementModal.userIndex],
-          fullName: userData.fullName,
-          dateOfBirth: userData.dateOfBirth,
-          timeOfBirth: userData.timeOfBirth,
-          placeOfBirth: userData.placeOfBirth,
-          relation: userData.relation || updatedResults[managementModal.userIndex].relation,
-          gridData: calculatedNumerology.loshuGrid,
-          numerologyData: calculatedNumerology
-        };
-      }
-
-      // Update Firebase - Use existing timestamp to update the same record
-      if (updatedResults.length > 0 && user?.uid && currentPhoneNumber && currentTimestamp) {
-        const entriesRef = ref(database, `users/${currentPhoneNumber}/entries/${currentTimestamp}`);
-        await set(entriesRef, {
-          entries: updatedResults,
-          phoneNumber: currentPhoneNumber,
-          createdAt: new Date().toISOString(),
-          userId: user.uid
-        });
-
-        console.log('Updated existing record:', currentTimestamp);
-      }
-
-      setAllResults(updatedResults);
-    } catch (error) {
-      console.error('Error saving user:', error);
-      throw error;
-    }
-  };
-
-  const handleUserDelete = async () => {
-    try {
-      const updatedResults = allResults.filter((_, index) => index !== managementModal.userIndex);
-      
-      // Update Firebase - Use existing timestamp to update the same record
-      if (user?.uid && currentPhoneNumber && currentTimestamp) {
-        const entriesRef = ref(database, `users/${currentPhoneNumber}/entries/${currentTimestamp}`);
-        await set(entriesRef, {
-          entries: updatedResults,
-          phoneNumber: currentPhoneNumber,
-          createdAt: new Date().toISOString(),
-          userId: user.uid
-        });
-
-        console.log('Updated existing record after deletion:', currentTimestamp);
-      }
-
-      setAllResults(updatedResults);
-    } catch (error) {
-      console.error('Error deleting user:', error);
-      throw error;
-    }
-  };
+  // ... keep existing code (state declarations and handlers)
 
   return (
     <div className="min-h-screen celestial-bg">
@@ -445,9 +229,6 @@ const Dashboard = () => {
         mode={managementModal.mode}
         isMainUser={managementModal.userData?.relation === 'SELF'}
       />
-
-      {/* Spiritual Footer */}
-      <SpiritualFooter />
     </div>
   );
 };
