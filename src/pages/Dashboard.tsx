@@ -1,10 +1,10 @@
-
 import { useState, useCallback } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { UserDataForm } from '@/components/UserDataForm';
 import { LoshoGrid } from '@/components/LoshoGrid';
 import { SearchTables } from '@/components/SearchTables';
 import { CelestialHeader } from '@/components/CelestialHeader';
+import { SpiritualFooter } from '@/components/SpiritualFooter';
 import { CelestialLoader } from '@/components/CelestialLoader';
 import { Badge } from '@/components/ui/badge';
 import { calculateAllNumerology } from '@/utils/numerologyCalculator';
@@ -16,133 +16,231 @@ import { Sparkles, Users, BarChart3, BookOpen } from 'lucide-react';
 import { UserManagementModal } from '@/components/UserManagementModal';
 import { Edit, Plus, Trash2 } from 'lucide-react';
 
-// Type definition for management modal state
-interface ManagementModalState {
-  isOpen: boolean;
-  mode: 'add' | 'edit';
-  userData: any;
-  userIndex: number;
-}
-
 const Dashboard = () => {
-  const { user } = useAuth();
+  const [userData, setUserData] = useState(null);
+  const [gridData, setGridData] = useState(null);
+  const [numerologyData, setNumerologyData] = useState(null);
   const [currentView, setCurrentView] = useState('form');
-  const [allResults, setAllResults] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [managementModal, setManagementModal] = useState<ManagementModalState>({
+  const [allResults, setAllResults] = useState([]);
+  const [currentPhoneNumber, setCurrentPhoneNumber] = useState('');
+  const [currentTimestamp, setCurrentTimestamp] = useState('');
+  const [managementModal, setManagementModal] = useState({
     isOpen: false,
-    mode: 'add',
+    mode: 'add' as 'add' | 'edit',
     userData: null,
     userIndex: -1
   });
+  const { user } = useAuth();
 
-  const handleFormSubmit = useCallback(async (formData) => {
-    console.log('Form submitted:', formData);
+  const handleFormSubmit = useCallback(async (data) => {
+    console.log('Form submitted with entries:', data);
     setIsLoading(true);
     
     try {
       const results = [];
       
-      for (const entry of formData.entries) {
-        const numerologyData = calculateAllNumerology(
-          entry.fullName,
-          entry.dateOfBirth,
-          entry.timeOfBirth,
-          entry.placeOfBirth
-        );
+      // Process each entry (main user + relatives)
+      for (const entry of data.entries) {
+        const calculatedNumerology = calculateAllNumerology(entry.dateOfBirth, entry.fullName);
         
-        results.push({
-          ...entry,
-          numerologyData,
-          gridData: numerologyData.gridData?.frequencies || {}
-        });
+        console.log(`Numerology calculated for ${entry.fullName}:`, calculatedNumerology);
+        
+        const entryData = {
+          fullName: entry.fullName,
+          dateOfBirth: entry.dateOfBirth,
+          timeOfBirth: entry.timeOfBirth,
+          placeOfBirth: entry.placeOfBirth,
+          relation: entry.relation,
+          gridData: calculatedNumerology.loshuGrid,
+          numerologyData: calculatedNumerology,
+          createdAt: new Date().toISOString()
+        };
+        
+        results.push(entryData);
       }
       
-      // Save to Firebase
-      if (user && formData.phoneNumber) {
-        const dataRef = ref(database, `users/${user.uid}/entries/${formData.phoneNumber}`);
-        await set(dataRef, {
-          phoneNumber: formData.phoneNumber,
-          entries: results,
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString()
-        });
+      // Wait for user to be available
+      if (!user?.uid) {
+        console.error('User not authenticated');
+        throw new Error('User not authenticated');
+      }
+
+      // Create unique timestamp-based key for this submission
+      const timestamp = Date.now();
+      
+      // Save to Firebase using phone number as key with proper structure
+      const entriesRef = ref(database, `users/${data.phoneNumber}/entries/${timestamp}`);
+      
+      // Save all entries under one timestamp key
+      await set(entriesRef, {
+        entries: results,
+        phoneNumber: data.phoneNumber,
+        createdAt: new Date().toISOString(),
+        userId: user.uid
+      });
+      
+      console.log('Data saved to Firebase with timestamp:', timestamp);
+      
+      // Store current phone number and timestamp for future updates
+      setCurrentPhoneNumber(data.phoneNumber);
+      setCurrentTimestamp(timestamp.toString());
+      
+      // iOS-safe state update with error handling
+      if (typeof window !== 'undefined') {
+        try {
+          requestAnimationFrame(() => {
+            setAllResults(results);
+            setCurrentView('results');
+          });
+        } catch (error) {
+          console.error('Error updating state:', error);
+          // Fallback for iOS
+          setTimeout(() => {
+            setAllResults(results);
+            setCurrentView('results');
+          }, 100);
+        }
       }
       
-      setAllResults(results);
-      setCurrentView('results');
     } catch (error) {
-      console.error('Error processing form data:', error);
+      console.error('Error saving data:', error);
+      alert('Error saving data. Please try again.');
     } finally {
       setIsLoading(false);
     }
   }, [user]);
 
   const handleNewEntry = useCallback(() => {
-    setAllResults([]);
-    setCurrentView('form');
+    // iOS-safe state reset with error handling
+    if (typeof window !== 'undefined') {
+      try {
+        requestAnimationFrame(() => {
+          setUserData(null);
+          setGridData(null);
+          setNumerologyData(null);
+          setAllResults([]);
+          setCurrentPhoneNumber('');
+          setCurrentTimestamp('');
+          setCurrentView('form');
+        });
+      } catch (error) {
+        console.error('Error resetting state:', error);
+        // Fallback for iOS
+        setTimeout(() => {
+          setUserData(null);
+          setGridData(null);
+          setNumerologyData(null);
+          setAllResults([]);
+          setCurrentPhoneNumber('');
+          setCurrentTimestamp('');
+          setCurrentView('form');
+        }, 100);
+      }
+    }
   }, []);
 
-  const openUserModal = useCallback((mode, userData = null, userIndex = -1) => {
+  const openUserModal = (mode: 'add' | 'edit', userData: any = null, userIndex: number = -1) => {
     setManagementModal({
       isOpen: true,
       mode,
       userData,
       userIndex
     });
-  }, []);
+  };
 
-  const closeUserModal = useCallback(() => {
+  const closeUserModal = () => {
     setManagementModal({
       isOpen: false,
       mode: 'add',
       userData: null,
       userIndex: -1
     });
-  }, []);
+  };
 
-  const handleUserSave = useCallback(async (userData) => {
-    console.log('Saving user:', userData);
-    
+  const handleUserSave = async (userData: any) => {
     try {
-      const numerologyData = calculateAllNumerology(
-        userData.fullName,
-        userData.dateOfBirth,
-        userData.timeOfBirth,
-        userData.placeOfBirth
-      );
-      
-      const updatedUserData = {
-        ...userData,
-        numerologyData,
-        gridData: numerologyData.gridData?.frequencies || {}
-      };
+      let updatedResults = [...allResults];
       
       if (managementModal.mode === 'add') {
-        setAllResults(prev => [...prev, updatedUserData]);
-      } else if (managementModal.mode === 'edit' && managementModal.userIndex >= 0) {
-        setAllResults(prev => prev.map((result, index) => 
-          index === managementModal.userIndex ? updatedUserData : result
-        ));
+        // Add new family member
+        const calculatedNumerology = calculateAllNumerology(userData.dateOfBirth, userData.fullName);
+        const newUser = {
+          fullName: userData.fullName,
+          dateOfBirth: userData.dateOfBirth,
+          timeOfBirth: userData.timeOfBirth,
+          placeOfBirth: userData.placeOfBirth,
+          relation: userData.relation,
+          gridData: calculatedNumerology.loshuGrid,
+          numerologyData: calculatedNumerology,
+          createdAt: new Date().toISOString()
+        };
+        updatedResults.push(newUser);
+      } else {
+        // Edit existing user
+        const calculatedNumerology = calculateAllNumerology(userData.dateOfBirth, userData.fullName);
+        updatedResults[managementModal.userIndex] = {
+          ...updatedResults[managementModal.userIndex],
+          fullName: userData.fullName,
+          dateOfBirth: userData.dateOfBirth,
+          timeOfBirth: userData.timeOfBirth,
+          placeOfBirth: userData.placeOfBirth,
+          relation: userData.relation || updatedResults[managementModal.userIndex].relation,
+          gridData: calculatedNumerology.loshuGrid,
+          numerologyData: calculatedNumerology
+        };
       }
-      
-      closeUserModal();
-    } catch (error) {
-      console.error('Error saving user data:', error);
-    }
-  }, [managementModal.mode, managementModal.userIndex, closeUserModal]);
 
-  const handleUserDelete = useCallback(() => {
-    if (managementModal.userIndex >= 0) {
-      setAllResults(prev => prev.filter((_, index) => index !== managementModal.userIndex));
-      closeUserModal();
+      // Update Firebase - Use existing timestamp to update the same record
+      if (updatedResults.length > 0 && user?.uid && currentPhoneNumber && currentTimestamp) {
+        const entriesRef = ref(database, `users/${currentPhoneNumber}/entries/${currentTimestamp}`);
+        await set(entriesRef, {
+          entries: updatedResults,
+          phoneNumber: currentPhoneNumber,
+          createdAt: new Date().toISOString(),
+          userId: user.uid
+        });
+
+        console.log('Updated existing record:', currentTimestamp);
+      }
+
+      setAllResults(updatedResults);
+    } catch (error) {
+      console.error('Error saving user:', error);
+      throw error;
     }
-  }, [managementModal.userIndex, closeUserModal]);
+  };
+
+  const handleUserDelete = async () => {
+    try {
+      const updatedResults = allResults.filter((_, index) => index !== managementModal.userIndex);
+      
+      // Update Firebase - Use existing timestamp to update the same record
+      if (user?.uid && currentPhoneNumber && currentTimestamp) {
+        const entriesRef = ref(database, `users/${currentPhoneNumber}/entries/${currentTimestamp}`);
+        await set(entriesRef, {
+          entries: updatedResults,
+          phoneNumber: currentPhoneNumber,
+          createdAt: new Date().toISOString(),
+          userId: user.uid
+        });
+
+        console.log('Updated existing record after deletion:', currentTimestamp);
+      }
+
+      setAllResults(updatedResults);
+    } catch (error) {
+      console.error('Error deleting user:', error);
+      throw error;
+    }
+  };
 
   return (
     <div className="min-h-screen celestial-bg">
       {/* Celestial Header */}
       <CelestialHeader currentView={currentView} setCurrentView={setCurrentView} />
+
+      {/* Hero Section - Only show when on form view */}
 
       {/* Main Content */}
       <main className="relative">
@@ -347,6 +445,9 @@ const Dashboard = () => {
         mode={managementModal.mode}
         isMainUser={managementModal.userData?.relation === 'SELF'}
       />
+
+      {/* Spiritual Footer */}
+      <SpiritualFooter />
     </div>
   );
 };
