@@ -27,6 +27,108 @@ const pratyantarFixedDays: Record<string, number[]> = {
   SHUKRA:  [91, 27, 46, 32, 82, 72, 87, 77, 32] 
 };
 
+export const dainikFixedDays: Record<string, Record<string, number[]>> = {
+  SURYA: {
+    SURYA: [0, 1, 0, 1, 1, 1, 1, 0, 3],
+    CHANDRA: [1, 1, 2, 2, 2, 2, 1, 2, 1],
+    MANGAL: [1, 2, 1, 2, 1, 1, 2, 0, 0],
+    RAHU: [4, 3, 4, 4, 1, 4, 1, 2, 2],
+    GURU: [3, 3, 3, 1, 4, 1, 2, 1, 4],
+    SHANI: [4, 4, 2, 4, 1, 2, 2, 4, 3],
+    BUDH: [3, 1, 4, 1, 2, 1, 3, 3, 5],
+    KETU: [1, 2, 0, 1, 1, 2, 1, 2, 0],
+    SHUKRA: [4, 1, 2, 2, 4, 3, 4, 4, 2]
+  },
+  CHANDRA: {
+    CHANDRA: [2, 1, 3, 3, 4, 3, 1, 4, 2],
+    MANGAL: [1, 2, 2, 3, 2, 1, 3, 1, 1],
+    RAHU: [6, 5, 6, 6, 2, 7, 2, 3, 4],
+    GURU: [5, 6, 5, 2, 6, 2, 3, 2, 6],
+    SHANI: [4, 4, 2, 4, 1, 2, 2, 4, 3],
+    BUDH: [6, 2, 6, 2, 3, 2, 6, 5, 7],
+    KETU: [1, 3, 1, 1, 1, 2, 2, 3, 2],
+    SHUKRA: [8, 2, 4, 3, 7, 6, 7, 7, 2],
+    SURYA: [1, 1, 1, 2, 2, 2, 2, 1, 1]
+  },
+  MANGAL: {
+    MANGAL: [1, 2, 1, 2, 2, 1, 2, 0, 0],
+    RAHU: [4, 4, 5, 4, 2, 5, 1, 2, 2],
+    GURU: [3, 3, 4, 2, 4, 1, 2, 2, 4],
+    SHANI: [5, 4, 2, 5, 1, 3, 2, 5, 3],
+    BUDH: [4, 2, 4, 1, 2, 2, 4, 4, 4],
+    KETU: [1, 2, 1, 1, 1, 2, 1, 2, 0],
+    SHUKRA: [5, 2, 3, 2, 5, 4, 5, 5, 1],
+    SURYA: [0, 1, 1, 2, 1, 2, 1, 1, 1],
+    CHANDRA: [1, 1, 2, 2, 3, 2, 1, 3, 1]
+  },
+  RAHU: {
+    RAHU : [11, 10, 12, 10, 4, 12, 4, 6, 5],
+    GURU: [9, 10, 9, 4, 11, 3, 6, 4, 10],
+    SHANI: [13, 11, 5, 13, 4, 7, 5, 12, 9],
+    BUDH: [10, 4, 12, 3, 6, 4, 11, 9, 11],
+    KETU: [2, 5 ,1, 2, 2, 4, 4, 5, 4],
+    SHUKRA: [14, 4, 7, 5, 12, 11, 13, 12, 5],
+    SURYA: [1, 2, 1, 4, 3, 4, 4, 1, 5],
+    CHANDRA: [3, 2, 6, 5, 6, 6, 2, 7, 4],
+    MANGAL: [2, 4, 4, 5, 4, 2, 5, 1, 2]
+  },
+  GURU: {
+    GURU: [8, 9, 8, 3, 10, 3, 5, 3, 9],
+    SHANI: [11, 10, 4, 11, 3, 6, 4, 10, 10],
+    BUDH: [9, 4, 10, 3, 5, 4, 9, 8, 10],
+    KETU: [2, 4, 1, 2, 2, 4, 3, 4, 4],
+    SHUKRA: [12, 4, 6, 4, 11, 10, 12, 10, 4],
+    SURYA: [1, 2, 1, 3, 3, 3, 3, 1, 5],
+    CHANDRA: [3, 2, 6, 5, 6, 5, 2, 6, 2],
+    MANGAL: [2, 4, 3,  4, 4, 2, 4, 1, 2],
+    RAHU: [10, 9, 10 , 9, 4, 11, 3, 5, 4]
+  },
+  SHANI: {
+    SHANI: [13, 12, 5, 14, 4, 7, 5, 12, 10],
+    BUDH: [10, 4, 12, 4, 6, 4, 11, 10, 13],
+    KETU: [2, 5, 1, 3, 2, 5, 4, 5, 3],
+    SHUKRA: [14, 4, 7, 5, 13, 12, 14, 12, 6],
+    SURYA: [1, 2, 2, 4, 3, 4, 4, 2, 4],
+    CHANDRA: [4, 3, 6, 6, 7, 6, 3, 7, 1],
+    MANGAL: [2, 5, 4, 5, 4, 2, 5, 1, 2],
+    RAHU: [12, 10, 12, 11, 5, 13, 4, 7, 4],
+    GURU: [9, 11, 10, 4, 12, 3, 6, 4, 11]
+  },
+  BUDH: {
+    BUDH: [9, 4, 11, 3, 6, 4, 10, 9, 10],
+    KETU: [2, 4, 1, 2, 2, 4, 4, 4, 4],
+    SHUKRA: [13, 4, 6, 5, 12, 10, 12, 11, 4],
+    SURYA: [1, 2, 1, 3, 3, 4, 3, 1, 5],
+    CHANDRA: [3, 2, 6, 5, 6, 6, 2, 6, 3],
+    MANGAL: [2, 4, 4, 4, 4, 2, 4, 1, 2],
+    RAHU: [11, 9, 11, 10, 4, 12, 3, 6, 4],
+    GURU: [8, 10, 9, 4, 10, 3, 5, 4, 9],
+    SHANI: [12, 10, 4, 12, 4, 6, 4, 11, 11]
+  },
+  KETU: {
+    KETU: [1, 2, 1, 1, 1, 2, 1, 2, 0],
+    SHUKRA: [5, 2, 3, 2, 5, 4, 5, 5, 1],
+    SURYA: [0, 1, 1, 2, 1, 2, 1, 1, 1],
+    CHANDRA: [1, 1, 2, 2, 3, 2, 1, 3, 1],
+    MANGAL: [1, 2, 1, 2, 2, 1, 2, 0, 0],
+    RAHU: [4, 4, 5, 4, 2, 5, 1, 2, 2],
+    GURU: [3, 4, 4, 2, 4, 1, 2, 2, 4],
+    SHANI: [5, 4, 2, 5, 1, 3, 2, 5, 3],
+    BUDH: [4, 2, 4, 1, 2, 2, 4, 4, 4]
+  },
+  SHUKRA: {
+    SHUKRA: [15, 5, 8, 5, 14, 12, 14, 13, 5],
+    SURYA: [1, 2, 2, 4, 4, 4, 4, 2, 4],
+    CHANDRA: [4, 3, 7, 6, 7, 7, 3, 8, 1],
+    MANGAL: [2, 5, 4, 5, 5, 2, 5, 2, 2],
+    RAHU: [12, 11, 13, 12, 5, 14, 4, 7, 4],
+    GURU: [10, 12, 10, 4, 12, 4, 6, 4, 11],
+    SHANI: [14, 12, 5, 14, 4, 7, 5, 13, 13],
+    BUDH: [11, 5, 13, 4, 6, 5, 12, 10, 11],
+    KETU: [2, 5, 2, 3, 2, 5, 4, 5, 4]
+  }
+};
+
 const fixedSequence = [1, 2, 9, 4, 3, 8, 5, 7, 6];
 
 const getPlanetSequence = (startPlanetNumber: number): PlanetData[] => {
@@ -59,7 +161,7 @@ const formatDate = (date: Date): string => {
 
 const parseDate = (dateStr: string): Date => {
   const [yearStr, monthStr, dayStr] = dateStr.split('-');
-  return new Date(Number(yearStr), Number(monthStr) - 1, Number(dayStr));
+    return new Date(Number(yearStr), Number(monthStr) - 1, Number(dayStr));
 };
 
 const parseDateDDMMYYYY = (dateStr: string): Date => {
@@ -330,10 +432,6 @@ export const calculatePreBirthPratyantarDasha = (
   console.log('✅ Final Pre-Birth Pratyantar Dasha Output:', pratyantarReverseData);
   return pratyantarReverseData;
 };
-
-
-
-
 
 export const calculateDainikDasha = (
   fromDateStr: string,
