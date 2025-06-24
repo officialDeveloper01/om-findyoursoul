@@ -433,6 +433,89 @@ export const calculatePreBirthPratyantarDasha = (
   return pratyantarReverseData;
 };
 
+export const calculatePreBirthDainikDasha = (
+  fromDateStr: string,
+  toDateStr: string,
+  mainPlanetName: string,
+  pratyantarPlanetName: string,
+  dateOfBirth: string
+) => {
+  const startDate = parseDateDDMMYYYY(fromDateStr);
+  const endDate = parseDateDDMMYYYY(toDateStr);
+  const dobDate = parseDateDDMMYYYY(dateOfBirth);
+  const totalDays = Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
+
+  const fixedDays = dainikFixedDays[mainPlanetName]?.[pratyantarPlanetName];
+  if (!fixedDays) {
+    console.error(`❌ No fixed Dainik days found for ${mainPlanetName} → ${pratyantarPlanetName}`);
+    return [];
+  }
+
+  const fixedSequence = [1, 2, 9, 4, 3, 8, 5, 7, 6];
+  const sequence = fixedSequence.map(num => getPlanetData(num)); // returns names like SURYA, etc.
+
+  const dainikData = [];
+  let currentDate = new Date(endDate);
+  let usedDays = 0;
+  let lastUsedIndex = fixedSequence.length;
+
+  // Traverse in reverse
+  for (let i = fixedDays.length - 1; i >= 0; i--) {
+    const dainik = sequence[i];
+    let days = fixedDays[i];
+
+    if (usedDays + days > totalDays) {
+      days = totalDays - usedDays;
+    }
+
+    const fromDate = subtractDays(currentDate, days);
+
+    if (fromDate < dobDate) {
+      const clippedDays = Math.ceil((currentDate.getTime() - dobDate.getTime()) / (1000 * 60 * 60 * 24));
+      dainikData.unshift({
+        title: `${mainPlanetName} – ${pratyantarPlanetName} – ${dainik.name}`,
+        dainik: dainik.name,
+        days: clippedDays,
+        from: formatDate(dobDate),
+        to: formatDate(currentDate)
+      });
+      lastUsedIndex = i;
+      break;
+    }
+
+    dainikData.unshift({
+      title: `${mainPlanetName} – ${pratyantarPlanetName} – ${dainik.name}`,
+      dainik: dainik.name,
+      days,
+      from: formatDate(fromDate),
+      to: formatDate(currentDate)
+    });
+
+    currentDate = new Date(fromDate);
+    usedDays += days;
+
+    if (usedDays >= totalDays) {
+      lastUsedIndex = i;
+      break;
+    }
+  }
+
+  // Add dash rows for unused planets
+  for (let j = lastUsedIndex - 1; j >= 0; j--) {
+    const dainik = sequence[j];
+    dainikData.unshift({
+      title: `${mainPlanetName} – ${pratyantarPlanetName} – ${dainik.name}`,
+      dainik: dainik.name,
+      days: 0,
+      from: '–',
+      to: '–'
+    });
+  }
+
+  return dainikData;
+};
+
+
 export const calculateDainikDasha = (
   fromDateStr: string,
   toDateStr: string,
