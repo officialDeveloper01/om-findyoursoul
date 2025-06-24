@@ -16,12 +16,20 @@ import { Sparkles, Users, BarChart3, BookOpen } from 'lucide-react';
 import { UserManagementModal } from '@/components/UserManagementModal';
 import { Edit, Plus, Trash2 } from 'lucide-react';
 
+// Type definition for management modal state
+interface ManagementModalState {
+  isOpen: boolean;
+  mode: 'add' | 'edit';
+  userData: any;
+  userIndex: number;
+}
+
 const Dashboard = () => {
   const { user } = useAuth();
   const [currentView, setCurrentView] = useState('form');
   const [allResults, setAllResults] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [managementModal, setManagementModal] = useState({
+  const [managementModal, setManagementModal] = useState<ManagementModalState>({
     isOpen: false,
     mode: 'add',
     userData: null,
