@@ -561,4 +561,8 @@ export const calculateDainikDasha = (
   return dainikData;
 };
 
+export const getPlanetData = (planetNumber: number): PlanetData => {
+  return planetMap[planetNumber];
+};
+
 export { planetMap };

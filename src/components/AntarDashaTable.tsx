@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
 import { X, ChevronDown, ChevronRight } from 'lucide-react';
-import { calculatePratyantarDasha, calculatePreBirthPratyantarDasha, calculateDainikDasha } from '@/utils/antarDashaCalculator';
+import { calculatePratyantarDasha, calculatePreBirthPratyantarDasha, calculateDainikDasha, calculatePreBirthDainikDasha } from '@/utils/antarDashaCalculator';
 
 interface AntarDashaRow {
   antar: string;
@@ -92,14 +92,40 @@ export const AntarDashaTable = ({ data, planet, startAge, onClose, isPreBirth = 
     }
 
     try {
-      const dainik = calculateDainikDasha(
-        pratyantarRow.from,
-        pratyantarRow.to,
-        pratyantarRow.planetNumber || antarRow.planetNumber,
-        planet,
-        antarRow.antar,
-        pratyantarRow.pratyantar
-      );
+      let dainik;
+
+      console.log('🚀 handlePratyantarRowClick called for Dainik:', { 
+        pratyantarIndex, 
+        isPreBirth, 
+        expandedRow, 
+        dateOfBirth,
+        pratyantarRow,
+        antarRow 
+      });
+
+      // Check if this is a pre-birth calculation and we're in the first antar dasha row
+      if (isPreBirth && dateOfBirth && expandedRow === 0) {
+        console.log('✅ Calling calculatePreBirthDainikDasha');
+        dainik = calculatePreBirthDainikDasha(
+          pratyantarRow.from,
+          pratyantarRow.to,
+          planet, // mainPlanetName
+          pratyantarRow.pratyantar, // pratyantarPlanetName
+          dateOfBirth
+        );
+      } else {
+        console.log('✅ Calling normal calculateDainikDasha');
+        dainik = calculateDainikDasha(
+          pratyantarRow.from,
+          pratyantarRow.to,
+          pratyantarRow.planetNumber || antarRow.planetNumber,
+          planet,
+          antarRow.antar,
+          pratyantarRow.pratyantar
+        );
+      }
+
+      console.log('📊 Dainik result:', dainik);
       setDainikData(dainik);
       setExpandedPratyantarRow(rowKey);
     } catch (error) {
