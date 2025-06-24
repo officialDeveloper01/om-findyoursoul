@@ -82,56 +82,61 @@ export const AntarDashaTable = ({ data, planet, startAge, onClose, isPreBirth = 
     }
   };
 
-  const handlePratyantarRowClick = async (pratyantarIndex: number, pratyantarRow: any, antarRow: AntarDashaRow) => {
-    const rowKey = `${expandedRow}-${pratyantarIndex}`;
+  const handlePratyantarRowClick = async (
+  pratyantarIndex: number,
+  pratyantarRow: any,
+  antarRow: AntarDashaRow
+) => {
+  const rowKey = `${expandedRow}-${pratyantarIndex}`;
 
-    if (expandedPratyantarRow === rowKey) {
-      setExpandedPratyantarRow(null);
-      setDainikData([]);
-      return;
+  if (expandedPratyantarRow === rowKey) {
+    setExpandedPratyantarRow(null);
+    setDainikData([]);
+    return;
+  }
+
+  try {
+    let dainik;
+
+    console.log('🚀 handlePratyantarRowClick called for Dainik:', { 
+      pratyantarIndex, 
+      isPreBirth, 
+      expandedRow, 
+      dateOfBirth,
+      pratyantarRow,
+      antarRow 
+    });
+
+    // ✅ FIXED: Use antarRow.antar for mainPlanetName
+    if (isPreBirth && dateOfBirth && expandedRow === 0) {
+      console.log('✅ Calling calculatePreBirthDainikDasha');
+      dainik = calculatePreBirthDainikDasha(
+        pratyantarRow.from,
+        pratyantarRow.to,
+        antarRow.antar, // ✅ Correct mainPlanetName
+        pratyantarRow.pratyantar,
+        dateOfBirth
+      );
+    } else {
+      console.log('✅ Calling normal calculateDainikDasha');
+      dainik = calculateDainikDasha(
+        pratyantarRow.from,
+        pratyantarRow.to,
+        pratyantarRow.planetNumber || antarRow.planetNumber,
+        antarRow.antar, // ✅ Correct mainPlanetName
+        antarRow.antar,
+        pratyantarRow.pratyantar
+      );
     }
 
-    try {
-      let dainik;
+    console.log('📊 Dainik result:', dainik);
+    setDainikData(dainik);
+    setExpandedPratyantarRow(rowKey);
+  } catch (error) {
+    console.error('Error calculating Dainik Dasha:', error);
+  }
+};
 
-      console.log('🚀 handlePratyantarRowClick called for Dainik:', { 
-        pratyantarIndex, 
-        isPreBirth, 
-        expandedRow, 
-        dateOfBirth,
-        pratyantarRow,
-        antarRow 
-      });
-
-      // Check if this is a pre-birth calculation and we're in the first antar dasha row
-      if (isPreBirth && dateOfBirth && expandedRow === 0) {
-        console.log('✅ Calling calculatePreBirthDainikDasha');
-        dainik = calculatePreBirthDainikDasha(
-          pratyantarRow.from,
-          pratyantarRow.to,
-          planet, // mainPlanetName
-          pratyantarRow.pratyantar, // pratyantarPlanetName
-          dateOfBirth
-        );
-      } else {
-        console.log('✅ Calling normal calculateDainikDasha');
-        dainik = calculateDainikDasha(
-          pratyantarRow.from,
-          pratyantarRow.to,
-          pratyantarRow.planetNumber || antarRow.planetNumber,
-          planet,
-          antarRow.antar,
-          pratyantarRow.pratyantar
-        );
-      }
-
-      console.log('📊 Dainik result:', dainik);
-      setDainikData(dainik);
-      setExpandedPratyantarRow(rowKey);
-    } catch (error) {
-      console.error('Error calculating Dainik Dasha:', error);
-    }
-  };
 
   const getTableTitle = () => {
     if (isPreBirth) {
