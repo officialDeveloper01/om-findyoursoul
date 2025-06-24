@@ -17,14 +17,124 @@ import { UserManagementModal } from '@/components/UserManagementModal';
 import { Edit, Plus, Trash2 } from 'lucide-react';
 
 const Dashboard = () => {
-  // ... keep existing code (state declarations and handlers)
+  const { user } = useAuth();
+  const [currentView, setCurrentView] = useState('form');
+  const [allResults, setAllResults] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [managementModal, setManagementModal] = useState({
+    isOpen: false,
+    mode: 'add',
+    userData: null,
+    userIndex: -1
+  });
+
+  const handleFormSubmit = useCallback(async (formData) => {
+    console.log('Form submitted:', formData);
+    setIsLoading(true);
+    
+    try {
+      const results = [];
+      
+      for (const entry of formData.entries) {
+        const numerologyData = calculateAllNumerology(
+          entry.fullName,
+          entry.dateOfBirth,
+          entry.timeOfBirth,
+          entry.placeOfBirth
+        );
+        
+        results.push({
+          ...entry,
+          numerologyData,
+          gridData: numerologyData.gridData?.frequencies || {}
+        });
+      }
+      
+      // Save to Firebase
+      if (user && formData.phoneNumber) {
+        const dataRef = ref(database, `users/${user.uid}/entries/${formData.phoneNumber}`);
+        await set(dataRef, {
+          phoneNumber: formData.phoneNumber,
+          entries: results,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        });
+      }
+      
+      setAllResults(results);
+      setCurrentView('results');
+    } catch (error) {
+      console.error('Error processing form data:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [user]);
+
+  const handleNewEntry = useCallback(() => {
+    setAllResults([]);
+    setCurrentView('form');
+  }, []);
+
+  const openUserModal = useCallback((mode, userData = null, userIndex = -1) => {
+    setManagementModal({
+      isOpen: true,
+      mode,
+      userData,
+      userIndex
+    });
+  }, []);
+
+  const closeUserModal = useCallback(() => {
+    setManagementModal({
+      isOpen: false,
+      mode: 'add',
+      userData: null,
+      userIndex: -1
+    });
+  }, []);
+
+  const handleUserSave = useCallback(async (userData) => {
+    console.log('Saving user:', userData);
+    
+    try {
+      const numerologyData = calculateAllNumerology(
+        userData.fullName,
+        userData.dateOfBirth,
+        userData.timeOfBirth,
+        userData.placeOfBirth
+      );
+      
+      const updatedUserData = {
+        ...userData,
+        numerologyData,
+        gridData: numerologyData.gridData?.frequencies || {}
+      };
+      
+      if (managementModal.mode === 'add') {
+        setAllResults(prev => [...prev, updatedUserData]);
+      } else if (managementModal.mode === 'edit' && managementModal.userIndex >= 0) {
+        setAllResults(prev => prev.map((result, index) => 
+          index === managementModal.userIndex ? updatedUserData : result
+        ));
+      }
+      
+      closeUserModal();
+    } catch (error) {
+      console.error('Error saving user data:', error);
+    }
+  }, [managementModal.mode, managementModal.userIndex, closeUserModal]);
+
+  const handleUserDelete = useCallback(() => {
+    if (managementModal.userIndex >= 0) {
+      setAllResults(prev => prev.filter((_, index) => index !== managementModal.userIndex));
+      closeUserModal();
+    }
+  }, [managementModal.userIndex, closeUserModal]);
 
   return (
     <div className="min-h-screen celestial-bg">
       {/* Celestial Header */}
       <CelestialHeader currentView={currentView} setCurrentView={setCurrentView} />
-
-      {/* Hero Section - Only show when on form view */}
 
       {/* Main Content */}
       <main className="relative">
