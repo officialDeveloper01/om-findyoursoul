@@ -3,8 +3,15 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
 import { X, ChevronDown, ChevronRight } from 'lucide-react';
-import { calculatePratyantarDasha, calculatePreBirthPratyantarDasha, calculateDainikDasha, calculatePreBirthDainikDasha } from '@/utils/antarDashaCalculator';
+import { 
+  calculatePratyantarDasha, 
+  calculatePreBirthPratyantarDasha, 
+  calculateDainikDasha, 
+  calculatePreBirthDainikDasha 
+} from '@/utils/antarDashaCalculator';
 import dayjs from 'dayjs';
+import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
+dayjs.extend(isSameOrBefore);
 
 interface AntarDashaRow {
   antar: string;
@@ -51,11 +58,22 @@ export const AntarDashaTable = ({ data, planet, startAge, onClose, isPreBirth = 
 
   try {
     let pratyantar;
-    const isPreBirthRow = dateOfBirth && dayjs(row.to, 'DD/MM/YYYY').isBefore(dayjs(dateOfBirth, 'DD/MM/YYYY'));
 
-    console.log('🚀 handleRowClick called:', { index, isPreBirthRow, dateOfBirth, row });
+    const dob = dayjs(dateOfBirth, 'DD/MM/YYYY');
+    const rowEnd = dayjs(row.to, 'DD/MM/YYYY');
+    const isTrulyPreBirth = isPreBirth && dayjs(row.to, 'DD/MM/YYYY').isSameOrBefore(dayjs(dateOfBirth, 'DD/MM/YYYY'));
+ // ensures we're in pre-birth *and* row ends before DOB
 
-    if (isPreBirth && isPreBirthRow) {
+    console.log('🚀 handleRowClick called:', {
+      index,
+      isPreBirth,
+      rowEnd: row.to,
+      dob: dateOfBirth,
+      isTrulyPreBirth,
+      row
+    });
+
+    if (isTrulyPreBirth) {
       console.log('✅ Calling calculatePreBirthPratyantarDasha');
       pratyantar = calculatePreBirthPratyantarDasha(
         row.from,
@@ -78,9 +96,10 @@ export const AntarDashaTable = ({ data, planet, startAge, onClose, isPreBirth = 
     setPratyantarData(pratyantar);
     setExpandedRow(index);
   } catch (error) {
-    console.error('Error calculating Pratyantar Dasha:', error);
+    console.error('❌ Error calculating Pratyantar Dasha:', error);
   }
 };
+
 
 
   const handlePratyantarRowClick = async (

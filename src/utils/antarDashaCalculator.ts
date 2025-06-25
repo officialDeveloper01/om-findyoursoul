@@ -364,25 +364,33 @@ export const calculatePreBirthPratyantarDasha = (
   const pratyantarReverseData = [];
   let currentDate = new Date(endDate);
   let usedDays = 0;
-  let lastUsedIndex = fixedDays.length;
 
-  // Traverse in reverse (from last to first)
+  // Traverse full sequence in reverse
   for (let i = fixedDays.length - 1; i >= 0; i--) {
     const pratyantar = sequence[i];
     let days = fixedDays[i];
-    console.log(`🪐 Processing ${pratyantar.name} with fixed ${days} days`);
+
+    if (usedDays >= totalDays) {
+      // Placeholder if total is already filled
+      pratyantarReverseData.unshift({
+        title: `${mainPlanetName} – ${pratyantar.name}`,
+        pratyantar: pratyantar.name,
+        days: 0,
+        from: '–',
+        to: '–',
+        planetNumber: getPlanetNumberFromName(pratyantar.name)
+      });
+      continue;
+    }
 
     if (usedDays + days > totalDays) {
       days = totalDays - usedDays;
-      console.log(`⚠️ Clipping ${pratyantar.name} to ${days} days to match total`);
     }
 
     const tentativeFrom = subtractDays(currentDate, days);
 
     if (tentativeFrom < dobDate) {
       const clippedDays = Math.ceil((currentDate.getTime() - dobDate.getTime()) / (1000 * 60 * 60 * 24));
-      console.log(`📍 Clipping to DOB for ${pratyantar.name}: ${clippedDays} days`);
-
       pratyantarReverseData.unshift({
         title: `${mainPlanetName} – ${pratyantar.name}`,
         pratyantar: pratyantar.name,
@@ -392,46 +400,27 @@ export const calculatePreBirthPratyantarDasha = (
         planetNumber: getPlanetNumberFromName(pratyantar.name)
       });
 
-      lastUsedIndex = i;
-      break;
+      currentDate = new Date(dobDate);
+      usedDays += clippedDays;
+    } else {
+      pratyantarReverseData.unshift({
+        title: `${mainPlanetName} – ${pratyantar.name}`,
+        pratyantar: pratyantar.name,
+        days,
+        from: formatDate(tentativeFrom),
+        to: formatDate(currentDate),
+        planetNumber: getPlanetNumberFromName(pratyantar.name)
+      });
+
+      currentDate = new Date(tentativeFrom);
+      usedDays += days;
     }
-
-    pratyantarReverseData.unshift({
-      title: `${mainPlanetName} – ${pratyantar.name}`,
-      pratyantar: pratyantar.name,
-      days,
-      from: formatDate(tentativeFrom),
-      to: formatDate(currentDate),
-      planetNumber: getPlanetNumberFromName(pratyantar.name)
-    });
-
-    currentDate = new Date(tentativeFrom);
-    usedDays += days;
-    console.log(`✅ Added ${pratyantar.name}: ${days} days | Total used: ${usedDays}`);
-
-    if (usedDays >= totalDays) {
-      console.log('✅ Finished: Reached total Antar Dasha days.');
-      lastUsedIndex = i;
-      break;
-    }
-  }
-
-  // 🧩 Add placeholder rows above the used part
-  for (let j = lastUsedIndex - 1; j >= 0; j--) {
-    const pratyantar = sequence[j];
-    pratyantarReverseData.unshift({
-      title: `${mainPlanetName} – ${pratyantar.name}`,
-      pratyantar: pratyantar.name,
-      days: 0,
-      from: '–',
-      to: '–',
-      planetNumber: getPlanetNumberFromName(pratyantar.name)
-    });
   }
 
   console.log('✅ Final Pre-Birth Pratyantar Dasha Output:', pratyantarReverseData);
   return pratyantarReverseData;
 };
+
 
 export const calculatePreBirthDainikDasha = (
   fromDateStr: string,
