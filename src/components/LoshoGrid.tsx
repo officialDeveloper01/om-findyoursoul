@@ -1,3 +1,4 @@
+
 import { useState, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -281,58 +282,12 @@ export const LoshoGrid = ({ gridData, userData }) => {
           </CardHeader>
 
           <CardContent className="space-y-6">
-            {/* Lo Shu Grid with Plane Labels */}
+            {/* Lo Shu Grid - Simple 3x3 Grid without labels */}
             <div className="flex justify-center items-center">
-              <div className="relative">
-                {/* Top Labels */}
-                <div className="grid grid-cols-3 gap-4 mb-2 text-center">
-                  <div className="text-xs md:text-sm font-bold text-gray-700 uppercase">THOUGHT<br/>PLANE</div>
-                  <div className="text-xs md:text-sm font-bold text-gray-700 uppercase">WILL POWER<br/>PLANE</div>
-                  <div className="text-xs md:text-sm font-bold text-gray-700 uppercase">ACTION<br/>PLANE</div>
-                </div>
-
-                {/* Main Grid Container with Side Labels */}
-                <div className="flex items-center gap-2 md:gap-4">
-                  {/* Left Side Labels */}
-                  <div className="flex flex-col justify-between h-full">
-                    <div className="text-xs md:text-sm font-bold text-gray-700 uppercase writing-mode-vertical text-center h-16 md:h-20 flex items-center">
-                      <span className="transform -rotate-90 whitespace-nowrap">MENTAL PLANE</span>
-                    </div>
-                    <div className="text-xs md:text-sm font-bold text-gray-700 uppercase writing-mode-vertical text-center h-16 md:h-20 flex items-center">
-                      <span className="transform -rotate-90 whitespace-nowrap">EMOTIONAL PLANE</span>
-                    </div>
-                    <div className="text-xs md:text-sm font-bold text-gray-700 uppercase writing-mode-vertical text-center h-16 md:h-20 flex items-center">
-                      <span className="transform -rotate-90 whitespace-nowrap">PRACTICAL PLANE</span>
-                    </div>
-                  </div>
-
-                  {/* 3x3 Grid */}
-                  <div className="grid grid-cols-3 gap-4 w-full max-w-md mx-auto">
-                    {gridNumbers.flat().map((digit, index) => (
-                      <div key={`grid-cell-${digit}-${index}`}>{renderGridCell(digit)}</div>
-                    ))}
-                  </div>
-
-                  {/* Right Side Labels */}
-                  <div className="flex flex-col justify-between h-full">
-                    <div className="text-xs md:text-sm font-bold text-gray-700 uppercase writing-mode-vertical text-center h-16 md:h-20 flex items-center">
-                      <span className="transform rotate-90 whitespace-nowrap">HEAD</span>
-                    </div>
-                    <div className="text-xs md:text-sm font-bold text-gray-700 uppercase writing-mode-vertical text-center h-16 md:h-20 flex items-center">
-                      <span className="transform rotate-90 whitespace-nowrap">BODY</span>
-                    </div>
-                    <div className="text-xs md:text-sm font-bold text-gray-700 uppercase writing-mode-vertical text-center h-16 md:h-20 flex items-center">
-                      <span className="transform rotate-90 whitespace-nowrap">FEET</span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Bottom Labels */}
-                <div className="grid grid-cols-3 gap-4 mt-2 text-center">
-                  <div className="text-xs md:text-sm font-bold text-gray-700 uppercase">DIAGONAL<br/>GOLDEN<br/>PLANE</div>
-                  <div></div>
-                  <div className="text-xs md:text-sm font-bold text-gray-700 uppercase">DIAGONAL<br/>SILVER<br/>PLANE</div>
-                </div>
+              <div className="grid grid-cols-3 gap-4 w-full max-w-md mx-auto">
+                {gridNumbers.flat().map((digit, index) => (
+                  <div key={`grid-cell-${digit}-${index}`}>{renderGridCell(digit)}</div>
+                ))}
               </div>
             </div>
 
