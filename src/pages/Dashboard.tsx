@@ -4,7 +4,6 @@ import { UserDataForm } from '@/components/UserDataForm';
 import { LoshoGrid } from '@/components/LoshoGrid';
 import { SearchTables } from '@/components/SearchTables';
 import { CelestialHeader } from '@/components/CelestialHeader';
-import { SpiritualFooter } from '@/components/SpiritualFooter';
 import { CelestialLoader } from '@/components/CelestialLoader';
 import { Badge } from '@/components/ui/badge';
 import { calculateAllNumerology } from '@/utils/numerologyCalculator';
@@ -447,7 +446,7 @@ const Dashboard = () => {
       />
 
       {/* Spiritual Footer */}
-      <SpiritualFooter />
+      {/* <SpiritualFooter /> */}
     </div>
   );
 };
