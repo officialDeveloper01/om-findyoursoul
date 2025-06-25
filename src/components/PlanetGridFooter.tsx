@@ -10,36 +10,36 @@ const PlanetGridFooter = () => {
       title: "DIAGONAL GOLDEN PLANE",
       subtitle: "1 - 5 - 9",
       description: "Courage, Energy, Fame",
-      bgColor: "bg-yellow-500",
+      bgColor: "grey",
       textColor: "text-black"
     },
     {
       title: "THOUGHT PLANE",
       subtitle: "4 - 9 - 2", 
       description: "Planning, Reputation, Simplicity",
-      bgColor: "bg-blue-400",
-      textColor: "text-white"
+      bgColor: "grey-",
+      textColor: "text-black"
     },
     {
       title: "WILL POWER PLANE",
       subtitle: "3 - 5 - 7",
       description: "Knowledge, Stability, Research", 
-      bgColor: "bg-green-400",
-      textColor: "text-white"
+      bgColor: "grey",
+      textColor: "text-black"
     },
     {
       title: "ACTION PLANE",
       subtitle: "8 - 1 - 6",
       description: "Wisdom, Success, Luxury",
-      bgColor: "bg-red-400", 
-      textColor: "text-white"
+      bgColor: "grey",
+      textColor: "text-black"
     },
     {
       title: "DIAGONAL SILVER PLANE",
       subtitle: "3 - 5 - 7",
       description: "Family, Mind, Spirituality",
-      bgColor: "bg-gray-400",
-      textColor: "text-white"
+      bgColor: "grey",
+      textColor: "text-black"
     },
     
     // Row 2
@@ -47,8 +47,8 @@ const PlanetGridFooter = () => {
       title: "MENTAL PLANE",
       subtitle: "4 - 3 - 8",
       description: "Wealth, Family, Knowledge",
-      bgColor: "bg-purple-400",
-      textColor: "text-white"
+      bgColor: "grey",
+      textColor: "text-black"
     },
     {
       title: "Wealth & Prosperity",
@@ -87,8 +87,8 @@ const PlanetGridFooter = () => {
       title: "HEAD",
       subtitle: "4 - 9 - 2",
       description: "Mental Activities",
-      bgColor: "bg-orange-400",
-      textColor: "text-white"
+      bgColor: "grey",
+      textColor: "text-black"
     },
     
     // Row 3
@@ -96,8 +96,8 @@ const PlanetGridFooter = () => {
       title: "EMOTIONAL PLANE", 
       subtitle: "9 - 5 - 1",
       description: "Fame, Energy, Career",
-      bgColor: "bg-pink-400",
-      textColor: "text-white"
+      bgColor: "grey",
+      textColor: "text-black"
     },
     {
       title: "Family & Elder Blessing",
@@ -136,8 +136,8 @@ const PlanetGridFooter = () => {
       title: "BODY",
       subtitle: "3 - 5 - 7",
       description: "Physical Activities",
-      bgColor: "bg-teal-400",
-      textColor: "text-white"
+      bgColor: "grey",
+      textColor: "text-black"
     },
     
     // Row 4
@@ -145,8 +145,8 @@ const PlanetGridFooter = () => {
       title: "PRACTICAL PLANE",
       subtitle: "2 - 7 - 6", 
       description: "Marriage, Research, Luxury",
-      bgColor: "bg-indigo-400",
-      textColor: "text-white"
+      bgColor: "grey",
+      textColor: "text-black"
     },
     {
       title: "Wisdom & Knowledge",
@@ -185,9 +185,20 @@ const PlanetGridFooter = () => {
       title: "FEET",
       subtitle: "8 - 1 - 6",
       description: "Ground Level Activities", 
-      bgColor: "bg-cyan-400",
-      textColor: "text-white"
+      bgColor: "grey",
+      textColor: "text-black"
     }
+  ];
+
+  const planetGrid = [
+    { letters: "A I J Q Y", number: "1", planet: "SURYA" },
+    { letters: "B K R", number: "2", planet: "CHANDRA" },
+    { letters: "C G L S", number: "3", planet: "GURU" },
+    { letters: "D M T", number: "4", planet: "RAHU" },
+    { letters: "E H N X", number: "5", planet: "BUDH" },
+    { letters: "U V W", number: "6", planet: "SHUKRA" },
+    { letters: "O Z", number: "7", planet: "KETU" },
+    { letters: "F P", number: "8", planet: "SHANI" }
   ];
 
   return (
@@ -239,6 +250,23 @@ const PlanetGridFooter = () => {
             </div>
           ))}
         </div>
+
+        <div className="space-y-4">
+            <h3 className="text-xl font-semibold text-center text-gray-700 mb-4">
+              Planet & Letter Associations
+            </h3>
+            <div className="grid grid-cols-1 gap-2">
+              {planetGrid.map((planet, index) => (
+                <Card key={index} className="bg-white border-2 border-gray-200 p-3 shadow-lg">
+                  <div className="grid grid-cols-3 gap-4 items-center text-center">
+                    <div className="font-bold text-gray-800">{planet.letters}</div>
+                    <div className="font-bold text-2xl text-amber-600">{planet.number}</div>
+                    <div className="font-bold text-gray-800">{planet.planet}</div>
+                  </div>
+                </Card>
+              ))}
+            </div>
+          </div>
 
         {/* Copyright */}
         <div className="text-center text-gray-500 text-xs md:text-sm border-t border-gray-200 pt-4 md:pt-6">
