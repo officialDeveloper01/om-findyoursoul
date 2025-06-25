@@ -105,7 +105,6 @@ export const LoshoGrid = ({ gridData, userData }) => {
 
   const dashes = calculateDashes();
 
-  // Get numerology data
   const numerologyData = userData.numerologyData || {};
   const conductorSeries = numerologyData.conductorSeries || [];
   const bottomValues = numerologyData.bottomValues || [];
@@ -177,7 +176,6 @@ export const LoshoGrid = ({ gridData, userData }) => {
     );
   };
 
-  // Helper function to calculate age
   const calculateAge = (dateOfBirth: string) => {
     const today = new Date();
     const birth = new Date(dateOfBirth);
@@ -189,7 +187,6 @@ export const LoshoGrid = ({ gridData, userData }) => {
     return age;
   };
 
-  // Helper function to format time with AM/PM
   const formatTime = (timeString: string) => {
     if (!timeString) return '';
     try {
@@ -203,7 +200,6 @@ export const LoshoGrid = ({ gridData, userData }) => {
     }
   };
 
-  // Helper function to format date as DD/MM/YYYY
   const formatDateDDMMYYYY = (dateString: string) => {
     const date = new Date(dateString);
     const day = date.getDate().toString().padStart(2, '0');
@@ -212,7 +208,6 @@ export const LoshoGrid = ({ gridData, userData }) => {
     return `${day}/${month}/${year}`;
   };
 
-  // If showing Plane Analysis, render it instead
   if (showPlaneAnalysis) {
     return (
       <div className="max-w-4xl mx-auto px-4 py-8 font-calibri">
@@ -286,12 +281,58 @@ export const LoshoGrid = ({ gridData, userData }) => {
           </CardHeader>
 
           <CardContent className="space-y-6">
-            {/* Lo Shu Grid */}
+            {/* Lo Shu Grid with Plane Labels */}
             <div className="flex justify-center items-center">
-              <div className="grid grid-cols-3 gap-4 w-full max-w-md mx-auto">
-                {gridNumbers.flat().map((digit, index) => (
-                  <div key={`grid-cell-${digit}-${index}`}>{renderGridCell(digit)}</div>
-                ))}
+              <div className="relative">
+                {/* Top Labels */}
+                <div className="grid grid-cols-3 gap-4 mb-2 text-center">
+                  <div className="text-xs md:text-sm font-bold text-gray-700 uppercase">THOUGHT<br/>PLANE</div>
+                  <div className="text-xs md:text-sm font-bold text-gray-700 uppercase">WILL POWER<br/>PLANE</div>
+                  <div className="text-xs md:text-sm font-bold text-gray-700 uppercase">ACTION<br/>PLANE</div>
+                </div>
+
+                {/* Main Grid Container with Side Labels */}
+                <div className="flex items-center gap-2 md:gap-4">
+                  {/* Left Side Labels */}
+                  <div className="flex flex-col justify-between h-full">
+                    <div className="text-xs md:text-sm font-bold text-gray-700 uppercase writing-mode-vertical text-center h-16 md:h-20 flex items-center">
+                      <span className="transform -rotate-90 whitespace-nowrap">MENTAL PLANE</span>
+                    </div>
+                    <div className="text-xs md:text-sm font-bold text-gray-700 uppercase writing-mode-vertical text-center h-16 md:h-20 flex items-center">
+                      <span className="transform -rotate-90 whitespace-nowrap">EMOTIONAL PLANE</span>
+                    </div>
+                    <div className="text-xs md:text-sm font-bold text-gray-700 uppercase writing-mode-vertical text-center h-16 md:h-20 flex items-center">
+                      <span className="transform -rotate-90 whitespace-nowrap">PRACTICAL PLANE</span>
+                    </div>
+                  </div>
+
+                  {/* 3x3 Grid */}
+                  <div className="grid grid-cols-3 gap-4 w-full max-w-md mx-auto">
+                    {gridNumbers.flat().map((digit, index) => (
+                      <div key={`grid-cell-${digit}-${index}`}>{renderGridCell(digit)}</div>
+                    ))}
+                  </div>
+
+                  {/* Right Side Labels */}
+                  <div className="flex flex-col justify-between h-full">
+                    <div className="text-xs md:text-sm font-bold text-gray-700 uppercase writing-mode-vertical text-center h-16 md:h-20 flex items-center">
+                      <span className="transform rotate-90 whitespace-nowrap">HEAD</span>
+                    </div>
+                    <div className="text-xs md:text-sm font-bold text-gray-700 uppercase writing-mode-vertical text-center h-16 md:h-20 flex items-center">
+                      <span className="transform rotate-90 whitespace-nowrap">BODY</span>
+                    </div>
+                    <div className="text-xs md:text-sm font-bold text-gray-700 uppercase writing-mode-vertical text-center h-16 md:h-20 flex items-center">
+                      <span className="transform rotate-90 whitespace-nowrap">FEET</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Bottom Labels */}
+                <div className="grid grid-cols-3 gap-4 mt-2 text-center">
+                  <div className="text-xs md:text-sm font-bold text-gray-700 uppercase">DIAGONAL<br/>GOLDEN<br/>PLANE</div>
+                  <div></div>
+                  <div className="text-xs md:text-sm font-bold text-gray-700 uppercase">DIAGONAL<br/>SILVER<br/>PLANE</div>
+                </div>
               </div>
             </div>
 
