@@ -59,7 +59,7 @@ const PlanetGridFooter = () => {
       neutral: "Neutral - 3, 5 & 7",
       enemy: "Enemy - 1, 2 & 9",
       bgColor: "bg-amber-700",
-      textColor: "text-white"
+      textColor: "text-black"
     },
     {
       title: "Fame & Reputation",
@@ -70,7 +70,7 @@ const PlanetGridFooter = () => {
       neutral: "Neutral - 6 & 8",
       enemy: "Enemy - 4, 5 & 7",
       bgColor: "bg-orange-500",
-      textColor: "text-white"
+      textColor: "text-black"
     },
     {
       title: "Marriage & Relationship",
@@ -80,8 +80,8 @@ const PlanetGridFooter = () => {
       friends: "Friends - 1 & 5",
       neutral: "Neutral - 9, 3, 6 & 8",
       enemy: "Enemy - 4 & 7",
-      bgColor: "bg-red-500",
-      textColor: "text-white"
+      bgColor: "bg-white",
+      textColor: "text-black"
     },
     {
       title: "HEAD",
@@ -119,7 +119,7 @@ const PlanetGridFooter = () => {
       neutral: "Neutral - 3, 4, 8 & 9",
       enemy: "Enemy - 2 & 7",
       bgColor: "bg-green-500", 
-      textColor: "text-white"
+      textColor: "text-black"
     },
     {
       title: "Children, Research &",
@@ -129,8 +129,8 @@ const PlanetGridFooter = () => {
       friends: "Friends - 1 & 9",
       neutral: "Neutral - 2, 3, 4 & 5",
       enemy: "Enemy - 6 & 8",
-      bgColor: "bg-blue-600",
-      textColor: "text-white"
+      bgColor: "bg-green-200",
+      textColor: "text-black"
     },
     {
       title: "BODY",
@@ -157,7 +157,7 @@ const PlanetGridFooter = () => {
       neutral: "Neutral - 3 & 7",
       enemy: "Enemy - 1, 2 & 9",
       bgColor: "bg-blue-900",
-      textColor: "text-white"
+      textColor: "text-black"
     },
     {
       title: "Career & Success",
@@ -168,7 +168,7 @@ const PlanetGridFooter = () => {
       neutral: "Neutral - 5 & 7", 
       enemy: "Enemy - 4, 6 & 8",
       bgColor: "bg-red-600",
-      textColor: "text-white"
+      textColor: "text-black"
     },
     {
       title: "Luxury & Friends",
@@ -178,8 +178,8 @@ const PlanetGridFooter = () => {
       friends: "Friends - 4, 5 & 8",
       neutral: "Neutral - 3, 7 & 9",
       enemy: "Enemy - 1 & 2",
-      bgColor: "bg-purple-600",
-      textColor: "text-white"
+      bgColor: "bg-white",
+      textColor: "text-black"
     },
     {
       title: "FEET",
@@ -252,21 +252,28 @@ const PlanetGridFooter = () => {
         </div>
 
         <div className="space-y-4">
-            <h3 className="text-xl font-semibold text-center text-gray-700 mb-4">
-              Planet & Letter Associations
-            </h3>
-            <div className="grid grid-cols-1 gap-2">
-              {planetGrid.map((planet, index) => (
-                <Card key={index} className="bg-white border-2 border-gray-200 p-3 shadow-lg">
-                  <div className="grid grid-cols-3 gap-4 items-center text-center">
-                    <div className="font-bold text-gray-800">{planet.letters}</div>
-                    <div className="font-bold text-2xl text-amber-600">{planet.number}</div>
-                    <div className="font-bold text-gray-800">{planet.planet}</div>
-                  </div>
-                </Card>
+          <h3 className="text-xl font-semibold text-center text-gray-700 mb-4">
+            Planet & Letter Associations
+          </h3>
+
+            {/* Responsive 2-column layout (4 cards per column) */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {[0, 1].map((col) => (
+                <div key={col} className="space-y-2">
+                  {planetGrid.slice(col * 4, col * 4 + 4).map((planet, index) => (
+                    <Card key={index} className="bg-white border-2 border-gray-200 p-3 shadow-lg">
+                      <div className="grid grid-cols-3 gap-4 items-center text-center">
+                        <div className="font-bold text-gray-800">{planet.letters}</div>
+                        <div className="font-bold text-2xl text-amber-600">{planet.number}</div>
+                        <div className="font-bold text-gray-800">{planet.planet}</div>
+                      </div>
+                    </Card>
+                  ))}
+                </div>
               ))}
             </div>
           </div>
+
 
         {/* Copyright */}
         <div className="text-center text-gray-500 text-xs md:text-sm border-t border-gray-200 pt-4 md:pt-6">

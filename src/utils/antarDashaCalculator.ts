@@ -441,17 +441,22 @@ export const calculatePreBirthDainikDasha = (
   }
 
   const fixedSequence = [1, 2, 9, 4, 3, 8, 5, 7, 6];
-  const sequence = fixedSequence.map(num => getPlanetData(num)); // returns names like SURYA, etc.
+
+  // 🔁 Rotate the fixed sequence starting from Pratyantar planet
+  const startIndex = fixedSequence.indexOf(getPlanetNumberFromName(pratyantarPlanetName));
+  const rotatedSequence = [...fixedSequence.slice(startIndex), ...fixedSequence.slice(0, startIndex)];
+  const sequence = rotatedSequence.map(num => getPlanetData(num));
+  const rotatedFixedDays = [...fixedDays.slice(startIndex), ...fixedDays.slice(0, startIndex)];
 
   const dainikData = [];
   let currentDate = new Date(endDate);
   let usedDays = 0;
-  let lastUsedIndex = fixedSequence.length;
+  let lastUsedIndex = rotatedSequence.length;
 
   // Traverse in reverse
-  for (let i = fixedDays.length - 1; i >= 0; i--) {
+  for (let i = rotatedFixedDays.length - 1; i >= 0; i--) {
     const dainik = sequence[i];
-    let days = fixedDays[i];
+    let days = rotatedFixedDays[i];
 
     if (usedDays + days > totalDays) {
       days = totalDays - usedDays;
@@ -489,7 +494,7 @@ export const calculatePreBirthDainikDasha = (
     }
   }
 
-  // Add dash rows for unused planets
+  // Add placeholder dash rows for the remaining unused planets
   for (let j = lastUsedIndex - 1; j >= 0; j--) {
     const dainik = sequence[j];
     dainikData.unshift({
@@ -503,6 +508,7 @@ export const calculatePreBirthDainikDasha = (
 
   return dainikData;
 };
+
 
 
 export const calculateDainikDasha = (
