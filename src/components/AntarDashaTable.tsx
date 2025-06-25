@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -9,9 +10,6 @@ import {
   calculateDainikDasha, 
   calculatePreBirthDainikDasha 
 } from '@/utils/antarDashaCalculator';
-import dayjs from 'dayjs';
-import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
-dayjs.extend(isSameOrBefore);
 
 interface AntarDashaRow {
   antar: string;
@@ -27,10 +25,19 @@ interface AntarDashaTableProps {
   startAge: number;
   onClose: () => void;
   isPreBirth?: boolean;
-  dateOfBirth: string;  // ✅ MAKE THIS REQUIRED
+  dateOfBirth: string;
+  conductorIndex: number; // ✅ NEW: Add conductorIndex prop
 }
 
-export const AntarDashaTable = ({ data, planet, startAge, onClose, isPreBirth = false, dateOfBirth }: AntarDashaTableProps) => {
+export const AntarDashaTable = ({ 
+  data, 
+  planet, 
+  startAge, 
+  onClose, 
+  isPreBirth = false, 
+  dateOfBirth,
+  conductorIndex // ✅ NEW: Accept conductorIndex prop
+}: AntarDashaTableProps) => {
   const [expandedRow, setExpandedRow] = useState<number | null>(null);
   const [pratyantarData, setPratyantarData] = useState<any[]>([]);
   const [expandedPratyantarRow, setExpandedPratyantarRow] = useState<string | null>(null);
@@ -50,113 +57,107 @@ export const AntarDashaTable = ({ data, planet, startAge, onClose, isPreBirth = 
   };
 
   const handleRowClick = async (index: number, row: AntarDashaRow) => {
-  if (expandedRow === index) {
-    setExpandedRow(null);
-    setPratyantarData([]);
-    return;
-  }
-
-  try {
-    let pratyantar;
-
-    const dob = dayjs(dateOfBirth, 'DD/MM/YYYY');
-    const rowEnd = dayjs(row.to, 'DD/MM/YYYY');
-    const isTrulyPreBirth = isPreBirth && dayjs(row.to, 'DD/MM/YYYY').isSameOrBefore(dayjs(dateOfBirth, 'DD/MM/YYYY'));
- // ensures we're in pre-birth *and* row ends before DOB
-
-    console.log('🚀 handleRowClick called:', {
-      index,
-      isPreBirth,
-      rowEnd: row.to,
-      dob: dateOfBirth,
-      isTrulyPreBirth,
-      row
-    });
-
-    if (isTrulyPreBirth) {
-      console.log('✅ Calling calculatePreBirthPratyantarDasha');
-      pratyantar = calculatePreBirthPratyantarDasha(
-        row.from,
-        row.to,
-        row.planetNumber,
-        row.antar,
-        dateOfBirth
-      );
-    } else {
-      console.log('✅ Calling calculatePratyantarDasha');
-      pratyantar = calculatePratyantarDasha(
-        row.from,
-        row.to,
-        row.planetNumber,
-        row.antar
-      );
+    if (expandedRow === index) {
+      setExpandedRow(null);
+      setPratyantarData([]);
+      return;
     }
 
-    console.log('📊 Pratyantar result:', pratyantar);
-    setPratyantarData(pratyantar);
-    setExpandedRow(index);
-  } catch (error) {
-    console.error('❌ Error calculating Pratyantar Dasha:', error);
-  }
-};
+    try {
+      let pratyantar;
 
+      console.log('🚀 handleRowClick called:', {
+        index,
+        isPreBirth,
+        conductorIndex,
+        shouldUseReverse: isPreBirth && conductorIndex === 0,
+        row
+      });
 
+      // ✅ FIXED: Use conductorIndex === 0 instead of date comparison
+      if (isPreBirth && conductorIndex === 0) {
+        console.log('✅ Calling calculatePreBirthPratyantarDasha');
+        pratyantar = calculatePreBirthPratyantarDasha(
+          row.from,
+          row.to,
+          row.planetNumber,
+          row.antar,
+          dateOfBirth
+        );
+      } else {
+        console.log('✅ Calling calculatePratyantarDasha');
+        pratyantar = calculatePratyantarDasha(
+          row.from,
+          row.to,
+          row.planetNumber,
+          row.antar
+        );
+      }
+
+      console.log('📊 Pratyantar result:', pratyantar);
+      setPratyantarData(pratyantar);
+      setExpandedRow(index);
+    } catch (error) {
+      console.error('❌ Error calculating Pratyantar Dasha:', error);
+    }
+  };
 
   const handlePratyantarRowClick = async (
-  pratyantarIndex: number,
-  pratyantarRow: any,
-  antarRow: AntarDashaRow
-) => {
-  const rowKey = `${expandedRow}-${pratyantarIndex}`;
+    pratyantarIndex: number,
+    pratyantarRow: any,
+    antarRow: AntarDashaRow
+  ) => {
+    const rowKey = `${expandedRow}-${pratyantarIndex}`;
 
-  if (expandedPratyantarRow === rowKey) {
-    setExpandedPratyantarRow(null);
-    setDainikData([]);
-    return;
-  }
-
-  try {
-    let dainik;
-
-    console.log('🚀 handlePratyantarRowClick called for Dainik:', { 
-      pratyantarIndex, 
-      isPreBirth, 
-      expandedRow, 
-      dateOfBirth,
-      pratyantarRow,
-      antarRow 
-    });
-
-    // ✅ FIXED: Use antarRow.antar for mainPlanetName
-    if (isPreBirth && dateOfBirth && expandedRow === 0) {
-      console.log('✅ Calling calculatePreBirthDainikDasha');
-      dainik = calculatePreBirthDainikDasha(
-        pratyantarRow.from,
-        pratyantarRow.to,
-        antarRow.antar, // ✅ Correct mainPlanetName
-        pratyantarRow.pratyantar,
-        dateOfBirth
-      );
-    } else {
-      console.log('✅ Calling normal calculateDainikDasha');
-      dainik = calculateDainikDasha(
-        pratyantarRow.from,
-        pratyantarRow.to,
-        pratyantarRow.planetNumber || antarRow.planetNumber,
-        antarRow.antar, // ✅ Correct mainPlanetName
-        antarRow.antar,
-        pratyantarRow.pratyantar
-      );
+    if (expandedPratyantarRow === rowKey) {
+      setExpandedPratyantarRow(null);
+      setDainikData([]);
+      return;
     }
 
-    console.log('📊 Dainik result:', dainik);
-    setDainikData(dainik);
-    setExpandedPratyantarRow(rowKey);
-  } catch (error) {
-    console.error('Error calculating Dainik Dasha:', error);
-  }
-};
+    try {
+      let dainik;
 
+      console.log('🚀 handlePratyantarRowClick called for Dainik:', { 
+        pratyantarIndex, 
+        isPreBirth, 
+        conductorIndex,
+        shouldUseReverse: isPreBirth && conductorIndex === 0,
+        expandedRow, 
+        dateOfBirth,
+        pratyantarRow,
+        antarRow 
+      });
+
+      // ✅ FIXED: Use conductorIndex === 0 instead of date comparison
+      if (isPreBirth && conductorIndex === 0) {
+        console.log('✅ Calling calculatePreBirthDainikDasha');
+        dainik = calculatePreBirthDainikDasha(
+          pratyantarRow.from,
+          pratyantarRow.to,
+          antarRow.antar, // ✅ Correct mainPlanetName
+          pratyantarRow.pratyantar,
+          dateOfBirth
+        );
+      } else {
+        console.log('✅ Calling normal calculateDainikDasha');
+        dainik = calculateDainikDasha(
+          pratyantarRow.from,
+          pratyantarRow.to,
+          pratyantarRow.planetNumber || antarRow.planetNumber,
+          antarRow.antar, // ✅ Correct mainPlanetName
+          antarRow.antar,
+          pratyantarRow.pratyantar
+        );
+      }
+
+      console.log('📊 Dainik result:', dainik);
+      setDainikData(dainik);
+      setExpandedPratyantarRow(rowKey);
+    } catch (error) {
+      console.error('Error calculating Dainik Dasha:', error);
+    }
+  };
 
   const getTableTitle = () => {
     if (isPreBirth) {
@@ -217,7 +218,7 @@ export const AntarDashaTable = ({ data, planet, startAge, onClose, isPreBirth = 
                         <div className="p-4">
                           <h4 className="font-bold text-orange-700 mb-3">
                             Pratyantar Dasha – {row.antar}
-                            {isPreBirth && <span className="text-sm ml-2">(Pre-Birth Reverse)</span>}
+                            {isPreBirth && conductorIndex === 0 && <span className="text-sm ml-2">(Pre-Birth Reverse)</span>}
                           </h4>
                           <Table className="compressed-table">
                             <TableHeader>
