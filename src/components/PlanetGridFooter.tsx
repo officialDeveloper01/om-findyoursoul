@@ -6,13 +6,19 @@ const PlanetGridFooter = () => {
   const gridData = [
     // Row 1 - Head
     {
-      plane: "DIAGONAL GOLDEN PLANE",
-      numbers: [],
-      planet: "",
-      planetNumber: "",
-      effects: [],
-      bgColor: "bg-gray-100",
-      textColor: "text-gray-800"
+      plane: "ACTION PLANE",
+      numbers: [2, 7, 6],
+      planet: "CHANDRA",
+      planetNumber: "2",
+      effects: [
+        "Marriage & Relationship",
+        "Directness & Simplicity",
+        "Friends - 1 & 5",
+        "Neutral - 9, 3, 6 & 8",
+        "Enemy - 4 & 7"
+      ],
+      bgColor: "bg-red-500",
+      textColor: "text-white"
     },
     {
       plane: "THOUGHT PLANE",
@@ -43,49 +49,6 @@ const PlanetGridFooter = () => {
       ],
       bgColor: "bg-orange-500",
       textColor: "text-white"
-    },
-    {
-      plane: "ACTION PLANE",
-      numbers: [2, 7, 6],
-      planet: "CHANDRA",
-      planetNumber: "2",
-      effects: [
-        "Marriage & Relationship",
-        "Directness & Simplicity",
-        "Friends - 1 & 5",
-        "Neutral - 9, 3, 6 & 8",
-        "Enemy - 4 & 7"
-      ],
-      bgColor: "bg-red-500",
-      textColor: "text-white"
-    },
-    {
-      plane: "DIAGONAL SILVER PLANE",
-      numbers: [],
-      planet: "",
-      planetNumber: "",
-      effects: [],
-      bgColor: "bg-gray-100",
-      textColor: "text-gray-800"
-    },
-    // Row 2 - Body
-    {
-      plane: "MENTAL PLANE",
-      numbers: [],
-      planet: "",
-      planetNumber: "",
-      effects: [],
-      bgColor: "bg-blue-100",
-      textColor: "text-gray-800"
-    },
-    {
-      plane: "HEAD",
-      numbers: [],
-      planet: "",
-      planetNumber: "",
-      effects: [],
-      bgColor: "bg-gray-200",
-      textColor: "text-gray-800"
     },
     {
       plane: "EMOTIONAL PLANE",
@@ -264,7 +227,7 @@ const PlanetGridFooter = () => {
         </div>
 
         {/* Body Zones Legend */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+        {/* <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
           <Card className="bg-blue-100 p-4 text-center border-2 border-blue-200">
             <div className="font-bold text-blue-800 text-lg mb-2">HEAD</div>
             <div className="text-sm text-blue-700">Mental & Thought Processes</div>
@@ -277,7 +240,7 @@ const PlanetGridFooter = () => {
             <div className="font-bold text-purple-800 text-lg mb-2">FEET</div>
             <div className="text-sm text-purple-700">Practical & Material Aspects</div>
           </Card>
-        </div>
+        </div> */}
 
         {/* Copyright */}
         <div className="text-center text-gray-500 text-sm border-t border-gray-200 pt-6">
