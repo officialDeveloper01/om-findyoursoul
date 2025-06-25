@@ -1,3 +1,4 @@
+
 import { useState, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -143,7 +144,8 @@ export const LoshoGrid = ({ gridData, userData }) => {
         planet: ageIndex === 0 ? tableTitle : planetName,
         startAge: ageIndex === 0 ? 0 : startAge,
         isPreBirth: ageIndex === 0,
-        dateOfBirth: userData.dateOfBirth
+        dateOfBirth: userData.dateOfBirth,
+        conductorIndex: ageIndex // ✅ NEW: Store the conductor index
       });
     } catch (error) {
       console.error('Error calculating Antar Dasha:', error);
@@ -346,6 +348,7 @@ export const LoshoGrid = ({ gridData, userData }) => {
           onClose={() => setSelectedAntarDasha(null)}
           isPreBirth={selectedAntarDasha.isPreBirth}
           dateOfBirth={selectedAntarDasha.dateOfBirth}
+          conductorIndex={selectedAntarDasha.conductorIndex} // ✅ NEW: Pass conductorIndex prop
         />
       )}
     </div>
