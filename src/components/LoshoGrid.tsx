@@ -1,4 +1,3 @@
-
 import { useState, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -145,7 +144,7 @@ export const LoshoGrid = ({ gridData, userData }) => {
         startAge: ageIndex === 0 ? 0 : startAge,
         isPreBirth: ageIndex === 0,
         dateOfBirth: userData.dateOfBirth,
-        conductorIndex: ageIndex // ✅ NEW: Store the conductor index
+        conductorIndex: ageIndex
       });
     } catch (error) {
       console.error('Error calculating Antar Dasha:', error);
@@ -227,116 +226,126 @@ export const LoshoGrid = ({ gridData, userData }) => {
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8 font-calibri">
-      {/* User Info Table - Clean 2-column layout */}
-      <Card className="shadow-xl border border-amber-200 bg-white rounded-xl mb-8">
-        <CardContent className="p-6">
-          <div className="grid grid-cols-2 gap-y-3 gap-x-8">
-            {/* Row 1 */}
-            <div className="flex justify-between items-center">
-              <span className="text-gray-600 font-bold">Name:</span>
-              <span className="font-bold text-gray-800">{userData.fullName}</span>
-            </div>
-            <div className="flex justify-between items-center">
-              <span className="text-gray-600 font-bold">Age:</span>
-              <span className="font-bold text-gray-800">{calculateAge(userData.dateOfBirth)} years</span>
-            </div>
+      {/* User Info Table with celestial background */}
+      <Card className="shadow-xl border border-amber-200/30 bg-white/10 backdrop-blur-md rounded-xl mb-8 celestial-bg relative overflow-hidden">
+        {/* Semi-transparent overlay for readability */}
+        <div className="absolute inset-0 bg-white/85 backdrop-blur-sm"></div>
+        
+        <div className="relative z-10">
+          <CardContent className="p-6">
+            <div className="grid grid-cols-2 gap-y-3 gap-x-8">
+              {/* Row 1 */}
+              <div className="flex justify-between items-center">
+                <span className="text-gray-600 font-bold">Name:</span>
+                <span className="font-bold text-gray-800">{userData.fullName}</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-gray-600 font-bold">Age:</span>
+                <span className="font-bold text-gray-800">{calculateAge(userData.dateOfBirth)} years</span>
+              </div>
 
-            {/* Row 2 */}
-            <div className="flex justify-between items-center">
-              <span className="text-gray-600 font-bold">Name Number:</span>
-              <span className="font-bold text-gray-800">{numerologyData.chaldeanNumbers?.nameNumber || 0}</span>
-            </div>
-            <div className="flex justify-between items-center">
-              <span className="text-gray-600 font-bold">MULAANK:</span>
-              <span className="font-bold text-amber-700">{numerologyData.driver || 0}</span>
-            </div>
+              {/* Row 2 */}
+              <div className="flex justify-between items-center">
+                <span className="text-gray-600 font-bold">Name Number:</span>
+                <span className="font-bold text-gray-800">{numerologyData.chaldeanNumbers?.nameNumber || 0}</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-gray-600 font-bold">MULAANK:</span>
+                <span className="font-bold text-amber-700">{numerologyData.driver || 0}</span>
+              </div>
 
-            {/* Row 3 */}
-            <div className="flex justify-between items-center">
-              <span className="text-gray-600 font-bold">DOB:</span>
-              <span className="font-bold text-gray-800">{formatDateDDMMYYYY(userData.dateOfBirth)}</span>
-            </div>
-            <div className="flex justify-between items-center">
-              <span className="text-gray-600 font-bold">BHAGYAANK:</span>
-              <span className="font-bold text-blue-700">{numerologyData.conductor || 0}</span>
-            </div>
+              {/* Row 3 */}
+              <div className="flex justify-between items-center">
+                <span className="text-gray-600 font-bold">DOB:</span>
+                <span className="font-bold text-gray-800">{formatDateDDMMYYYY(userData.dateOfBirth)}</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-gray-600 font-bold">BHAGYAANK:</span>
+                <span className="font-bold text-blue-700">{numerologyData.conductor || 0}</span>
+              </div>
 
-            {/* Row 4 */}
-            <div className="flex justify-between items-center">
-              <span className="text-gray-600 font-bold">Time:</span>
-              <span className="font-bold text-gray-800 whitespace-nowrap">{formatTime(userData.timeOfBirth)}</span>
+              {/* Row 4 */}
+              <div className="flex justify-between items-center">
+                <span className="text-gray-600 font-bold">Time:</span>
+                <span className="font-bold text-gray-800 whitespace-nowrap">{formatTime(userData.timeOfBirth)}</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-gray-600 font-bold">PERSONALITY NO:</span>
+                <span className="font-bold text-green-700">{numerologyData.chaldeanNumbers?.soulUrgeNumber || 0}</span>
+              </div>
             </div>
-            <div className="flex justify-between items-center">
-              <span className="text-gray-600 font-bold">PERSONALITY NO:</span>
-              <span className="font-bold text-green-700">{numerologyData.chaldeanNumbers?.soulUrgeNumber || 0}</span>
-            </div>
-          </div>
-        </CardContent>
+          </CardContent>
+        </div>
       </Card>
 
-      {/* Main Grid Card */}
-      <Card className="shadow-xl border border-gray-200 bg-white rounded-xl">
-        <CardHeader className="text-center pb-4">
-          <CardTitle className="text-3xl md:text-4xl font-bold text-blue-800">
-            Analysis
-          </CardTitle>
-        </CardHeader>
+      {/* Main Grid Card with celestial background */}
+      <Card className="shadow-xl border border-gray-200/30 bg-white/10 backdrop-blur-md rounded-xl celestial-bg relative overflow-hidden">
+        {/* Semi-transparent overlay for readability */}
+        <div className="absolute inset-0 bg-white/85 backdrop-blur-sm"></div>
+        
+        <div className="relative z-10">
+          <CardHeader className="text-center pb-4">
+            <CardTitle className="text-3xl md:text-4xl font-bold text-blue-800">
+              Analysis
+            </CardTitle>
+          </CardHeader>
 
-        <CardContent className="space-y-6">
-          {/* Lo Shu Grid */}
-          <div className="flex justify-center items-center">
-            <div className="grid grid-cols-3 gap-4 w-full max-w-md mx-auto">
-              {gridNumbers.flat().map((digit, index) => (
-                <div key={`grid-cell-${digit}-${index}`}>{renderGridCell(digit)}</div>
-              ))}
-            </div>
-          </div>
-
-          {/* Plane Analysis Button */}
-          <div className="text-center">
-            <Button 
-              onClick={() => setShowPlaneAnalysis(true)}
-              className="bg-amber-600 hover:bg-amber-700 text-white font-bold px-6 py-2"
-            >
-              Plane Analysis
-            </Button>
-          </div>
-
-          {/* Conductor Series - Clickable for Antar Dasha */}
-          {conductorSeries.length > 0 && bottomValues.length > 0 && (
-            <div className="space-y-3">
-              <div className="text-center">
-                <h3 className="font-bold text-gray-700">Conductor Series (Maha Dasha)</h3>
-                <p className="font-bold text-gray-500">Click on any number below to view Antar Dasha table</p>
+          <CardContent className="space-y-6">
+            {/* Lo Shu Grid */}
+            <div className="flex justify-center items-center">
+              <div className="grid grid-cols-3 gap-4 w-full max-w-md mx-auto">
+                {gridNumbers.flat().map((digit, index) => (
+                  <div key={`grid-cell-${digit}-${index}`}>{renderGridCell(digit)}</div>
+                ))}
               </div>
-              
-              {/* Ages Row - Clean bordered table design */}
-              <div className="border border-gray-300 rounded-lg overflow-hidden">
-                <div className="grid grid-cols-11 bg-gray-100 border-b border-gray-300">
-                  {conductorSeries.map((age, index) => (
-                    <div key={`age-${age}-${index}`} className="text-center font-bold text-gray-700 py-2 px-2 border-r border-gray-300 last:border-r-0">
-                      {age}
-                    </div>
-                  ))}
+            </div>
+
+            {/* Plane Analysis Button */}
+            <div className="text-center">
+              <Button 
+                onClick={() => setShowPlaneAnalysis(true)}
+                className="bg-amber-600 hover:bg-amber-700 text-white font-bold px-6 py-2"
+              >
+                Plane Analysis
+              </Button>
+            </div>
+
+            {/* Conductor Series - Clickable for Antar Dasha */}
+            {conductorSeries.length > 0 && bottomValues.length > 0 && (
+              <div className="space-y-3">
+                <div className="text-center">
+                  <h3 className="font-bold text-gray-700">Conductor Series (Maha Dasha)</h3>
+                  <p className="font-bold text-gray-500">Click on any number below to view Antar Dasha table</p>
                 </div>
                 
-                {/* Conductor Numbers Row - Clickable with borders */}
-                <div className="grid grid-cols-11">
-                  {bottomValues.map((number, index) => (
-                    <button
-                      key={`conductor-${number}-${index}`}
-                      onClick={() => handleConductorClick(number, index)}
-                      className="bg-amber-50 hover:bg-amber-100 py-2 px-2 text-center font-bold text-amber-800 transition-colors cursor-pointer border-r border-gray-300 last:border-r-0"
-                      title={`Click to view ${planetMap[number]?.name || 'Unknown'} Maha Dasha`}
-                    >
-                      {number}
-                    </button>
-                  ))}
+                {/* Ages Row - Clean bordered table design */}
+                <div className="border border-gray-300 rounded-lg overflow-hidden bg-white/90 backdrop-blur-sm">
+                  <div className="grid grid-cols-11 bg-gray-100 border-b border-gray-300">
+                    {conductorSeries.map((age, index) => (
+                      <div key={`age-${age}-${index}`} className="text-center font-bold text-gray-700 py-2 px-2 border-r border-gray-300 last:border-r-0">
+                        {age}
+                      </div>
+                    ))}
+                  </div>
+                  
+                  {/* Conductor Numbers Row - Clickable with borders */}
+                  <div className="grid grid-cols-11">
+                    {bottomValues.map((number, index) => (
+                      <button
+                        key={`conductor-${number}-${index}`}
+                        onClick={() => handleConductorClick(number, index)}
+                        className="bg-amber-50 hover:bg-amber-100 py-2 px-2 text-center font-bold text-amber-800 transition-colors cursor-pointer border-r border-gray-300 last:border-r-0"
+                        title={`Click to view ${planetMap[number]?.name || 'Unknown'} Maha Dasha`}
+                      >
+                        {number}
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
-        </CardContent>
+            )}
+          </CardContent>
+        </div>
       </Card>
 
       {/* Antar Dasha Table */}
@@ -348,7 +357,7 @@ export const LoshoGrid = ({ gridData, userData }) => {
           onClose={() => setSelectedAntarDasha(null)}
           isPreBirth={selectedAntarDasha.isPreBirth}
           dateOfBirth={selectedAntarDasha.dateOfBirth}
-          conductorIndex={selectedAntarDasha.conductorIndex} // ✅ NEW: Pass conductorIndex prop
+          conductorIndex={selectedAntarDasha.conductorIndex}
         />
       )}
     </div>
