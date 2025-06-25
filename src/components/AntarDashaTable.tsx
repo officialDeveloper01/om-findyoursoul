@@ -4,6 +4,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Button } from '@/components/ui/button';
 import { X, ChevronDown, ChevronRight } from 'lucide-react';
 import { calculatePratyantarDasha, calculatePreBirthPratyantarDasha, calculateDainikDasha, calculatePreBirthDainikDasha } from '@/utils/antarDashaCalculator';
+import dayjs from 'dayjs';
 
 interface AntarDashaRow {
   antar: string;
@@ -42,45 +43,45 @@ export const AntarDashaTable = ({ data, planet, startAge, onClose, isPreBirth = 
   };
 
   const handleRowClick = async (index: number, row: AntarDashaRow) => {
-    if (expandedRow === index) {
-      setExpandedRow(null);
-      setPratyantarData([]);
-      return;
+  if (expandedRow === index) {
+    setExpandedRow(null);
+    setPratyantarData([]);
+    return;
+  }
+
+  try {
+    let pratyantar;
+    const isPreBirthRow = dateOfBirth && dayjs(row.to, 'DD/MM/YYYY').isBefore(dayjs(dateOfBirth, 'DD/MM/YYYY'));
+
+    console.log('🚀 handleRowClick called:', { index, isPreBirthRow, dateOfBirth, row });
+
+    if (isPreBirth && isPreBirthRow) {
+      console.log('✅ Calling calculatePreBirthPratyantarDasha');
+      pratyantar = calculatePreBirthPratyantarDasha(
+        row.from,
+        row.to,
+        row.planetNumber,
+        row.antar,
+        dateOfBirth
+      );
+    } else {
+      console.log('✅ Calling calculatePratyantarDasha');
+      pratyantar = calculatePratyantarDasha(
+        row.from,
+        row.to,
+        row.planetNumber,
+        row.antar
+      );
     }
 
-    try {
-      let pratyantar;
+    console.log('📊 Pratyantar result:', pratyantar);
+    setPratyantarData(pratyantar);
+    setExpandedRow(index);
+  } catch (error) {
+    console.error('Error calculating Pratyantar Dasha:', error);
+  }
+};
 
-      console.log('🚀 handleRowClick called:', { index, isPreBirth, dateOfBirth, row });
-
-      if (isPreBirth && dateOfBirth && index === 0) {
-        console.log('✅ Calling calculatePreBirthPratyantarDasha');
-        // ✅ Use reverse calculation only for 0th row
-        pratyantar = calculatePreBirthPratyantarDasha(
-          row.from,
-          row.to,
-          row.planetNumber,
-          row.antar,
-          dateOfBirth
-        );
-      } else {
-        console.log('✅ Calling calculatePratyantarDasha');
-        //  Use normal proportional calculation for all other rows
-        pratyantar = calculatePratyantarDasha(
-          row.from,
-          row.to,
-          row.planetNumber,
-          row.antar
-        );
-      }
-
-      console.log('📊 Pratyantar result:', pratyantar);
-      setPratyantarData(pratyantar);
-      setExpandedRow(index);
-    } catch (error) {
-      console.error('Error calculating Pratyantar Dasha:', error);
-    }
-  };
 
   const handlePratyantarRowClick = async (
   pratyantarIndex: number,

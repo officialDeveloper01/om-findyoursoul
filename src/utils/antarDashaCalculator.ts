@@ -34,7 +34,7 @@ export const dainikFixedDays: Record<string, Record<string, number[]>> = {
     MANGAL: [1, 2, 1, 2, 1, 1, 2, 0, 0],
     RAHU: [4, 3, 4, 4, 1, 4, 1, 2, 2],
     GURU: [3, 3, 3, 1, 4, 1, 2, 1, 4],
-    SHANI: [4, 4, 2, 4, 1, 2, 2, 4, 3],
+    SHANI: [4, 4, 2, 4, 1, 2, 2, 4  , 3],
     BUDH: [3, 1, 4, 1, 2, 1, 3, 3, 5],
     KETU: [1, 2, 0, 1, 1, 2, 1, 2, 0],
     SHUKRA: [4, 1, 2, 2, 4, 3, 4, 4, 2]
