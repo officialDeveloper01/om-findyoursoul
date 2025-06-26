@@ -8,14 +8,14 @@ const PlanetGridFooter = () => {
     // Row 1 (Headers)
     {
       title: "DIAGONAL GOLDEN PLANE",
-      subtitle: "4 - 3 - 8",
+      subtitle: "4 - 5 - 6",
       description: "Courage, Energy, Fame",
       bgColor: "grey",
       textColor: "text-black"
     },
     {
       title: "THOUGHT PLANE",
-      subtitle: "4 - 9 - 2", 
+      subtitle: "4 - 3 - 8", 
       description: "Planning, Reputation, Simplicity",
       bgColor: "grey-",
       textColor: "text-black"
@@ -59,7 +59,7 @@ const PlanetGridFooter = () => {
       neutral: "Neutral - 3, 5 & 7",
       enemy: "Enemy - 1, 2 & 9",
       bgColor: "bg-amber-700",
-      textColor: "text-black"
+      textColor: "text-white"
     },
     {
       title: "Fame & Reputation",
@@ -157,7 +157,7 @@ const PlanetGridFooter = () => {
       neutral: "Neutral - 3 & 7",
       enemy: "Enemy - 1, 2 & 9",
       bgColor: "bg-blue-900",
-      textColor: "text-black"
+      textColor: "text-white"
     },
     {
       title: "Career & Success",
@@ -168,7 +168,7 @@ const PlanetGridFooter = () => {
       neutral: "Neutral - 5 & 7", 
       enemy: "Enemy - 4, 6 & 8",
       bgColor: "bg-red-600",
-      textColor: "text-black"
+      textColor: "text-white"
     },
     {
       title: "Luxury & Friends",
