@@ -6,6 +6,7 @@ import { Label } from '@/components/ui/label';
 import { Calendar, MapPin, User, Phone, Plus } from 'lucide-react';
 import { RelativeForm } from './RelativeForm';
 import { TimeInput } from './TimeInput';
+import { useAuth } from '@/hooks/useAuth';
 
 export const UserDataForm = ({ onSubmit }) => {
   const [mainFormData, setMainFormData] = useState({
@@ -18,6 +19,7 @@ export const UserDataForm = ({ onSubmit }) => {
   
   const [relatives, setRelatives] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { user } = useAuth();
 
   const handleMainInputChange = (field, value) => {
     setMainFormData(prev => ({
@@ -47,6 +49,11 @@ export const UserDataForm = ({ onSubmit }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
+    if (!user) {
+      alert('Please sign in to save records.');
+      return;
+    }
+    
     if (isSubmitting) {
       console.log('Form already submitting, ignoring...');
       return;
@@ -61,16 +68,20 @@ export const UserDataForm = ({ onSubmit }) => {
       rel.relation
     );
 
-    // Prepare entries array with main user first
+    // Prepare entries array with main user first, including user ID
     const entries = [
       {
         ...mainFormData,
-        relation: 'SELF'
+        relation: 'SELF',
+        createdBy: user.uid // Add user ID to each entry
       },
-      ...completeRelatives
+      ...completeRelatives.map(rel => ({
+        ...rel,
+        createdBy: user.uid // Add user ID to each entry
+      }))
     ];
 
-    console.log('Submitting entries:', entries);
+    console.log('Submitting entries with user ID:', entries);
     console.log('Complete relatives found:', completeRelatives.length);
     
     setIsSubmitting(true);
@@ -78,7 +89,8 @@ export const UserDataForm = ({ onSubmit }) => {
     try {
       await onSubmit({
         phoneNumber: mainFormData.mobileNumber,
-        entries
+        entries,
+        userId: user.uid // Include user ID in the submission
       });
     } catch (error) {
       console.error('Error submitting form:', error);
@@ -86,6 +98,25 @@ export const UserDataForm = ({ onSubmit }) => {
       setIsSubmitting(false);
     }
   };
+
+  // Check if user is logged in
+  if (!user) {
+    return (
+      <div className="max-w-2xl mx-auto space-y-6">
+        <Card className="shadow-lg border-0 bg-white/80 backdrop-blur-sm">
+          <CardContent className="text-center py-8">
+            <p className="text-gray-600 mb-4">Please sign in to create records.</p>
+            <Button 
+              onClick={() => window.location.href = '/login'}
+              className="bg-amber-600 hover:bg-amber-700 text-white"
+            >
+              Sign In
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   const isMainFormValid = mainFormData.fullName && mainFormData.dateOfBirth && mainFormData.timeOfBirth && mainFormData.placeOfBirth && mainFormData.mobileNumber;
   const validRelativesCount = relatives.filter(rel => rel.fullName && rel.dateOfBirth && rel.timeOfBirth && rel.placeOfBirth && rel.relation).length;
@@ -186,9 +217,6 @@ export const UserDataForm = ({ onSubmit }) => {
           </div>
         </CardContent>
       </Card>
-
-      {/* Add Family Member Button - Only show if main form is valid */}
-      
 
       {/* Relatives Forms */}
       {relatives.map((relative, index) => (

@@ -4,15 +4,16 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
-import { ref, get, set, remove } from 'firebase/database';
+import { ref, get, set, remove, query, orderByChild, equalTo } from 'firebase/database';
 import { database } from '@/config/firebase';
-import { Phone, Calendar, MapPin, Clock, Edit, Plus, Trash2 } from 'lucide-react';
+import { Phone, Calendar, MapPin, Clock, Edit, Plus, Trash2, User } from 'lucide-react';
 import { LoshoGrid } from './LoshoGrid';
 import { UserManagementModal } from './UserManagementModal';
 import { useAuth } from '@/hooks/useAuth';
 import { calculateAllNumerology } from '@/utils/numerologyCalculator';
 
 export const SearchTables = () => {
+  const [fullName, setFullName] = useState('');
   const [mobileNumber, setMobileNumber] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -29,47 +30,76 @@ export const SearchTables = () => {
 
   const handleSearch = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!user) {
+      alert('Please sign in to search your records.');
+      return;
+    }
+
+    if (!fullName.trim()) {
+      alert('Please enter a name to search.');
+      return;
+    }
+
     setLoading(true);
     setSearched(true);
     setSelectedResults([]);
     
     try {
-      // Search by phone number directly
-      const phoneRef = ref(database, `users/${mobileNumber}`);
-      const snapshot = await get(phoneRef);
+      // Search through all users data
+      const usersRef = ref(database, 'users');
+      const snapshot = await get(usersRef);
       const results: any[] = [];
       
       if (snapshot.exists()) {
-        const phoneData = snapshot.val();
+        const allUsers = snapshot.val();
         
-        if (phoneData.entries) {
-          // Handle new structure with entries
-          Object.keys(phoneData.entries).forEach(entryId => {
-            const entryGroup = phoneData.entries[entryId];
-            if (entryGroup.entries && Array.isArray(entryGroup.entries)) {
-              // Each entryGroup contains multiple family members
-              entryGroup.entries.forEach((entry: any, index: number) => {
-                results.push({
-                  id: `${entryId}-${index}`,
-                  groupId: entryId,
-                  phoneNumber: mobileNumber,
-                  ...entry,
-                  createdAt: entryGroup.createdAt
+        // Iterate through all phone numbers
+        Object.keys(allUsers).forEach(phoneNumber => {
+          const phoneData = allUsers[phoneNumber];
+          
+          if (phoneData.entries) {
+            // Handle new structure with entries
+            Object.keys(phoneData.entries).forEach(entryId => {
+              const entryGroup = phoneData.entries[entryId];
+              
+              // Only include records created by the current user
+              if (entryGroup.userId === user.uid && entryGroup.entries && Array.isArray(entryGroup.entries)) {
+                entryGroup.entries.forEach((entry: any, index: number) => {
+                  // Check if name matches (case insensitive)
+                  const nameMatches = entry.fullName && 
+                    entry.fullName.toLowerCase().includes(fullName.toLowerCase());
+                  
+                  // Check mobile number if provided
+                  const mobileMatches = !mobileNumber.trim() || 
+                    phoneNumber.includes(mobileNumber.trim());
+                  
+                  if (nameMatches && mobileMatches) {
+                    results.push({
+                      id: `${entryId}-${index}`,
+                      groupId: entryId,
+                      phoneNumber: phoneNumber,
+                      ...entry,
+                      createdAt: entryGroup.createdAt,
+                      userId: entryGroup.userId
+                    });
+                  }
                 });
-              });
-            }
-          });
-        }
+              }
+            });
+          }
+        });
       }
       
       console.log('Search results:', results);
       setSearchResults(results);
     } catch (error) {
-      console.error('Error searching tables:', error);
+      console.error('Error searching records:', error);
+      alert('Error searching records. Please try again.');
     } finally {
       setLoading(false);
     }
-  }, [mobileNumber]);
+  }, [fullName, mobileNumber, user]);
 
   const handleShowResults = useCallback((groupId: string) => {
     console.log('Showing results for group:', groupId);
@@ -105,6 +135,25 @@ export const SearchTables = () => {
     });
   }, []);
 
+  // Check if user is logged in
+  if (!user) {
+    return (
+      <div className="max-w-2xl mx-auto space-y-6">
+        <Card className="shadow-lg border-0 bg-white/80 backdrop-blur-sm">
+          <CardContent className="text-center py-8">
+            <p className="text-gray-600 mb-4">Please sign in to search your records.</p>
+            <Button 
+              onClick={() => window.location.href = '/login'}
+              className="bg-amber-600 hover:bg-amber-700 text-white"
+            >
+              Sign In
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
   // CRUD Operations
   const openUserModal = (mode: 'add' | 'edit', userData: any = null, userIndex: number = -1) => {
     setManagementModal({
@@ -125,6 +174,11 @@ export const SearchTables = () => {
   };
 
   const handleUserSave = async (userData: any) => {
+    if (!user) {
+      alert('Please sign in to save records.');
+      return;
+    }
+
     try {
       let updatedResults = [...selectedResults];
       
@@ -158,18 +212,18 @@ export const SearchTables = () => {
         };
       }
 
-      // Update Firebase - Update existing group instead of creating new one
-      if (updatedResults.length > 0 && user?.uid) {
+      // Update Firebase - Update existing group with user ID
+      if (updatedResults.length > 0) {
         const phoneNumber = selectedResults[0]?.phoneNumber || mobileNumber;
         
         if (phoneNumber && currentGroupId) {
-          // Update the existing group entry
+          // Update the existing group entry with user ID
           const entriesRef = ref(database, `users/${phoneNumber}/entries/${currentGroupId}`);
           await set(entriesRef, {
             entries: updatedResults,
             phoneNumber: phoneNumber,
             createdAt: new Date().toISOString(),
-            userId: user.uid
+            userId: user.uid // Ensure user ID is saved
           });
 
           console.log('Updated existing group:', currentGroupId);
@@ -184,42 +238,45 @@ export const SearchTables = () => {
   };
 
   const handleUserDelete = async () => {
+    if (!user) {
+      alert('Please sign in to delete records.');
+      return;
+    }
+
     try {
       const updatedResults = selectedResults.filter((_, index) => index !== managementModal.userIndex);
       
       // Update Firebase - Update existing group instead of creating new one
-      if (user?.uid) {
-        const phoneNumber = selectedResults[0]?.phoneNumber || mobileNumber;
-        
-        if (phoneNumber && currentGroupId) {
-          if (updatedResults.length > 0) {
-            // Update the existing group entry
-            const entriesRef = ref(database, `users/${phoneNumber}/entries/${currentGroupId}`);
-            await set(entriesRef, {
-              entries: updatedResults,
-              phoneNumber: phoneNumber,
-              createdAt: new Date().toISOString(),
-              userId: user.uid
-            });
-          } else {
-            // If no users left, remove the entire group
-            const entriesRef = ref(database, `users/${phoneNumber}/entries/${currentGroupId}`);
-            await remove(entriesRef);
-            
-            // Check if this was the last group for this phone number
-            const phoneRef = ref(database, `users/${phoneNumber}`);
-            const snapshot = await get(phoneRef);
-            if (snapshot.exists()) {
-              const phoneData = snapshot.val();
-              if (!phoneData.entries || Object.keys(phoneData.entries).length === 0) {
-                // Remove the entire phone number entry if no groups left
-                await remove(phoneRef);
-              }
+      const phoneNumber = selectedResults[0]?.phoneNumber || mobileNumber;
+      
+      if (phoneNumber && currentGroupId) {
+        if (updatedResults.length > 0) {
+          // Update the existing group entry
+          const entriesRef = ref(database, `users/${phoneNumber}/entries/${currentGroupId}`);
+          await set(entriesRef, {
+            entries: updatedResults,
+            phoneNumber: phoneNumber,
+            createdAt: new Date().toISOString(),
+            userId: user.uid
+          });
+        } else {
+          // If no users left, remove the entire group
+          const entriesRef = ref(database, `users/${phoneNumber}/entries/${currentGroupId}`);
+          await remove(entriesRef);
+          
+          // Check if this was the last group for this phone number
+          const phoneRef = ref(database, `users/${phoneNumber}`);
+          const snapshot = await get(phoneRef);
+          if (snapshot.exists()) {
+            const phoneData = snapshot.val();
+            if (!phoneData.entries || Object.keys(phoneData.entries).length === 0) {
+              // Remove the entire phone number entry if no groups left
+              await remove(phoneRef);
             }
           }
-
-          console.log('Updated existing group after deletion:', currentGroupId);
         }
+
+        console.log('Updated existing group after deletion:', currentGroupId);
       }
 
       setSelectedResults(updatedResults);
@@ -402,26 +459,42 @@ export const SearchTables = () => {
       <Card className="shadow-lg border-0 bg-white/80 backdrop-blur-sm">
         <CardHeader className="text-center pb-6">
           <CardTitle className="text-2xl font-light text-gray-700">
-            Search by Mobile Number
+            Search Your Records
           </CardTitle>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSearch} className="space-y-4">
             <div className="space-y-2">
+              <Label htmlFor="nameSearch" className="flex items-center gap-2 text-gray-700">
+                <User size={16} />
+                Full Name <span className="text-red-500">*</span>
+              </Label>
+              <Input
+                id="nameSearch"
+                type="text"
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
+                placeholder="Enter full name to search"
+                className="border-gray-200 focus:border-amber-400 focus:ring-amber-400"
+                required
+              />
+            </div>
+            
+            <div className="space-y-2">
               <Label htmlFor="mobileSearch" className="flex items-center gap-2 text-gray-700">
                 <Phone size={16} />
-                Mobile Number
+                Mobile Number <span className="text-gray-400">(Optional)</span>
               </Label>
               <Input
                 id="mobileSearch"
                 type="tel"
                 value={mobileNumber}
                 onChange={(e) => setMobileNumber(e.target.value)}
-                placeholder="+91 XXXXX XXXXX"
+                placeholder="+91 XXXXX XXXXX (optional filter)"
                 className="border-gray-200 focus:border-amber-400 focus:ring-amber-400"
-                required
               />
             </div>
+            
             <Button 
               type="submit" 
               className="w-full bg-amber-600 hover:bg-amber-700 text-white"
@@ -437,13 +510,19 @@ export const SearchTables = () => {
       {searched && (
         <div className="space-y-4">
           <h3 className="text-xl font-light text-gray-700 text-center">
-            Search Results for {mobileNumber}
+            Search Results for "{fullName}"
+            {mobileNumber && ` (${mobileNumber})`}
           </h3>
           
           {Object.keys(groupedResults).length === 0 ? (
             <Card className="text-center py-8">
               <CardContent>
-                <p className="text-gray-500">No records found for this number.</p>
+                <p className="text-gray-500">No records found under this name.</p>
+                {mobileNumber && (
+                  <p className="text-gray-400 text-sm mt-2">
+                    Try searching with just the name, or check if the mobile number is correct.
+                  </p>
+                )}
               </CardContent>
             </Card>
           ) : (
@@ -466,6 +545,10 @@ export const SearchTables = () => {
                             <div className="flex items-center gap-2 text-sm text-gray-600">
                               <Calendar size={14} />
                               <span>{result.dateOfBirth}</span>
+                            </div>
+                            <div className="flex items-center gap-2 text-sm text-gray-600">
+                              <Phone size={14} />
+                              <span>{result.phoneNumber}</span>
                             </div>
                           </div>
                         ))}
