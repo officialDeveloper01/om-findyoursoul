@@ -8,7 +8,7 @@ const PlanetGridFooter = () => {
     // Row 1 (Headers)
     {
       title: "DIAGONAL GOLDEN PLANE",
-      subtitle: "1 - 5 - 9",
+      subtitle: "4 - 3 - 8",
       description: "Courage, Energy, Fame",
       bgColor: "grey",
       textColor: "text-black"
@@ -22,21 +22,21 @@ const PlanetGridFooter = () => {
     },
     {
       title: "WILL POWER PLANE",
-      subtitle: "3 - 5 - 7",
+      subtitle: "9 - 5 - 1",
       description: "Knowledge, Stability, Research", 
       bgColor: "grey",
       textColor: "text-black"
     },
     {
       title: "ACTION PLANE",
-      subtitle: "8 - 1 - 6",
+      subtitle: "2 - 7 - 6",
       description: "Wisdom, Success, Luxury",
       bgColor: "grey",
       textColor: "text-black"
     },
     {
       title: "DIAGONAL SILVER PLANE",
-      subtitle: "3 - 5 - 7",
+      subtitle: "2 - 5 - 8",
       description: "Family, Mind, Spirituality",
       bgColor: "grey",
       textColor: "text-black"
@@ -45,7 +45,7 @@ const PlanetGridFooter = () => {
     // Row 2
     {
       title: "MENTAL PLANE",
-      subtitle: "4 - 3 - 8",
+      subtitle: "4 - 9 - 2",
       description: "Wealth, Family, Knowledge",
       bgColor: "grey",
       textColor: "text-black"
@@ -94,7 +94,7 @@ const PlanetGridFooter = () => {
     // Row 3
     {
       title: "EMOTIONAL PLANE", 
-      subtitle: "9 - 5 - 1",
+      subtitle: "3 - 5 - 7",
       description: "Fame, Energy, Career",
       bgColor: "grey",
       textColor: "text-black"
@@ -143,7 +143,7 @@ const PlanetGridFooter = () => {
     // Row 4
     {
       title: "PRACTICAL PLANE",
-      subtitle: "2 - 7 - 6", 
+      subtitle: "8 - 1 - 6", 
       description: "Marriage, Research, Luxury",
       bgColor: "grey",
       textColor: "text-black"
