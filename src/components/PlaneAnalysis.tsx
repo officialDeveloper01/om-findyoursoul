@@ -6,6 +6,8 @@ import { CheckCircle, XCircle, AlertTriangle } from 'lucide-react';
 interface PlaneAnalysisProps {
   frequencies: Record<number, number>;
   onBack: () => void;
+  userName?: string;
+  dateOfBirth?: string;
 }
 
 const PLANE_DEFINITIONS = [
@@ -22,6 +24,11 @@ const PLANE_DEFINITIONS = [
       "Strong memory and concentration.",
       "Can become inventors, strategists, successful in business or technology."
     ],
+    individualStrengths: {
+      4: "Strong logic, method, and structure. Appears well-organized and systematic.",
+      3: "Excellent communication and creative expression skills.",
+      8: "Strong long-term planning and pressure handling capabilities."
+    },
     ifMissing: {
       4: "Weakness in logic, method, or structure. May appear disorganized.",
       3: "Difficulty expressing thoughts, poor communication.",
@@ -43,6 +50,11 @@ const PLANE_DEFINITIONS = [
       "Can handle pressure, challenges, and responsibilities gracefully.",
       "Excellent in executing plans and maintaining consistency."
     ],
+    individualStrengths: {
+      9: "Strong initiative and ability to start tasks with determination.",
+      5: "Excellent balance and ability to stay centered under pressure.",
+      1: "Strong moral conviction, purpose, and long-term vision."
+    },
     ifMissing: {
       9: "Lacks initiative, struggles to start tasks.",
       5: "Finds it hard to balance or stay centered. Easily overwhelmed.",
@@ -63,6 +75,11 @@ const PLANE_DEFINITIONS = [
       "Attracted to service-based roles – teaching, healing, leadership, counselling, or social work.",
       "Strong sense of duty, can handle work pressure with calmness and grace."
     ],
+    individualStrengths: {
+      2: "Strong emotional intelligence and ability to relate well to others.",
+      7: "Takes responsibility seriously and maintains family/duty focus.",
+      6: "Deep spiritual wisdom, inner reflection, and contemplative nature."
+    },
     ifMissing: {
       2: "Lack of emotional intelligence or inability to relate to others.",
       7: "Avoids responsibility, may neglect family or duty.",
@@ -83,6 +100,11 @@ const PLANE_DEFINITIONS = [
       "Quick learner with capacity for deep understanding and visionary thinking.",
       "Makes fair, calculated decisions and is often a good advisor."
     ],
+    individualStrengths: {
+      4: "Strong discipline and structured thinking approach.",
+      9: "Excellent long-term vision and idealistic thinking.",
+      2: "Strong emotional intelligence and teamwork abilities."
+    },
     ifMissing: {
       4: "Lack of discipline, scattered thinking, struggles with structure.",
       9: "Can't see long-term goals, lacks vision or idealism.",
@@ -104,6 +126,11 @@ const PLANE_DEFINITIONS = [
       "Can comfort, motivate, and lead with compassion.",
       "Often a healer, counsellor, artist, or spiritual guide."
     ],
+    individualStrengths: {
+      3: "Excellent emotional expression and warm communication style.",
+      5: "Strong emotional balance and ability to stay centered.",
+      7: "Deep spiritual calm and emotional depth."
+    },
     ifMissing: {
       3: "Difficulty expressing emotions, may appear cold or reserved.",
       5: "Struggles with emotional balance; gets overwhelmed or detached.",
@@ -124,6 +151,11 @@ const PLANE_DEFINITIONS = [
       "Reliable, practical, and respected for getting things done.",
       "Values both material success and social responsibility."
     ],
+    individualStrengths: {
+      8: "Excellent planning, money management, and authority handling.",
+      1: "Strong initiative, self-drive, and leadership capabilities.",
+      6: "Strong family responsibilities and emotional grounding."
+    },
     ifMissing: {
       8: "Poor in planning, money management, or handling authority.",
       1: "Lack of initiative, self-drive, or leadership.",
@@ -144,6 +176,11 @@ const PLANE_DEFINITIONS = [
       "Can balance personal emotions with professional goals.",
       "Often becomes financially stable over time due to smart decisions."
     ],
+    individualStrengths: {
+      2: "Strong emotional awareness in decision-making and balanced approach.",
+      5: "Excellent adaptability and ability to stay balanced in changing situations.",
+      8: "Strong planning and organization in material and financial matters."
+    },
     ifMissing: {
       2: "Lacks emotional awareness in decision-making; may become too mechanical.",
       5: "Difficulty adapting or staying balanced; can feel stuck or chaotic.",
@@ -165,6 +202,11 @@ const PLANE_DEFINITIONS = [
       "Ideal for careers in management, education, healthcare, administration, or any people-oriented leadership role.",
       "Tends to attract abundance through sincere efforts, ethical work, and emotional maturity."
     ],
+    individualStrengths: {
+      4: "Strong structure, time management, and clear thinking abilities.",
+      5: "Excellent emotional stability and adaptability.",
+      6: "Strong sense of responsibility and emotional connection to family/work."
+    },
     ifMissing: {
       4: "Struggles with structure, time management, and clear thinking.",
       5: "Lacks emotional stability; gets overwhelmed easily or becomes too rigid.",
@@ -174,7 +216,7 @@ const PLANE_DEFINITIONS = [
   }
 ];
 
-export const PlaneAnalysis = ({ frequencies, onBack }: PlaneAnalysisProps) => {
+export const PlaneAnalysis = ({ frequencies, onBack, userName, dateOfBirth }: PlaneAnalysisProps) => {
   const getPlaneStatus = (plane: typeof PLANE_DEFINITIONS[0]) => {
     const presentNumbers = plane.numbers.filter(num => (frequencies[num] || 0) > 0);
     const missingNumbers = plane.numbers.filter(num => (frequencies[num] || 0) === 0);
@@ -226,12 +268,32 @@ export const PlaneAnalysis = ({ frequencies, onBack }: PlaneAnalysisProps) => {
     
     return (
       <div className="space-y-4">
-        {/* If Present - Show when plane is complete */}
+        {/* Show present numbers and their strengths */}
+        {status.presentNumbers.length > 0 && (
+          <div className="space-y-3">
+            <div className="flex items-center gap-2 mb-3">
+              <CheckCircle size={20} className="text-green-600" />
+              <h4 className="font-bold text-green-800 text-lg">Present</h4>
+            </div>
+            <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+              <ul className="space-y-2">
+                {status.presentNumbers.map((presentNum) => (
+                  <li key={`present-${presentNum}`} className="text-gray-700 flex items-start gap-2">
+                    <span className="text-green-600 mt-1 font-bold">{presentNum}:</span>
+                    <span>{plane.individualStrengths[presentNum]}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        )}
+
+        {/* If Complete - Show when plane is complete */}
         {status.isComplete && (
           <div className="space-y-3">
             <div className="flex items-center gap-2 mb-3">
               <CheckCircle size={20} className="text-green-600" />
-              <h4 className="font-bold text-green-800 text-lg">Strengths</h4>
+              <h4 className="font-bold text-green-800 text-lg">Overall Strengths</h4>
             </div>
             <div className="bg-green-50 border border-green-200 rounded-lg p-4">
               <ul className="space-y-2">
@@ -251,7 +313,7 @@ export const PlaneAnalysis = ({ frequencies, onBack }: PlaneAnalysisProps) => {
           <div className="space-y-3">
             <div className="flex items-center gap-2 mb-3">
               <AlertTriangle size={20} className="text-amber-600" />
-              <h4 className="font-bold text-amber-800 text-lg">Areas for Improvement</h4>
+              <h4 className="font-bold text-amber-800 text-lg">Missing</h4>
             </div>
             
             {/* Individual missing number points */}
@@ -295,6 +357,21 @@ export const PlaneAnalysis = ({ frequencies, onBack }: PlaneAnalysisProps) => {
           ← Back to Analysis
         </Button>
       </div>
+
+      {/* User Info Header */}
+      {(userName || dateOfBirth) && (
+        <Card className="shadow-xl border border-amber-200 bg-white rounded-xl mb-8">
+          <CardHeader className="text-center pb-4">
+            <CardTitle className="text-2xl font-bold text-blue-800">
+              Plane Analysis Report
+            </CardTitle>
+            <div className="text-lg text-gray-700 space-y-1">
+              {userName && <div className="font-semibold">{userName}</div>}
+              {dateOfBirth && <div className="text-gray-600">Date of Birth: {dateOfBirth}</div>}
+            </div>
+          </CardHeader>
+        </Card>
+      )}
 
       {/* Lo Shu Grid for Reference */}
       <Card className="shadow-xl border border-amber-200 bg-white rounded-xl mb-8">
