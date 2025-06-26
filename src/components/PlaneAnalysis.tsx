@@ -188,6 +188,39 @@ export const PlaneAnalysis = ({ frequencies, onBack }: PlaneAnalysisProps) => {
     };
   };
 
+  // Sort planes: complete first, then partially missing, then completely missing
+  const sortedPlanes = [...PLANE_DEFINITIONS].sort((a, b) => {
+    const statusA = getPlaneStatus(a);
+    const statusB = getPlaneStatus(b);
+    
+    if (statusA.isComplete && !statusB.isComplete) return -1;
+    if (!statusA.isComplete && statusB.isComplete) return 1;
+    if (statusA.isPartiallyMissing && statusB.isCompletelyMissing) return -1;
+    if (statusA.isCompletelyMissing && statusB.isPartiallyMissing) return 1;
+    
+    return 0;
+  });
+
+  const renderGridCell = (digit: number) => {
+    const count = frequencies[digit] || 0;
+
+    return (
+      <div className="relative aspect-square bg-white border border-gray-300 rounded-lg flex items-center justify-center text-center p-2">
+        {count > 0 && (
+          <div className="text-2xl md:text-3xl font-bold text-gray-800 flex flex-wrap justify-center">
+            {String(digit).repeat(count)}
+          </div>
+        )}
+      </div>
+    );
+  };
+
+  const gridNumbers = [
+    [4, 9, 2],
+    [3, 5, 7],
+    [8, 1, 6],
+  ];
+
   const renderPlaneContent = (plane: typeof PLANE_DEFINITIONS[0]) => {
     const status = getPlaneStatus(plane);
     
@@ -252,72 +285,95 @@ export const PlaneAnalysis = ({ frequencies, onBack }: PlaneAnalysisProps) => {
   };
 
   return (
-    <Card 
-      className="shadow-xl border border-amber-200 bg-white rounded-xl font-calibri relative overflow-hidden"
-      style={{
-        backgroundImage: `url(/lovable-uploads/b4d05a52-4d67-4119-a39b-5f854008adab.png)`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat'
-      }}
-    >
-      {/* Semi-transparent overlay for readability */}
-      <div className="absolute inset-0 bg-white/90 backdrop-blur-sm"></div>
-      
-      <div className="relative z-10">
-        <CardHeader className="pb-4">
-          <div className="flex justify-between items-center mb-4">
-            <Button 
-              onClick={onBack}
-              className="bg-amber-600 hover:bg-amber-700 text-white font-bold px-6 py-2"
-            >
-              ← Back to Analysis
-            </Button>
-          </div>
-          <CardTitle className="text-3xl font-bold text-amber-700 text-center">
-            Detailed Plane Analysis
+    <div className="max-w-4xl mx-auto px-4 py-8 font-calibri">
+      {/* Back Button */}
+      <div className="mb-6">
+        <Button 
+          onClick={onBack}
+          className="bg-amber-600 hover:bg-amber-700 text-white font-bold px-6 py-2"
+        >
+          ← Back to Analysis
+        </Button>
+      </div>
+
+      {/* Lo Shu Grid for Reference */}
+      <Card className="shadow-xl border border-amber-200 bg-white rounded-xl mb-8">
+        <CardHeader className="text-center pb-4">
+          <CardTitle className="text-2xl font-bold text-blue-800">
+            Lo Shu Grid Reference
           </CardTitle>
         </CardHeader>
-        
-        <CardContent className="space-y-8">
-          {/* Render all planes */}
-          {PLANE_DEFINITIONS.map((plane, index) => {
-            const status = getPlaneStatus(plane);
-            
-            return (
-              <div 
-                key={`plane-${index}`} 
-                className="border border-gray-300 rounded-lg p-6 shadow-sm bg-white/80 backdrop-blur-sm"
-              >
-                <div className="flex items-center gap-3 mb-4">
-                  {status.isComplete ? (
-                    <CheckCircle size={24} className="text-green-600" />
-                  ) : status.isPartiallyMissing ? (
-                    <AlertTriangle size={24} className="text-amber-600" />
-                  ) : (
-                    <XCircle size={24} className="text-red-600" />
-                  )}
-                  <h3 className="text-xl font-bold text-gray-800">{plane.name}</h3>
-                  <div className="text-sm text-gray-500">
-                    ({plane.numbers.join(' – ')})
-                  </div>
-                </div>
-                
-                {renderPlaneContent(plane)}
-              </div>
-            );
-          })}
-          
-          <div className="text-center pt-4">
-            <Button 
-              onClick={onBack}
-              className="bg-amber-600 hover:bg-amber-700 text-white font-bold px-6 py-2"
-            >
-              Back to Analysis
-            </Button>
+        <CardContent>
+          <div className="flex justify-center items-center">
+            <div className="grid grid-cols-3 gap-2 w-full max-w-xs mx-auto">
+              {gridNumbers.flat().map((digit, index) => (
+                <div key={`grid-cell-${digit}-${index}`}>{renderGridCell(digit)}</div>
+              ))}
+            </div>
           </div>
         </CardContent>
-      </div>
-    </Card>
+      </Card>
+
+      {/* Plane Analysis */}
+      <Card 
+        className="shadow-xl border border-amber-200 bg-white rounded-xl font-calibri relative overflow-hidden"
+        style={{
+          backgroundImage: `url(/lovable-uploads/b4d05a52-4d67-4119-a39b-5f854008adab.png)`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat'
+        }}
+      >
+        {/* Semi-transparent overlay for readability */}
+        <div className="absolute inset-0 bg-white/90 backdrop-blur-sm"></div>
+        
+        <div className="relative z-10">
+          <CardHeader className="pb-4">
+            <CardTitle className="text-3xl font-bold text-amber-700 text-center">
+              Detailed Plane Analysis
+            </CardTitle>
+          </CardHeader>
+          
+          <CardContent className="space-y-8">
+            {/* Render sorted planes */}
+            {sortedPlanes.map((plane, index) => {
+              const status = getPlaneStatus(plane);
+              
+              return (
+                <div 
+                  key={`plane-${index}`} 
+                  className="border border-gray-300 rounded-lg p-6 shadow-sm bg-white/80 backdrop-blur-sm"
+                >
+                  <div className="flex items-center gap-3 mb-4">
+                    {status.isComplete ? (
+                      <CheckCircle size={24} className="text-green-600" />
+                    ) : status.isPartiallyMissing ? (
+                      <AlertTriangle size={24} className="text-amber-600" />
+                    ) : (
+                      <XCircle size={24} className="text-red-600" />
+                    )}
+                    <h3 className="text-xl font-bold text-gray-800">{plane.name}</h3>
+                    <div className="text-sm text-gray-500">
+                      ({plane.numbers.join(' – ')})
+                    </div>
+                  </div>
+                  
+                  {renderPlaneContent(plane)}
+                </div>
+              );
+            })}
+            
+            <div className="text-center pt-4">
+              <Button 
+                onClick={onBack}
+                className="bg-amber-600 hover:bg-amber-700 text-white font-bold px-6 py-2"
+              >
+                Back to Analysis
+              </Button>
+            </div>
+          </CardContent>
+        </div>
+      </Card>
+    </div>
   );
 };
