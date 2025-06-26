@@ -9,7 +9,7 @@ const BorderedTable = React.forwardRef<
   <div className="relative w-full overflow-auto">
     <table
       ref={ref}
-      className={cn("w-full caption-bottom text-sm border-collapse border-2 border-gray-300", className)}
+      className={cn("w-full caption-bottom text-sm border-collapse border-2 border-gray-400", className)}
       {...props}
     />
   </div>
@@ -20,7 +20,7 @@ const BorderedTableHeader = React.forwardRef<
   HTMLTableSectionElement,
   React.HTMLAttributes<HTMLTableSectionElement>
 >(({ className, ...props }, ref) => (
-  <thead ref={ref} className={cn("bg-gray-50 border-b-2 border-gray-300", className)} {...props} />
+  <thead ref={ref} className={cn("bg-gray-50 border-b-2 border-gray-400", className)} {...props} />
 ))
 BorderedTableHeader.displayName = "BorderedTableHeader"
 
@@ -30,7 +30,7 @@ const BorderedTableBody = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <tbody
     ref={ref}
-    className={cn("divide-y divide-gray-300", className)}
+    className={cn("divide-y-2 divide-gray-400", className)}
     {...props}
   />
 ))
@@ -43,7 +43,7 @@ const BorderedTableFooter = React.forwardRef<
   <tfoot
     ref={ref}
     className={cn(
-      "border-t-2 border-gray-300 bg-muted/50 font-medium",
+      "border-t-2 border-gray-400 bg-muted/50 font-medium",
       className
     )}
     {...props}
@@ -58,7 +58,7 @@ const BorderedTableRow = React.forwardRef<
   <tr
     ref={ref}
     className={cn(
-      "border-b border-gray-300 transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted divide-x divide-gray-300",
+      "border-b-2 border-gray-400 transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted divide-x-2 divide-gray-400",
       className
     )}
     {...props}
@@ -73,7 +73,7 @@ const BorderedTableHead = React.forwardRef<
   <th
     ref={ref}
     className={cn(
-      "h-12 px-4 text-left align-middle font-medium text-muted-foreground border-r border-gray-300 last:border-r-0",
+      "h-12 px-4 text-left align-middle font-medium text-muted-foreground border-r-2 border-gray-400 last:border-r-0",
       className
     )}
     {...props}
@@ -87,7 +87,7 @@ const BorderedTableCell = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <td
     ref={ref}
-    className={cn("p-4 align-middle border-r border-gray-300 last:border-r-0", className)}
+    className={cn("p-4 align-middle border-r-2 border-gray-400 last:border-r-0", className)}
     {...props}
   />
 ))

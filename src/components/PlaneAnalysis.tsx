@@ -345,6 +345,15 @@ export const PlaneAnalysis = ({ frequencies, onBack, userName, dateOfBirth }: Pl
     );
   };
 
+  // Helper function to format date
+  const formatDateDDMMYYYY = (dateString: string) => {
+    const date = new Date(dateString);
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  };
+
   return (
     <div className="max-w-4xl mx-auto px-4 py-8 font-calibri">
       {/* Back Button */}
@@ -357,29 +366,29 @@ export const PlaneAnalysis = ({ frequencies, onBack, userName, dateOfBirth }: Pl
         </Button>
       </div>
 
-      {/* User Info Header */}
-      <Card className="shadow-xl border border-amber-200 bg-white rounded-xl mb-8">
-        <CardHeader className="text-center pb-4">
+      {/* User Info Header with stronger borders */}
+      <Card className="shadow-xl border-2 border-gray-400 bg-white rounded-xl mb-8">
+        <CardHeader className="text-center pb-4 border-b-2 border-gray-300">
           <CardTitle className="text-2xl font-bold text-blue-800">
             Plane Analysis Report
           </CardTitle>
-          <div className="text-lg text-gray-700 space-y-1">
-            {userName && <div className="font-semibold">{userName}</div>}
-            {dateOfBirth && <div className="text-gray-600">Date of Birth: {dateOfBirth}</div>}
+          <div className="text-lg text-gray-700 space-y-1 mt-4">
+            {userName && <div className="font-semibold text-xl">{userName}</div>}
+            {dateOfBirth && <div className="text-gray-600">Date of Birth: {formatDateDDMMYYYY(dateOfBirth)}</div>}
           </div>
         </CardHeader>
       </Card>
 
-      {/* Lo Shu Grid for Reference */}
-      <Card className="shadow-xl border border-amber-200 bg-white rounded-xl mb-8">
-        <CardHeader className="text-center pb-4">
+      {/* Lo Shu Grid for Reference with stronger borders */}
+      <Card className="shadow-xl border-2 border-gray-400 bg-white rounded-xl mb-8">
+        <CardHeader className="text-center pb-4 border-b-2 border-gray-300">
           <CardTitle className="text-2xl font-bold text-blue-800">
             Lo Shu Grid Reference
           </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex justify-center items-center">
-            <div className="grid grid-cols-3 gap-2 w-full max-w-xs mx-auto">
+            <div className="grid grid-cols-3 gap-2 w-full max-w-xs mx-auto border-2 border-gray-400 p-2 rounded-lg bg-gray-50">
               {gridNumbers.flat().map((digit, index) => (
                 <div key={`grid-cell-${digit}-${index}`}>{renderGridCell(digit)}</div>
               ))}
@@ -388,9 +397,9 @@ export const PlaneAnalysis = ({ frequencies, onBack, userName, dateOfBirth }: Pl
         </CardContent>
       </Card>
 
-      {/* Plane Analysis */}
+      {/* Plane Analysis with stronger borders */}
       <Card 
-        className="shadow-xl border border-amber-200 bg-white rounded-xl font-calibri relative overflow-hidden"
+        className="shadow-xl border-2 border-gray-400 bg-white rounded-xl font-calibri relative overflow-hidden"
         style={{
           backgroundImage: `url(/lovable-uploads/b4d05a52-4d67-4119-a39b-5f854008adab.png)`,
           backgroundSize: 'cover',
@@ -402,7 +411,7 @@ export const PlaneAnalysis = ({ frequencies, onBack, userName, dateOfBirth }: Pl
         <div className="absolute inset-0 bg-white/90 backdrop-blur-sm"></div>
         
         <div className="relative z-10">
-          <CardHeader className="pb-4">
+          <CardHeader className="pb-4 border-b-2 border-gray-300">
             <CardTitle className="text-3xl font-bold text-amber-700 text-center">
               Detailed Plane Analysis
             </CardTitle>
@@ -416,9 +425,9 @@ export const PlaneAnalysis = ({ frequencies, onBack, userName, dateOfBirth }: Pl
               return (
                 <div 
                   key={`plane-${index}`} 
-                  className="border border-gray-300 rounded-lg p-6 shadow-sm bg-white/80 backdrop-blur-sm"
+                  className="border-2 border-gray-400 rounded-lg p-6 shadow-sm bg-white/80 backdrop-blur-sm"
                 >
-                  <div className="flex items-center gap-3 mb-4">
+                  <div className="flex items-center gap-3 mb-4 border-b-2 border-gray-300 pb-3">
                     {status.isComplete ? (
                       <CheckCircle size={24} className="text-green-600" />
                     ) : status.isPartiallyMissing ? (
@@ -437,7 +446,7 @@ export const PlaneAnalysis = ({ frequencies, onBack, userName, dateOfBirth }: Pl
               );
             })}
             
-            <div className="text-center pt-4">
+            <div className="text-center pt-4 border-t-2 border-gray-300">
               <Button 
                 onClick={onBack}
                 className="bg-amber-600 hover:bg-amber-700 text-white font-bold px-6 py-2"
