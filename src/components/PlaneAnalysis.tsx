@@ -33,141 +33,144 @@ const PLANE_DEFINITIONS = [
     name: "Will Power Plane",
     numbers: [9, 5, 1],
     ifPresent: [
-      "This plane represents inner strength and determination.",
-      "Strong willpower and leadership qualities.",
-      "Ability to overcome obstacles and challenges.",
-      "Natural leadership and pioneering spirit.",
-      "Independent and self-reliant nature.",
-      "Goal-oriented with strong focus.",
-      "Confident decision-making abilities.",
-      "Can inspire and motivate others effectively."
+      "Very determined and persistent.",
+      "Strong decision-making abilities.",
+      "A natural leader with clear goals.",
+      "Possess strong self-discipline and mental focus.",
+      "Can resist temptations and distractions with ease.",
+      "Confident in actions and convictions.",
+      "Suited for leadership roles, entrepreneurship, and high-responsibility jobs.",
+      "Can handle pressure, challenges, and responsibilities gracefully.",
+      "Excellent in executing plans and maintaining consistency."
     ],
     ifMissing: {
-      9: "Lacks compassion and humanitarian instincts. May be self-centered.",
-      5: "Poor adaptability and flexibility. Struggles with change.",
-      1: "Weak leadership qualities and lack of initiative. Dependent on others."
+      9: "Lacks initiative, struggles to start tasks.",
+      5: "Finds it hard to balance or stay centered. Easily overwhelmed.",
+      1: "May lack moral conviction, purpose, or long-term vision."
     },
-    allMissing: "Lacks inner strength and determination. May be easily influenced by others. Difficulty in making independent decisions. Tends to give up easily when faced with challenges. Needs external motivation and support. May lack confidence and self-belief."
+    allMissing: "The willpower might be weakened or inconsistent. May struggle with self-control, focus, or decision-making. There may be a tendency to procrastinate, or give in to pressure. Indicates a lack of willpower, confidence, and direction. May find it difficult to say no, take decisions, or stay focused. Tendency to rely on others for motivation or leadership."
   },
   {
     name: "Action Plane",
     numbers: [2, 7, 6],
     ifPresent: [
-      "Emotionally intelligent and responsible in actions.",
-      "Strong sense of duty and service to others.",
-      "Excellent in teamwork and cooperation.",
-      "Intuitive and spiritually aware.",
-      "Caring and nurturing personality.",
-      "Good at maintaining relationships.",
-      "Balanced approach to life decisions.",
-      "Reliable and trustworthy in commitments."
+      "A doer – turns thoughts and plans into tangible actions.",
+      "Balanced between feelings (2), wisdom (7), and practicality (6).",
+      "Takes responsibility seriously, often works for the betterment of others.",
+      "Combines empathy with action, making you a great caregiver, guide, or leader.",
+      "Has inner spiritual depth, yet remains grounded and responsible.",
+      "Strong execution power; you don't just dream, you act.",
+      "Attracted to service-based roles – teaching, healing, leadership, counselling, or social work.",
+      "Strong sense of duty, can handle work pressure with calmness and grace."
     ],
     ifMissing: {
-      2: "Poor cooperation and teamwork abilities. May be overly independent.",
-      7: "Lacks spiritual awareness and introspection. Surface-level thinking.",
-      6: "Irresponsible and unreliable. Poor family and relationship management."
+      2: "Lack of emotional intelligence or inability to relate to others.",
+      7: "Avoids responsibility, may neglect family or duty.",
+      6: "Misses spiritual depth, inner wisdom, and reflective nature."
     },
-    allMissing: "Lacks emotional intelligence and responsibility. May be self-centered and unreliable. Difficulty in maintaining relationships. Poor sense of duty and service. Needs to develop empathy and caring nature."
+    allMissing: "The action power may be imbalanced or inconsistent. Might struggle with completion, empathy, or responsibility depending on what's missing. Difficulty in translating thoughts into action. May remain in a state of indecision or inaction. Struggles with commitment, consistency, and fulfilling responsibilities."
   },
   {
     name: "Mental Plane",
     numbers: [4, 9, 2],
     ifPresent: [
-      "Strategic thinker with vision and emotional intelligence.",
-      "Excellent planning and organizational skills.",
-      "Combines logic with compassion effectively.",
-      "Strong analytical and problem-solving abilities.",
-      "Good at understanding human psychology.",
-      "Balanced approach to mental challenges.",
-      "Can handle complex situations with ease.",
-      "Natural ability to see the bigger picture."
+      "Sharp thinker: Combines logic (4), idealism (9), and intuition (2).",
+      "Balanced mind set: Rational, visionary, and emotionally intelligent.",
+      "Has a structured way of thinking, but also sees the bigger picture.",
+      "Can use both analytical skills and gut feeling to make decisions.",
+      "Excellent in planning, analysing, and innovating.",
+      "Well-suited for fields that need mental focus, like engineering, strategy, law, education, research, or leadership.",
+      "Quick learner with capacity for deep understanding and visionary thinking.",
+      "Makes fair, calculated decisions and is often a good advisor."
     ],
     ifMissing: {
-      4: "Lacks systematic thinking and organizational skills.",
-      9: "Poor humanitarian instincts and broader vision.",
-      2: "Weak emotional intelligence and cooperation skills."
+      4: "Lack of discipline, scattered thinking, struggles with structure.",
+      9: "Can't see long-term goals, lacks vision or idealism.",
+      2: "Weak emotional intelligence, poor at teamwork or understanding others."
     },
-    allMissing: "Lacks strategic thinking and mental balance. May have difficulty in complex problem-solving. Poor planning abilities and emotional understanding. Needs to develop analytical and cooperative skills."
+    allMissing: "An incomplete mental plane leads to either rigid, short-sighted, or emotionally distant thought patterns. Thinking can be scattered, inconsistent, or confused. May act impulsively or depend on others for intellectual direction. Lacks mental discipline, foresight, or emotional clarity."
   },
   {
     name: "Emotional Plane",
     numbers: [3, 5, 7],
     ifPresent: [
-      "Emotionally expressive, intuitive, and spiritually wise.",
-      "Excellent communication and creative abilities.",
-      "Highly adaptable and flexible nature.",
-      "Strong spiritual and intuitive insights.",
-      "Creative and artistic tendencies.",
-      "Good at expressing emotions and ideas.",
-      "Inspirational and motivational personality.",
-      "Deep understanding of life's mysteries."
+      "Emotionally expressive, yet composed and balanced.",
+      "Strong EQ (Emotional Intelligence).",
+      "Able to understand, express, and manage feelings well.",
+      "Deep spiritual sensitivity combined with emotional stability.",
+      "Likely to be empathetic, warm, and intuitive.",
+      "Good at handling stress, maintaining inner peace.",
+      "Builds healthy, emotionally connected relationships.",
+      "Can comfort, motivate, and lead with compassion.",
+      "Often a healer, counsellor, artist, or spiritual guide."
     ],
     ifMissing: {
-      3: "Poor communication and creative expression. Difficulty in articulating thoughts.",
-      5: "Lacks adaptability and freedom of expression. Rigid thinking.",
-      7: "Missing spiritual awareness and introspective abilities."
+      3: "Difficulty expressing emotions, may appear cold or reserved.",
+      5: "Struggles with emotional balance; gets overwhelmed or detached.",
+      7: "Lacks depth or spiritual calm; may be restless or shallow emotionally."
     },
-    allMissing: "Lacks emotional expression and spiritual awareness. May be rigid and uncreative. Poor communication skills and difficulty in adapting to changes. Needs to develop emotional intelligence and spiritual growth."
+    allMissing: "An incomplete emotional plane may lead to Mood swings, Emotional suppression and Difficulty connecting deeply with others. Low emotional resilience and poor emotional expression. Can lead to emotional blockages, social disconnection, or fear of intimacy. May become overly logical, withdrawn, or reactive."
   },
   {
     name: "Practical Plane",
     numbers: [8, 1, 6],
     ifPresent: [
-      "Grounded, reliable, executes tasks with leadership.",
-      "Strong material and practical achievements.",
-      "Excellent business and management skills.",
-      "Natural leadership in practical matters.",
-      "Responsible and reliable in commitments.",
-      "Good at organizing and executing plans.",
-      "Material success and financial stability.",
-      "Balanced approach to work and family."
+      "Highly organized and efficient in managing life and responsibilities.",
+      "Strong sense of duty, both personal and social.",
+      "Capable of turning ideas into action with discipline and foresight.",
+      "Good at financial planning, time management, and administration.",
+      "Possesses leadership abilities, yet remains family- and society-oriented.",
+      "Excels in careers related to business, management, finance, law, public service, or any field needing grounded execution.",
+      "Reliable, practical, and respected for getting things done.",
+      "Values both material success and social responsibility."
     ],
     ifMissing: {
-      8: "Poor business sense and material achievements. Lacks practical ambition.",
-      1: "Weak leadership and initiative in practical matters.",
-      6: "Irresponsible and unreliable in practical commitments."
+      8: "Poor in planning, money management, or handling authority.",
+      1: "Lack of initiative, self-drive, or leadership.",
+      6: "Struggles with family responsibilities or emotional grounding."
     },
-    allMissing: "Lacks practical abilities and material success. May be impractical and unreliable. Poor business sense and financial management. Needs to develop practical skills and responsibility."
+    allMissing: "A partially missing practical plane may result in: Inconsistent execution, Avoidance of responsibility and Trouble with long-term planning or leadership roles. May struggle to apply thoughts into real-world action. Poor in money matters, work discipline, and responsibility handling. Can be impractical, lacking structure, or overwhelmed by daily life tasks."
   },
   {
     name: "Silver Plane",
     numbers: [2, 5, 8],
     ifPresent: [
-      "Emotionally aware and instinctively good with finances.",
-      "Natural business instincts and financial wisdom.",
-      "Excellent at managing resources and investments.",
-      "Balanced emotional and material approach.",
-      "Good at adapting to financial opportunities.",
-      "Cooperative in business partnerships.",
-      "Material prosperity through emotional intelligence.",
-      "Intuitive understanding of market dynamics."
+      "Strong financial instincts; knows when and where to invest time, money, and effort.",
+      "Emotionally intelligent with money — balances head and heart well.",
+      "Able to read people, sense trends, and make timely decisions.",
+      "Highly adaptable; can handle change well while staying grounded.",
+      "Has a mix of intuitive, practical, and organizational strengths.",
+      "Great potential in finance, investments, trading, real estate, or any field requiring quick judgment and calculated risks.",
+      "Can balance personal emotions with professional goals.",
+      "Often becomes financially stable over time due to smart decisions."
     ],
     ifMissing: {
-      2: "Poor cooperation in financial matters. Overly independent in business.",
-      5: "Lacks adaptability in financial opportunities. Rigid financial thinking.",
-      8: "Poor material achievements and business sense."
+      2: "Lacks emotional awareness in decision-making; may become too mechanical.",
+      5: "Difficulty adapting or staying balanced; can feel stuck or chaotic.",
+      8: "Poor planner, disorganized in material or financial matters."
     },
-    allMissing: "Lacks financial wisdom and material prosperity. Poor business instincts and difficulty in managing resources. May struggle with financial stability and investment decisions."
+    allMissing: "Incomplete Silver Plane may lead to: Financial instability, Poor adaptability in practical life and Emotional imbalance in work or money-related matters. Struggles to balance emotions with practical decisions. Poor money management, often impulsive or overly cautious. May face frequent financial stress or fail to capitalize on opportunities."
   },
   {
     name: "Golden Plane",
     numbers: [4, 5, 6],
     ifPresent: [
-      "Emotionally mature, disciplined, balanced and composed under pressure.",
-      "Perfect balance of logic, flexibility, and responsibility.",
-      "Excellent in managing both personal and professional life.",
-      "Strong family values with practical wisdom.",
-      "Adaptable yet disciplined approach to life.",
-      "Natural ability to handle stress and pressure.",
-      "Harmonious personality with balanced traits.",
-      "Success in both material and emotional aspects."
+      "Highly organized and disciplined thinker (4)",
+      "Emotionally balanced and adaptable (5)",
+      "Strong sense of responsibility and care for family, community, and work (6)",
+      "Can efficiently manage both personal and professional life",
+      "Naturally attracts respect, trust, and stability",
+      "Very successful in both career and family life.",
+      "Has the ability to solve problems calmly and logically, even under pressure.",
+      "Ideal for careers in management, education, healthcare, administration, or any people-oriented leadership role.",
+      "Tends to attract abundance through sincere efforts, ethical work, and emotional maturity."
     ],
     ifMissing: {
-      4: "Lacks discipline and systematic approach. Disorganized thinking.",
-      5: "Poor adaptability and rigid behavior. Difficulty in changing circumstances.",
-      6: "Irresponsible and unreliable. Poor family and relationship management."
+      4: "Struggles with structure, time management, and clear thinking.",
+      5: "Lacks emotional stability; gets overwhelmed easily or becomes too rigid.",
+      6: "Avoids responsibilities; may be emotionally disconnected from family/work."
     },
-    allMissing: "Lacks balance and maturity in life. May be either too rigid or too flexible. Poor family values and responsibility. Difficulty in handling pressure and stress. Needs overall personality development."
+    allMissing: "An incomplete Golden Plane can result in: Imbalance in work-life harmony, Inconsistent decision-making, poor relationship management and Emotional reactivity or avoidance of duties. May lack the core stability needed to succeed in the real world. Tends to be disorganized, emotionally reactive, or ungrounded. Struggles in maintaining balance between work, emotions, and responsibilities. Needs strong external support or discipline to succeed."
   }
 ];
 
@@ -234,7 +237,7 @@ export const PlaneAnalysis = ({ frequencies, onBack }: PlaneAnalysisProps) => {
 
             {/* All missing - show complete missing description */}
             {status.isCompletelyMissing && (
-              <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+              <div className="bg-red-50 border border-red-200 rounded-lg p-4 mt-3">
                 <div className="flex items-center gap-2 mb-2">
                   <XCircle size={16} className="text-red-600" />
                   <span className="font-bold text-red-800">Complete Absence</span>
@@ -263,6 +266,14 @@ export const PlaneAnalysis = ({ frequencies, onBack }: PlaneAnalysisProps) => {
       
       <div className="relative z-10">
         <CardHeader className="pb-4">
+          <div className="flex justify-between items-center mb-4">
+            <Button 
+              onClick={onBack}
+              className="bg-amber-600 hover:bg-amber-700 text-white font-bold px-6 py-2"
+            >
+              ← Back to Analysis
+            </Button>
+          </div>
           <CardTitle className="text-3xl font-bold text-amber-700 text-center">
             Detailed Plane Analysis
           </CardTitle>
@@ -288,7 +299,7 @@ export const PlaneAnalysis = ({ frequencies, onBack }: PlaneAnalysisProps) => {
                   )}
                   <h3 className="text-xl font-bold text-gray-800">{plane.name}</h3>
                   <div className="text-sm text-gray-500">
-                    ({plane.numbers.join(', ')})
+                    ({plane.numbers.join(' – ')})
                   </div>
                 </div>
                 

@@ -22,6 +22,15 @@ export const CelestialHeader = ({ currentView, setCurrentView }: CelestialHeader
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const handleSearchClick = () => {
+    // Always redirect to search main screen, even if already viewing a search result
+    setCurrentView('search');
+    // Force a page refresh to reset any search result state
+    if (currentView === 'search') {
+      window.location.reload();
+    }
+  };
+
   return (
     <header 
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
@@ -60,7 +69,7 @@ export const CelestialHeader = ({ currentView, setCurrentView }: CelestialHeader
             </Button>
             
             <Button 
-              onClick={() => setCurrentView('search')}
+              onClick={handleSearchClick}
               variant={currentView === 'search' ? 'default' : 'ghost'}
               className={`sacred-button text-white font-medium ${
                 currentView === 'search' ? '' : 'bg-transparent text-slate-700 hover:text-amber-600'
