@@ -1,4 +1,3 @@
-
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { CheckCircle, XCircle, AlertTriangle } from 'lucide-react';
@@ -268,27 +267,7 @@ export const PlaneAnalysis = ({ frequencies, onBack, userName, dateOfBirth }: Pl
     
     return (
       <div className="space-y-4">
-        {/* Show present numbers and their strengths */}
-        {status.presentNumbers.length > 0 && (
-          <div className="space-y-3">
-            <div className="flex items-center gap-2 mb-3">
-              <CheckCircle size={20} className="text-green-600" />
-              <h4 className="font-bold text-green-800 text-lg">Present</h4>
-            </div>
-            <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-              <ul className="space-y-2">
-                {status.presentNumbers.map((presentNum) => (
-                  <li key={`present-${presentNum}`} className="text-gray-700 flex items-start gap-2">
-                    <span className="text-green-600 mt-1 font-bold">{presentNum}:</span>
-                    <span>{plane.individualStrengths[presentNum]}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        )}
-
-        {/* If Complete - Show when plane is complete */}
+        {/* If Complete - Show full "If Present" section only */}
         {status.isComplete && (
           <div className="space-y-3">
             <div className="flex items-center gap-2 mb-3">
@@ -301,6 +280,26 @@ export const PlaneAnalysis = ({ frequencies, onBack, userName, dateOfBirth }: Pl
                   <li key={`present-${index}`} className="text-gray-700 flex items-start gap-2">
                     <span className="text-green-600 mt-1">•</span>
                     <span>{point}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        )}
+
+        {/* If Partially Missing - Show individual strengths for present numbers */}
+        {status.isPartiallyMissing && status.presentNumbers.length > 0 && (
+          <div className="space-y-3">
+            <div className="flex items-center gap-2 mb-3">
+              <CheckCircle size={20} className="text-green-600" />
+              <h4 className="font-bold text-green-800 text-lg">Present</h4>
+            </div>
+            <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+              <ul className="space-y-2">
+                {status.presentNumbers.map((presentNum) => (
+                  <li key={`present-${presentNum}`} className="text-gray-700 flex items-start gap-2">
+                    <span className="text-green-600 mt-1 font-bold">{presentNum}:</span>
+                    <span>{plane.individualStrengths[presentNum]}</span>
                   </li>
                 ))}
               </ul>
@@ -359,19 +358,17 @@ export const PlaneAnalysis = ({ frequencies, onBack, userName, dateOfBirth }: Pl
       </div>
 
       {/* User Info Header */}
-      {(userName || dateOfBirth) && (
-        <Card className="shadow-xl border border-amber-200 bg-white rounded-xl mb-8">
-          <CardHeader className="text-center pb-4">
-            <CardTitle className="text-2xl font-bold text-blue-800">
-              Plane Analysis Report
-            </CardTitle>
-            <div className="text-lg text-gray-700 space-y-1">
-              {userName && <div className="font-semibold">{userName}</div>}
-              {dateOfBirth && <div className="text-gray-600">Date of Birth: {dateOfBirth}</div>}
-            </div>
-          </CardHeader>
-        </Card>
-      )}
+      <Card className="shadow-xl border border-amber-200 bg-white rounded-xl mb-8">
+        <CardHeader className="text-center pb-4">
+          <CardTitle className="text-2xl font-bold text-blue-800">
+            Plane Analysis Report
+          </CardTitle>
+          <div className="text-lg text-gray-700 space-y-1">
+            {userName && <div className="font-semibold">{userName}</div>}
+            {dateOfBirth && <div className="text-gray-600">Date of Birth: {dateOfBirth}</div>}
+          </div>
+        </CardHeader>
+      </Card>
 
       {/* Lo Shu Grid for Reference */}
       <Card className="shadow-xl border border-amber-200 bg-white rounded-xl mb-8">

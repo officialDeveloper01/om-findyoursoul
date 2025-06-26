@@ -9,7 +9,7 @@ const BorderedTable = React.forwardRef<
   <div className="relative w-full overflow-auto">
     <table
       ref={ref}
-      className={cn("w-full caption-bottom text-sm border-collapse border border-gray-300", className)}
+      className={cn("w-full caption-bottom text-sm border-collapse border-2 border-gray-300", className)}
       {...props}
     />
   </div>
@@ -20,7 +20,7 @@ const BorderedTableHeader = React.forwardRef<
   HTMLTableSectionElement,
   React.HTMLAttributes<HTMLTableSectionElement>
 >(({ className, ...props }, ref) => (
-  <thead ref={ref} className={cn("bg-gray-50", className)} {...props} />
+  <thead ref={ref} className={cn("bg-gray-50 border-b-2 border-gray-300", className)} {...props} />
 ))
 BorderedTableHeader.displayName = "BorderedTableHeader"
 
@@ -30,7 +30,7 @@ const BorderedTableBody = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <tbody
     ref={ref}
-    className={cn("", className)}
+    className={cn("divide-y divide-gray-300", className)}
     {...props}
   />
 ))
@@ -43,7 +43,7 @@ const BorderedTableFooter = React.forwardRef<
   <tfoot
     ref={ref}
     className={cn(
-      "border-t bg-muted/50 font-medium",
+      "border-t-2 border-gray-300 bg-muted/50 font-medium",
       className
     )}
     {...props}
@@ -58,7 +58,7 @@ const BorderedTableRow = React.forwardRef<
   <tr
     ref={ref}
     className={cn(
-      "border-b border-gray-300 transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted",
+      "border-b border-gray-300 transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted divide-x divide-gray-300",
       className
     )}
     {...props}
