@@ -164,21 +164,21 @@ export const LoshoGrid = ({ gridData, userData }) => {
     return (
       <button 
         onClick={() => handleNumberClick(digit)}
-        className="relative aspect-square bg-white border-2 border-gray-400 rounded-lg flex items-center justify-center text-center p-2 hover:bg-gray-50 hover:border-blue-400 transition-colors cursor-pointer"
+        className="relative w-20 h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 bg-white border-2 border-gray-400 rounded-lg flex items-center justify-center text-center p-3 hover:bg-gray-50 hover:border-blue-400 transition-colors cursor-pointer shadow-md"
         title={`Click to view detailed analysis for Number ${digit}`}
       >
         {count > 0 && (
-          <div className="text-2xl md:text-3xl font-bold text-gray-800 flex flex-wrap justify-center">
+          <div className="text-xl md:text-2xl lg:text-3xl font-bold text-gray-800 flex flex-wrap justify-center items-center">
             {String(digit).repeat(count)}
           </div>
         )}
         {hiddenCount > 0 && (
-          <div className="absolute top-1 right-1 px-2 py-0.5 rounded-full border-2 border-green-600 text-green-600 text-xl flex items-center justify-center font-bold">
+          <div className="absolute top-1 right-1 w-5 h-5 md:w-6 md:h-6 px-1 py-0.5 rounded-full border-2 border-green-600 text-green-600 text-xs md:text-sm flex items-center justify-center font-bold">
             {String(digit).repeat(hiddenCount)}
           </div>
         )}
         {dashCount > 0 && (
-          <div className="absolute inset-0 flex items-center justify-center text-red-600 font-extrabold text-3xl pointer-events-none">
+          <div className="absolute inset-0 flex items-center justify-center text-red-600 font-extrabold text-2xl md:text-3xl pointer-events-none">
             {"_".repeat(dashCount)}
           </div>
         )}
@@ -303,19 +303,21 @@ export const LoshoGrid = ({ gridData, userData }) => {
             </CardTitle>
           </CardHeader>
 
-          <CardContent className="space-y-6">
-            {/* Lo Shu Grid - Simple 3x3 Grid with stronger borders */}
+          <CardContent className="space-y-8">
+            {/* Lo Shu Grid - Improved spacing and responsiveness */}
             <div className="flex justify-center items-center">
-              <div className="grid grid-cols-3 gap-2 w-full max-w-md mx-auto border-2 border-gray-400 p-2 rounded-lg bg-white/90">
+              <div className="grid grid-cols-3 gap-4 md:gap-6 lg:gap-8 p-6 md:p-8 lg:p-10 border-2 border-gray-400 rounded-lg bg-white/90 shadow-lg">
                 {gridNumbers.flat().map((digit, index) => (
-                  <div key={`grid-cell-${digit}-${index}`}>{renderGridCell(digit)}</div>
+                  <div key={`grid-cell-${digit}-${index}`} className="flex justify-center items-center">
+                    {renderGridCell(digit)}
+                  </div>
                 ))}
               </div>
             </div>
 
             {/* Grid Instructions */}
             <div className="text-center">
-              <p className="text-gray-600 text-sm">
+              <p className="text-gray-600 text-sm md:text-base">
                 Click on any number in the grid above to view detailed analysis
               </p>
             </div>
