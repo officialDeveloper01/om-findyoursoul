@@ -1,15 +1,16 @@
-
 import { useState, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { AntarDashaTable } from './AntarDashaTable';
 import { PlaneAnalysis } from './PlaneAnalysis';
+import { NumberDetail } from './NumberDetail';
 import { CompactNumerologyRow } from './CompactNumerologyRow';
 import { calculateAntarDasha, calculatePreBirthAntarDasha, planetMap } from '@/utils/antarDashaCalculator';
 
 export const LoshoGrid = ({ gridData, userData }) => {
   const [selectedAntarDasha, setSelectedAntarDasha] = useState(null);
   const [showPlaneAnalysis, setShowPlaneAnalysis] = useState(false);
+  const [selectedNumber, setSelectedNumber] = useState(null);
 
   const hiddenMap = {
     11: 2,
@@ -151,13 +152,21 @@ export const LoshoGrid = ({ gridData, userData }) => {
     }
   }, [conductorSeries, userData.dateOfBirth]);
 
+  const handleNumberClick = (digit: number) => {
+    setSelectedNumber(digit);
+  };
+
   const renderGridCell = (digit: number) => {
     const count = frequencies[digit] || 0;
     const hiddenCount = hiddenNumbers[digit] || 0;
     const dashCount = dashes[digit] || 0;
 
     return (
-      <div className="relative aspect-square bg-white border-2 border-gray-400 rounded-lg flex items-center justify-center text-center p-2">
+      <button 
+        onClick={() => handleNumberClick(digit)}
+        className="relative aspect-square bg-white border-2 border-gray-400 rounded-lg flex items-center justify-center text-center p-2 hover:bg-gray-50 hover:border-blue-400 transition-colors cursor-pointer"
+        title={`Click to view detailed analysis for Number ${digit}`}
+      >
         {count > 0 && (
           <div className="text-2xl md:text-3xl font-bold text-gray-800 flex flex-wrap justify-center">
             {String(digit).repeat(count)}
@@ -173,7 +182,7 @@ export const LoshoGrid = ({ gridData, userData }) => {
             {"_".repeat(dashCount)}
           </div>
         )}
-      </div>
+      </button>
     );
   };
 
@@ -208,6 +217,17 @@ export const LoshoGrid = ({ gridData, userData }) => {
     const year = date.getFullYear();
     return `${day}/${month}/${year}`;
   };
+
+  if (selectedNumber) {
+    return (
+      <NumberDetail 
+        number={selectedNumber}
+        onBack={() => setSelectedNumber(null)}
+        userName={userData.fullName}
+        dateOfBirth={userData.dateOfBirth}
+      />
+    );
+  }
 
   if (showPlaneAnalysis) {
     return (
@@ -291,6 +311,13 @@ export const LoshoGrid = ({ gridData, userData }) => {
                   <div key={`grid-cell-${digit}-${index}`}>{renderGridCell(digit)}</div>
                 ))}
               </div>
+            </div>
+
+            {/* Grid Instructions */}
+            <div className="text-center">
+              <p className="text-gray-600 text-sm">
+                Click on any number in the grid above to view detailed analysis
+              </p>
             </div>
 
             {/* Plane Analysis Button */}

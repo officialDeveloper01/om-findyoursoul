@@ -1,0 +1,431 @@
+
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { ArrowLeft } from 'lucide-react';
+
+interface NumberDetailProps {
+  number: number;
+  onBack: () => void;
+  userName: string;
+  dateOfBirth: string;
+}
+
+export const NumberDetail = ({ number, onBack, userName, dateOfBirth }: NumberDetailProps) => {
+  const formatDateDDMMYYYY = (dateString: string) => {
+    const date = new Date(dateString);
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  };
+
+  const getNumberContent = (num: number) => {
+    if (num === 1) {
+      return {
+        title: "ALL ABOUT NUMBER 1",
+        subtitle: "(Alphabets – A, I, J, Q, Y)",
+        sections: [
+          {
+            title: "Basic Information",
+            content: [
+              "It represents WATER element and lies in the North",
+              "SUN – Surya – Related to Career (1, 19 & 28)",
+              "",
+              "Friendly Planet – Chandra, Mangal & Guru",
+              "Neutral Planet – Budh & Ketu", 
+              "Enemy Planet – Shani, Shukra & Rahu"
+            ]
+          },
+          {
+            title: "Spiritual Meaning of Number 1",
+            content: [
+              "• Represents the divine spark of creation.",
+              "• The beginning of all things.",
+              "• Symbol of oneness with the universe – individuality within unity.",
+              "• When aligned, a person becomes a channel of inspiration, clarity, and purpose."
+            ]
+          },
+          {
+            title: "When Number 1 Present",
+            content: [
+              "• Very Good Mentors, Good Planner, Creative",
+              "• Ambitious, Visionary, Trust Worthy, Good Memory",
+              "• Authority, Self – Confident, Courageous, Straight Forward",
+              "• Independent in their approach, Stubborn",
+              "• Bright Career, Clear about identity and purpose in life.",
+              "• Hard Working, Progress Fast, Excels in new ideas, startups.",
+              "• Earns High Respect, Make friends easily",
+              "• Accept Challenges, Handle Responsibilities, Good Administration"
+            ]
+          },
+          {
+            title: "When Number 1 Missing",
+            content: [
+              "• Suffers from low self-esteem and lack of initiative.",
+              "• May feel lost, confused, or directionless.",
+              "• Easily gets discouraged when facing obstacles.",
+              "• May depend on others for emotional or practical support.",
+              "• Becomes a follower, lacks confidence to lead.",
+              "• Tends to overthink decisions, struggles with starting new tasks.",
+              "• Avoids responsibility or decision-making.",
+              "• Fears failure or judgment.",
+              "• Feels intimidated by strong personalities.",
+              "• May become submissive or passive-aggressive."
+            ]
+          },
+          {
+            title: "Career & Business of Number 1",
+            content: [
+              "• Business in Gold, Fire, Spices, Pharmacy",
+              "• Government & Administration",
+              "• Leadership & Management",
+              "• Politics & Public Service",
+              "• Legal & Justice",
+              "• Healthcare",
+              "• Defense & Police",
+              "• Technology & Creative Innovation",
+              "• Branding / Self-employment"
+            ]
+          },
+          {
+            title: "Health & Disease Associations of Number 1",
+            content: [
+              "• Heart related problems, High/Low Blood Pressure.",
+              "• Sun governs the right eye for males & the left eye for females - Weak eyesight, Loss of vision, cataracts, or glaucoma.",
+              "• Weak bones, osteoporosis, Chronic back pain or spinal issues, Joint inflammation",
+              "• Immunity and Vitality Deficiency, Autoimmune disorders",
+              "• Skin and Heat-Related Disorders (Skin rashes, eczema, or sun sensitivity)",
+              "• Liver inflammation, jaundice, hepatitis, Problems in bile secretion, Digestive disorders linked with poor metabolism.",
+              "• Sun governs the head and brain's vitality - Brain and Neurological Problems."
+            ]
+          },
+          {
+            title: "When Number 1 Repeated",
+            content: [
+              "• 1 – Difficulty in Expressing, can't understand others, believe in work, Lack of Self-Confidence, Introvert, Average & Normal Life.",
+              "",
+              "• 1 1 – Good Communication Skills, Balanced Personality & Life, Understand & Respect Others, Loyal & Ethical, Can Express the feelings & Think before action in work. The person is capable of understanding both sides (positive and negative) of a situation. They are fortunate and blessed. They possess deep thinking and clarity in thoughts and also will be capable seeing both sides of the problem.",
+              "",
+              "• 1 1 1 – Talkative & Entertainer, Lost in themselves for Self-Analysis, Mix with any situation, Lack of Concentration in work, Think more but fail to put in action, Loyal & Never Lose confidence.",
+              "",
+              "• 1 1 1 1 – Difficulty in Expressing, Insensitive & sometime Hyper Sensitive, Helping Nature & Socially involved, Misunderstood, Disturbed, Lack of Communication Skills, Surrounded by Controversaries, Egoistic, Successful in their work. These people have suppressed emotions and a storm of thoughts inside them, which eventually explode, often in the wrong way.",
+              "",
+              "• 1 1 1 1 1 – Egoistic, filled with anger and pride, Very Poor Communication Skills, Lonely, Mentally disturbed, Misused by others & Debauchery. They are powerful and influential but are often not understood emotionally or intellectually by others. They may become well-known but stay entangled in controversies. Some people with this combination overindulge in food, drugs, alcohol. & More - It will result in more and more losses of its character & Negativity."
+            ]
+          },
+          {
+            title: "Mahadasha – Antardasha",
+            content: [
+              "Surya – Surya (164 Days)",
+              "Positive",
+              "• Rise in leadership roles, promotions, and authority",
+              "• Increased self-confidence, recognition, and political success",
+              "• Governmental support, fame, and clarity in life goals",
+              "• Strong willpower and assertive decision-making",
+              "• Opportunity to start ventures or independent careers",
+              "",
+              "Negative",
+              "• Ego clashes with authority figures, father, or spouse",
+              "• Arrogance leading to isolation or resentment",
+              "• Heart-related health issues, high blood pressure, or heat strokes",
+              "• Public disgrace due to pride or authoritarian behaviour",
+              "• Fall from power or loss of leadership role due to ego issues",
+              "",
+              "Surya – Chandra (274 Days)",
+              "Positive",
+              "• Emotional balance and inner peace; good family bonding",
+              "• Support from mother or maternal figures; real estate gains",
+              "• Good for creative expression, music, or arts",
+              "• Enhanced intuitive and nurturing abilities",
+              "• Domestic comforts and harmonious living conditions",
+              "",
+              "Negative",
+              "• Mood swings, emotional dependency, or hypersensitivity",
+              "• Conflicts with mother or disruption in family life",
+              "• Health issues related to fluids, stomach, or mental stress",
+              "• Insecurity, lack of decision-making power due to emotions",
+              "• Instability in career due to fluctuating emotions",
+              "",
+              "Surya – Mangal (192 Days)",
+              "Positive",
+              "• Victory in legal disputes or conflicts",
+              "• Courage, motivation, and action-oriented behavior",
+              "• Progress in technical, real estate, or sports professions",
+              "• Increased physical energy, discipline, and strategic execution",
+              "• Strong leadership and ability to influence others",
+              "",
+              "Negative",
+              "• Aggression, impulsive behavior leading to conflict",
+              "• Accidents, blood-related issues, surgeries",
+              "• Disputes with siblings or younger males",
+              "• Reputation damage due to violent or hasty actions",
+              "• Overexertion leading to burnout",
+              "",
+              "Surya – Rahu (493 Days)",
+              "Positive",
+              "• Sudden rise in status, especially in politics, media, or abroad",
+              "• Innovative or unconventional success",
+              "• Foreign opportunities and technological growth",
+              "• Charisma and attraction to the masses",
+              "• Victory over rivals using manipulation (if ethical)",
+              "",
+              "Negative",
+              "• Scandals, deceit, or illegal dealings",
+              "• Addictions, confusion, and obsessive behavior",
+              "• Mental stress, hallucinations, or illusions",
+              "• Fall from power or disgrace due to hidden enemies",
+              "• Problems with authority and government institutions",
+              "",
+              "Surya – Guru (438 Days)",
+              "Positive",
+              "• Spiritual growth, connection with gurus or mentors",
+              "• Success in education, law, astrology, or religion",
+              "• Favourable outcomes in child-related matters",
+              "• High moral ground, ethical decisions, and wise leadership",
+              "• Respect from society for charitable or dharmic activities",
+              "",
+              "Negative",
+              "• Overconfidence or preaching tendencies",
+              "• Legal complications or moral dilemmas",
+              "• Liver or weight-related health issues",
+              "• Conflict with teachers or father figures",
+              "• Delay in results due to idealism or dogmatism",
+              "",
+              "Surya – Shani (520 Days)",
+              "Positive",
+              "• Long-term gains through discipline, structure, and perseverance",
+              "• Improved responsibilities and maturity",
+              "• Stable government or industrial job roles",
+              "• Debt repayment and organized financial management",
+              "• Karmic progress through patience and humility",
+              "",
+              "Negative",
+              "• Delays, obstacles, and work pressure",
+              "• Depression, joint pain, chronic fatigue",
+              "• Conflicts with authority figures and senior management",
+              "• Legal or bureaucratic challenges",
+              "• Coldness in relationships and loneliness",
+              "• Marriage Problem",
+              "",
+              "Surya – Budh (465 Days)",
+              "Positive",
+              "• Success in business, communication, writing, and commerce",
+              "• Enhanced intellectual and analytical capabilities",
+              "• Opportunities in finance, teaching, or sales professions",
+              "• Favourable contracts, presentations, and speaking events",
+              "• Support from younger siblings or colleagues",
+              "",
+              "Negative",
+              "• Nervous system disorders or skin allergies",
+              "• Disputes due to miscommunication or gossip",
+              "• Overthinking, anxiety, or analysis paralysis",
+              "• Sibling rivalry or workplace misunderstandings",
+              "• Speech-related or learning disorders if afflicted",
+              "",
+              "Surya – Ketu (192 Days)",
+              "Positive",
+              "• Strong detachment from material world, aiding spiritual growth",
+              "• Deep insight, intuition, and psychic development",
+              "• Breakthroughs in occult, astrology, or metaphysical sciences",
+              "• Minimalist lifestyle brings clarity and peace",
+              "• Ability to transcend ego and past karmas",
+              "",
+              "Negative",
+              "• Isolation, depression, or lack of motivation",
+              "• Loss of direction, career confusion, or disconnection from goals",
+              "• Poor physical health, especially immunity and mental clarity",
+              "• Relationship distancing or spiritual escapism",
+              "• Hidden fears or karmic baggage affecting performance",
+              "",
+              "Surya – Shukra (547 Days)",
+              "Positive",
+              "• Artistic success, romantic charm, and social magnetism",
+              "• Financial gains from luxury, beauty, or entertainment",
+              "• Strong attraction in personal relationships",
+              "• New romantic relationships or marriage possibilities",
+              "• Growth in beauty, fashion, or creative ventures",
+              "",
+              "Negative",
+              "• Ego and romance clashes, especially in marriage",
+              "• Overindulgence in pleasures, leading to distraction",
+              "• Venereal or reproductive health issues",
+              "• Conflicts with women or luxury-related losses",
+              "• Disputes over wealth or inheritance in relationships"
+            ]
+          },
+          {
+            title: "Mulaank - Bhagyaank Destiny Ratio & Business",
+            content: [
+              "Mulaank 1 – Bhagyaank 1 – 90% Destiny Ratio & Business",
+              "Startup, Tech Innovation, Branding, Advertising, Marketing Agency, Import-Export Business, Real Estate, Automobile, Aviation, Retail, Entrepreneurship in Any Field",
+              "",
+              "Mulaank 1 – Bhagyaank 2 – 70% Destiny Ratio & Business",
+              "Event Planner, any creative or designing with emotional appeal like Fashion, Interior Designer etc., Meditation, therapy centres, healing, Social media branding, influencer, Boutique, Hospitality like restaurants, Mother-child focused business like Baby care products, maternal health etc., Spiritual Products.",
+              "",
+              "Mulaank 1 – Bhagyaank 3 – 70% Destiny Ratio & Business",
+              "Occult Science, Education, Media, Entertainment, Film Production, Podcasting, Motivational Speaking, Corporate Training, Advertising Agency, Designing, Education Tech, Event Management, Travels, Fashion.",
+              "",
+              "Mulaank 1 – Bhagyaank 4 – 80% Destiny Ratio & Business",
+              "Controversy, Politics, Lottery, Gambling, Real Estate, Construction, Software Development, Manufacturing, Industrial Business, Engineering, Finance, Tax Consultancy, Legal, Audit firm, Logistics, Warehousing, Project Management, Security agencies.",
+              "",
+              "Mulaank 1 – Bhagyaank 5 – 80% Destiny Ratio & Business",
+              "Technology, Startups, Marketing, Media, Import – Export, Trading, Communication based Ventures, Finance, Investment Consultant, Event Management, Travel agency.",
+              "",
+              "Mulaank 1 – Bhagyaank 6 – 70% Destiny Ratio & Business",
+              "Luxury, Glamour, Modelling, Film & Lifestyle business, Entertainment & Media, Interior Design, Architecture, Hospitality & Event Management, Branding Business.",
+              "",
+              "Mulaank 1 – Bhagyaank 7 – 50% Destiny Ratio & Business",
+              "Occult Science, Astrology, Vastu, Reiki, Energy Healing, Technology, Research and Development Business, Consulting, Education Coaching, Occult Science, Spiritual Products, Photography, Writing.",
+              "",
+              "Mulaank 1 – Bhagyaank 8 – 00% Destiny Ratio & Business",
+              "Finance, Wealth Management, Insurance, Construction, Infrastructure & Real Estate, Legal, Compliance & Audit and regulatory Consulting, Government Contracting & Public Projects, Heavy Industries & Manufacturing (Steel, iron, mining, or energy sector, Machinery, tools, automobile parts), Leadership Training & Corporate Mentoring.",
+              "",
+              "Mulaank 1 – Bhagyaank 9 – 90% Destiny Ratio & Business",
+              "Defence, Security & Law Enforcement Agencies, Political consulting, NGOs or public welfare missions, Leadership training or motivational speaking, Fire, Rescue, and Emergency Service, Sports & Fitness Industry, Logistics, Courier, Transport & Action-Oriented Businesses, Construction, Demolition & Heavy Work, Media, Film & Action Production."
+            ]
+          },
+          {
+            title: "Remedies / How to Activate or Strengthen Number 1",
+            content: [
+              "Daily Chanting of Surya Mantras",
+              "• Surya Beej Mantra: \"ॐ ह्रां ह्रीं ह्रौं सः सूर्याय नमः\" – Chant 108 times daily at Sunrise.",
+              "• \"ॐ घृणि सूर्याय नमः\", सूर्य देव के बीज मंत्र को सिद्ध करने के लिए, इसके 7000 जाप 65 दिन में करने पड़ेंगे।",
+              "• Surya Gayatri Mantra: \"ॐ आदित्याय विद्महे दिवाकराय धीमहि तन्नः सूर्यः प्रचोदयात्\" – Chant 108 times daily at Sunrise.",
+              "• Aditya Hridaya Stotra – Powerful stotra from Ramayana, best chanted on Sundays or daily during problems.",
+              "",
+              "Spiritual & Devotional Remedies",
+              "• Offer water (Arghya) to Surya every morning after bath (especially during sunrise). Use a copper vessel with water, red sandalwood, and red flowers while facing the East.",
+              "• Worship Lord Surya on Sundays with red flowers, jaggery, and wheat.",
+              "• Observe Surya Vrat (Sun Fast) on Sundays, especially in waxing Moon phase.",
+              "• Visit Surya temples – Especially Konark (Odisha), Arasavalli (AP), and Modhera (Gujarat).",
+              "• Respect your father, government officials, and elders – Sun represents father, authority, and ego.",
+              "",
+              "Astrological Remedies",
+              "• Donate on Sundays:",
+              "o Copper, jaggery, wheat, ruby gemstones, red cloth, or red sandalwood.",
+              "o Donate to Brahmins, blind people, or poor elderly men.",
+              "• Feed animals:",
+              "o Offer jaggery and wheat balls to cows or feed monkeys.",
+              "• Charitable acts:",
+              "o Help with eye treatments or donate sunglasses/eye-related medical aid.",
+              "",
+              "Gemstone Remedy",
+              "• Ruby (Manikya):",
+              "o Wear natural ruby in a gold ring, on the ring finger, on Sunday morning, during the Shukla Paksha, in the Sun's hora, after proper purification and energizing.",
+              "o Alternative stones: Red Garnet (substitute for Ruby)",
+              "",
+              "Herbal & Ayurvedic Remedies",
+              "• Apply sandalwood (chandan) tilak daily on forehead.",
+              "• Use saffron or turmeric in food or milk (warm energy herbs).",
+              "• Drink sun-charged water: Keep water in a copper bottle exposed to morning sunlight for a few hours, then drink.",
+              "",
+              "Yogic & Lifestyle Remedies",
+              "• Surya Namaskar (Sun Salutation) – Perform 12 sets every morning.",
+              "• Wake up before sunrise and absorb the early sun rays.",
+              "• Practice meditation and gratitude during sunrise.",
+              "",
+              "Behavioral / Karmic Corrections",
+              "• Avoid ego, arrogance, and authoritarian behavior.",
+              "• Avoid lying to or disrespecting your father, teachers, or government officers.",
+              "• Keep your promises and speak truthfully.",
+              "",
+              "Other Remedies",
+              "• Surya Yantra: Install and worship an energized Surya Yantra at home or in puja room.",
+              "• Chant Surya Ashtakam or Surya Kavacham regularly.",
+              "• Burn red sandalwood incense or guggul during sunrise."
+            ]
+          }
+        ]
+      };
+    }
+    
+    // Placeholder for other numbers
+    return {
+      title: `ALL ABOUT NUMBER ${num}`,
+      subtitle: "Coming Soon",
+      sections: [
+        {
+          title: "Content Coming Soon",
+          content: [
+            `Detailed information for Number ${num} will be available soon.`,
+            "This section will include spiritual meanings, career guidance, health associations, and remedies."
+          ]
+        }
+      ]
+    };
+  };
+
+  const content = getNumberContent(number);
+
+  return (
+    <div className="max-w-4xl mx-auto px-4 py-8 font-calibri">
+      {/* Top Back Button */}
+      <div className="mb-6">
+        <Button 
+          onClick={onBack}
+          className="bg-amber-600 hover:bg-amber-700 text-white font-bold"
+        >
+          <ArrowLeft className="mr-2 h-4 w-4" />
+          Back to Analysis
+        </Button>
+      </div>
+
+      {/* Header with User Info */}
+      <Card className="shadow-xl border-2 border-gray-400 bg-white/90 backdrop-blur-md rounded-xl mb-8">
+        <CardHeader className="text-center">
+          <CardTitle className="text-3xl md:text-4xl font-bold text-blue-800">
+            {content.title}
+          </CardTitle>
+          <p className="text-xl text-gray-600 mt-2">{content.subtitle}</p>
+          {userName && dateOfBirth && (
+            <div className="mt-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
+              <p className="text-gray-700">
+                <span className="font-semibold">Analysis for:</span> {userName}
+              </p>
+              <p className="text-gray-700">
+                <span className="font-semibold">Date of Birth:</span> {formatDateDDMMYYYY(dateOfBirth)}
+              </p>
+            </div>
+          )}
+        </CardHeader>
+      </Card>
+
+      {/* Content Sections */}
+      <div className="space-y-6">
+        {content.sections.map((section, index) => (
+          <Card key={index} className="shadow-lg border-2 border-gray-300 bg-white/95 backdrop-blur-sm rounded-xl">
+            <CardHeader>
+              <CardTitle className="text-xl md:text-2xl font-bold text-gray-800 border-b border-gray-200 pb-2">
+                {section.title}
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              {section.content.map((line, lineIndex) => (
+                <div key={lineIndex}>
+                  {line === "" ? (
+                    <div className="h-2"></div>
+                  ) : (
+                    <p className={`${line.startsWith('•') ? 'ml-4' : ''} ${line.match(/^[A-Z][a-z]+ –/) ? 'font-bold text-lg text-blue-700 mt-4' : ''} text-gray-700 leading-relaxed`}>
+                      {line}
+                    </p>
+                  )}
+                </div>
+              ))}
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+
+      {/* Bottom Back Button */}
+      <div className="mt-8 text-center">
+        <Button 
+          onClick={onBack}
+          className="bg-amber-600 hover:bg-amber-700 text-white font-bold"
+        >
+          <ArrowLeft className="mr-2 h-4 w-4" />
+          Back to Analysis
+        </Button>
+      </div>
+    </div>
+  );
+};
