@@ -149,7 +149,7 @@ export const LoshoGrid = ({ gridData, userData }) => {
         conductorIndex: ageIndex
       });
       
-      // Also show the Mahadasha section for this number
+      // Show the Mahadasha section for this number
       setSelectedNumber(conductorNumber);
       setShowMahadashaOnly(true);
     } catch (error) {
@@ -166,9 +166,13 @@ export const LoshoGrid = ({ gridData, userData }) => {
   const handleBackFromNumber = () => {
     setSelectedNumber(null);
     setShowMahadashaOnly(false);
-    if (!showMahadashaOnly) {
-      setSelectedAntarDasha(null);
-    }
+    setSelectedAntarDasha(null);
+  };
+
+  const handleCloseNumberDetail = () => {
+    setSelectedNumber(null);
+    setShowMahadashaOnly(false);
+    // Keep Antar Dasha table if it exists
   };
 
   const renderGridCell = (digit: number) => {
@@ -233,14 +237,14 @@ export const LoshoGrid = ({ gridData, userData }) => {
     return `${day}/${month}/${year}`;
   };
 
-  if (selectedNumber && !selectedAntarDasha) {
+  if (selectedNumber && !selectedAntarDasha && !showMahadashaOnly) {
     return (
       <NumberDetail 
         number={selectedNumber}
         onBack={handleBackFromNumber}
         userName={userData.fullName}
         dateOfBirth={userData.dateOfBirth}
-        showOnlyMahadasha={showMahadashaOnly}
+        showOnlyMahadasha={false}
       />
     );
   }
@@ -386,12 +390,13 @@ export const LoshoGrid = ({ gridData, userData }) => {
         </div>
       </Card>
 
-      {/* Show Number Detail and Antar Dasha Table side by side when conductor is clicked */}
-      {selectedNumber && selectedAntarDasha && (
-        <div className="space-y-6">
+      {/* Show Number Detail and Antar Dasha Table when conductor is clicked */}
+      {selectedNumber && selectedAntarDasha && showMahadashaOnly && (
+        <div className="space-y-6 mt-8">
           <NumberDetail 
             number={selectedNumber}
             onBack={handleBackFromNumber}
+            onClose={handleCloseNumberDetail}
             userName={userData.fullName}
             dateOfBirth={userData.dateOfBirth}
             showOnlyMahadasha={true}

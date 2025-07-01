@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/hooks/useAuth';
-import { Moon, Sun, Sparkles } from 'lucide-react';
+import { Sun, Plus } from 'lucide-react';
 
 interface CelestialHeaderProps {
   currentView: string;
@@ -36,22 +36,8 @@ export const CelestialHeader = ({ currentView, setCurrentView }: CelestialHeader
     >
       <div className="max-w-6xl mx-auto px-4 py-4">
         <div className="flex justify-between items-center">
-          {/* Logo Section - Left */}
-          <div className="flex items-center gap-3">
-            <div className="relative">
-              <Sparkles className="w-8 h-8 text-amber-500 floating" />
-              <div className="absolute inset-0 w-8 h-8 bg-amber-400/20 rounded-full blur-sm"></div>
-            </div>
-          </div>
-
-          {/* Center Section - OM and HEAL YOUR SOUL */}
-          <div className="text-center fade-in flex-1">
-            <h1 className="text-5xl font-bold mystic-text tracking-wider mb-1">ॐ</h1>
-            <p className="text-lg text-amber-600 font-serif font-bold tracking-widest">HEAL YOUR SOUL</p>
-          </div>
-
-          {/* Navigation - Right */}
-          <nav className="flex items-center gap-6">
+          {/* Left Section - New Analysis Button */}
+          <div className="flex items-center">
             <Button 
               onClick={() => setCurrentView('form')}
               variant={currentView === 'form' ? 'default' : 'ghost'}
@@ -59,10 +45,27 @@ export const CelestialHeader = ({ currentView, setCurrentView }: CelestialHeader
                 currentView === 'form' ? '' : 'bg-transparent text-slate-700 hover:text-amber-600'
               }`}
             >
-              <Moon className="w-4 h-4 mr-2" />
-              New Reading
+              <Plus className="w-4 h-4 mr-2" />
+              New Analysis
             </Button>
-            
+          </div>
+
+          {/* Center Section - Ganesh Logo and HEAL YOUR SOUL */}
+          <div className="text-center fade-in flex-1 flex flex-col items-center">
+            <div className="mb-2">
+              <img 
+                src="/lovable-uploads/e1415cba-51c5-4a61-b523-642f2de6934b.png" 
+                alt="Ganesh Om Logo" 
+                className="w-16 h-16 object-contain floating"
+              />
+            </div>
+            <p className="text-2xl text-amber-600 font-serif font-bold tracking-widest mystic-text">
+              HEAL YOUR SOUL
+            </p>
+          </div>
+
+          {/* Right Section - Search and User Info */}
+          <nav className="flex items-center gap-6">
             <Button 
               onClick={handleSearchClick}
               variant={currentView === 'search' ? 'default' : 'ghost'}
