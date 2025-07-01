@@ -9,9 +9,10 @@ interface NumberDetailProps {
   onBack: () => void;
   userName: string;
   dateOfBirth: string;
+  showOnlyMahadasha?: boolean;
 }
 
-export const NumberDetail = ({ number, onBack, userName, dateOfBirth }: NumberDetailProps) => {
+export const NumberDetail = ({ number, onBack, userName, dateOfBirth, showOnlyMahadasha = false }: NumberDetailProps) => {
   const formatDateDDMMYYYY = (dateString: string) => {
     const date = new Date(dateString);
     const day = date.getDate().toString().padStart(2, '0');
@@ -21,6 +22,17 @@ export const NumberDetail = ({ number, onBack, userName, dateOfBirth }: NumberDe
   };
 
   const content = getNumberData(number);
+  
+  // Filter sections based on the showOnlyMahadasha prop
+  const filteredSections = showOnlyMahadasha 
+    ? content.sections.filter(section => 
+        section.title.toLowerCase().includes('mahadasha') || 
+        section.title.toLowerCase().includes('antardasha')
+      )
+    : content.sections.filter(section => 
+        !section.title.toLowerCase().includes('mahadasha') && 
+        !section.title.toLowerCase().includes('antardasha')
+      );
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8 font-calibri">
@@ -39,9 +51,11 @@ export const NumberDetail = ({ number, onBack, userName, dateOfBirth }: NumberDe
       <Card className="shadow-xl border-2 border-gray-400 bg-white/90 backdrop-blur-md rounded-xl mb-8">
         <CardHeader className="text-center">
           <CardTitle className="text-3xl md:text-4xl font-bold text-blue-800">
-            {content.title}
+            {showOnlyMahadasha ? `Number ${number} - Mahadasha Analysis` : content.title}
           </CardTitle>
-          <p className="text-xl text-gray-600 mt-2">{content.subtitle}</p>
+          <p className="text-xl text-gray-600 mt-2">
+            {showOnlyMahadasha ? "Planetary Influence & Timing" : content.subtitle}
+          </p>
           {userName && dateOfBirth && (
             <div className="mt-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
               <p className="text-gray-700">
@@ -57,7 +71,7 @@ export const NumberDetail = ({ number, onBack, userName, dateOfBirth }: NumberDe
 
       {/* Content Sections */}
       <div className="space-y-6">
-        {content.sections.map((section, index) => (
+        {filteredSections.map((section, index) => (
           <Card key={index} className="shadow-lg border-2 border-gray-300 bg-white/95 backdrop-blur-sm rounded-xl">
             <CardHeader>
               <CardTitle className="text-xl md:text-2xl font-bold text-gray-800 border-b border-gray-200 pb-2">
@@ -79,6 +93,19 @@ export const NumberDetail = ({ number, onBack, userName, dateOfBirth }: NumberDe
             </CardContent>
           </Card>
         ))}
+        
+        {filteredSections.length === 0 && (
+          <Card className="shadow-lg border-2 border-gray-300 bg-white/95 backdrop-blur-sm rounded-xl">
+            <CardContent className="text-center py-8">
+              <p className="text-gray-600">
+                {showOnlyMahadasha 
+                  ? "Mahadasha information for this number is not available yet."
+                  : "Content for this number is being prepared."
+                }
+              </p>
+            </CardContent>
+          </Card>
+        )}
       </div>
 
       {/* Bottom Back Button */}

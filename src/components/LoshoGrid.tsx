@@ -11,6 +11,7 @@ export const LoshoGrid = ({ gridData, userData }) => {
   const [selectedAntarDasha, setSelectedAntarDasha] = useState(null);
   const [showPlaneAnalysis, setShowPlaneAnalysis] = useState(false);
   const [selectedNumber, setSelectedNumber] = useState(null);
+  const [showMahadashaOnly, setShowMahadashaOnly] = useState(false);
 
   const hiddenMap = {
     11: 2,
@@ -147,13 +148,27 @@ export const LoshoGrid = ({ gridData, userData }) => {
         dateOfBirth: userData.dateOfBirth,
         conductorIndex: ageIndex
       });
+      
+      // Also show the Mahadasha section for this number
+      setSelectedNumber(conductorNumber);
+      setShowMahadashaOnly(true);
     } catch (error) {
       console.error('Error calculating Antar Dasha:', error);
     }
   }, [conductorSeries, userData.dateOfBirth]);
 
-  const handleNumberClick = (digit: number) => {
+  const handleGridNumberClick = (digit: number) => {
     setSelectedNumber(digit);
+    setShowMahadashaOnly(false);
+    setSelectedAntarDasha(null); // Clear any existing Antar Dasha table
+  };
+
+  const handleBackFromNumber = () => {
+    setSelectedNumber(null);
+    setShowMahadashaOnly(false);
+    if (!showMahadashaOnly) {
+      setSelectedAntarDasha(null);
+    }
   };
 
   const renderGridCell = (digit: number) => {
@@ -163,7 +178,7 @@ export const LoshoGrid = ({ gridData, userData }) => {
 
     return (
       <button 
-        onClick={() => handleNumberClick(digit)}
+        onClick={() => handleGridNumberClick(digit)}
         className="relative w-20 h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 bg-white border-2 border-gray-400 rounded-lg flex items-center justify-center text-center p-3 hover:bg-gray-50 hover:border-blue-400 transition-colors cursor-pointer shadow-md"
         title={`Click to view detailed analysis for Number ${digit}`}
       >
@@ -218,13 +233,14 @@ export const LoshoGrid = ({ gridData, userData }) => {
     return `${day}/${month}/${year}`;
   };
 
-  if (selectedNumber) {
+  if (selectedNumber && !selectedAntarDasha) {
     return (
       <NumberDetail 
         number={selectedNumber}
-        onBack={() => setSelectedNumber(null)}
+        onBack={handleBackFromNumber}
         userName={userData.fullName}
         dateOfBirth={userData.dateOfBirth}
+        showOnlyMahadasha={showMahadashaOnly}
       />
     );
   }
@@ -337,7 +353,7 @@ export const LoshoGrid = ({ gridData, userData }) => {
               <div className="space-y-3">
                 <div className="text-center">
                   <h3 className="font-bold text-gray-700">Conductor Series (Maha Dasha)</h3>
-                  <p className="font-bold text-gray-500">Click on any number below to view Antar Dasha table</p>
+                  <p className="font-bold text-gray-500">Click on any number below to view Antar Dasha table & Mahadasha details</p>
                 </div>
                 
                 {/* Ages Row - Clean bordered table design with stronger borders */}
@@ -370,8 +386,31 @@ export const LoshoGrid = ({ gridData, userData }) => {
         </div>
       </Card>
 
-      {/* Antar Dasha Table */}
-      {selectedAntarDasha && (
+      {/* Show Number Detail and Antar Dasha Table side by side when conductor is clicked */}
+      {selectedNumber && selectedAntarDasha && (
+        <div className="space-y-6">
+          <NumberDetail 
+            number={selectedNumber}
+            onBack={handleBackFromNumber}
+            userName={userData.fullName}
+            dateOfBirth={userData.dateOfBirth}
+            showOnlyMahadasha={true}
+          />
+          
+          <AntarDashaTable
+            data={selectedAntarDasha.data}
+            planet={selectedAntarDasha.planet}
+            startAge={selectedAntarDasha.startAge}
+            onClose={() => setSelectedAntarDasha(null)}
+            isPreBirth={selectedAntarDasha.isPreBirth}
+            dateOfBirth={selectedAntarDasha.dateOfBirth}
+            conductorIndex={selectedAntarDasha.conductorIndex}
+          />
+        </div>
+      )}
+
+      {/* Antar Dasha Table only (when no number detail is shown) */}
+      {selectedAntarDasha && !selectedNumber && (
         <AntarDashaTable
           data={selectedAntarDasha.data}
           planet={selectedAntarDasha.planet}
