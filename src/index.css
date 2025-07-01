@@ -117,6 +117,10 @@
     font-family: 'Calibri', 'Arial', sans-serif;
     font-weight: bold;
   }
+
+  .font-serif {
+    font-family: 'Lora', 'Georgia', serif;
+  }
 }
 
 /* Compressed table spacing for mobile and desktop */

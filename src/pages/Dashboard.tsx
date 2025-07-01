@@ -11,7 +11,6 @@ import { ref, set, get } from 'firebase/database';
 import { database } from '@/config/firebase';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Sparkles, Users, BarChart3, BookOpen } from 'lucide-react';
 import { UserManagementModal } from '@/components/UserManagementModal';
 import { Edit, Plus, Trash2 } from 'lucide-react';
 import PlanetGridFooter from '@/components/PlanetGridFooter';
@@ -59,7 +58,6 @@ const Dashboard = () => {
     try {
       const results = [];
       
-      // Process each entry (main user + relatives)
       for (const entry of data.entries) {
         const calculatedNumerology = calculateAllNumerology(entry.dateOfBirth, entry.fullName);
         
@@ -79,19 +77,15 @@ const Dashboard = () => {
         results.push(entryData);
       }
       
-      // Wait for user to be available
       if (!user?.uid) {
         console.error('User not authenticated');
         throw new Error('User not authenticated');
       }
 
-      // Create unique timestamp-based key for this submission
       const timestamp = Date.now();
       
-      // Save to Firebase using phone number as key with proper structure
       const entriesRef = ref(database, `users/${data.phoneNumber}/entries/${timestamp}`);
       
-      // Save all entries under one timestamp key
       await set(entriesRef, {
         entries: results,
         phoneNumber: data.phoneNumber,
@@ -101,11 +95,9 @@ const Dashboard = () => {
       
       console.log('Data saved to Firebase with timestamp:', timestamp);
       
-      // Store current phone number and timestamp for future updates
       setCurrentPhoneNumber(data.phoneNumber);
       setCurrentTimestamp(timestamp.toString());
       
-      // iOS-safe state update with error handling
       if (typeof window !== 'undefined') {
         try {
           requestAnimationFrame(() => {
@@ -114,7 +106,6 @@ const Dashboard = () => {
           });
         } catch (error) {
           console.error('Error updating state:', error);
-          // Fallback for iOS
           setTimeout(() => {
             setAllResults(results);
             setCurrentView('results');
@@ -131,7 +122,6 @@ const Dashboard = () => {
   }, [user]);
 
   const handleNewEntry = useCallback(() => {
-    // iOS-safe state reset with error handling
     if (typeof window !== 'undefined') {
       try {
         requestAnimationFrame(() => {
@@ -145,7 +135,6 @@ const Dashboard = () => {
         });
       } catch (error) {
         console.error('Error resetting state:', error);
-        // Fallback for iOS
         setTimeout(() => {
           setUserData(null);
           setGridData(null);
@@ -182,7 +171,6 @@ const Dashboard = () => {
       let updatedResults = [...allResults];
       
       if (managementModal.mode === 'add') {
-        // Add new family member
         const calculatedNumerology = calculateAllNumerology(userData.dateOfBirth, userData.fullName);
         const newUser = {
           fullName: userData.fullName,
@@ -196,7 +184,6 @@ const Dashboard = () => {
         };
         updatedResults.push(newUser);
       } else {
-        // Edit existing user
         const calculatedNumerology = calculateAllNumerology(userData.dateOfBirth, userData.fullName);
         updatedResults[managementModal.userIndex] = {
           ...updatedResults[managementModal.userIndex],
@@ -210,7 +197,6 @@ const Dashboard = () => {
         };
       }
 
-      // Update Firebase - Use existing timestamp to update the same record
       if (updatedResults.length > 0 && user?.uid && currentPhoneNumber && currentTimestamp) {
         const entriesRef = ref(database, `users/${currentPhoneNumber}/entries/${currentTimestamp}`);
         await set(entriesRef, {
@@ -222,7 +208,6 @@ const Dashboard = () => {
 
         console.log('Updated existing record:', currentTimestamp);
         
-        // Immediately refresh the display with updated data
         await refreshCurrentResults();
       }
     } catch (error) {
@@ -235,7 +220,6 @@ const Dashboard = () => {
     try {
       const updatedResults = allResults.filter((_, index) => index !== managementModal.userIndex);
       
-      // Update Firebase - Use existing timestamp to update the same record
       if (user?.uid && currentPhoneNumber && currentTimestamp) {
         const entriesRef = ref(database, `users/${currentPhoneNumber}/entries/${currentTimestamp}`);
         await set(entriesRef, {
@@ -247,7 +231,6 @@ const Dashboard = () => {
 
         console.log('Updated existing record after deletion:', currentTimestamp);
         
-        // Immediately refresh the display
         await refreshCurrentResults();
       }
     } catch (error) {
@@ -258,14 +241,9 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen celestial-bg">
-      {/* Celestial Header */}
       <CelestialHeader currentView={currentView} setCurrentView={setCurrentView} />
 
-      {/* Hero Section - Only show when on form view */}
-
-      {/* Main Content */}
       <main className="relative">
-        {/* Background for content sections */}
         <div className="bg-gradient-to-b from-transparent via-white/95 to-white min-h-screen">
           <div className="max-w-6xl mx-auto px-4 py-12">
             
@@ -276,21 +254,8 @@ const Dashboard = () => {
             )}
 
             {currentView === 'form' && (
-              <div className="space-y-8">
-                <div className="text-center mb-12 fade-in">
-                  <h2 className="text-4xl font-bold text-amber-600 mb-6">
-                    Begin Your Sacred Journey
-                  </h2>
-                  <p className="text-amber-400 max-w-2xl mx-auto text-lg leading-relaxed">
-                    Enter your birth details and optionally add family members to calculate 
-                    personal numerology and discover the cosmic patterns that influence your lives.
-                  </p>
-                  <div className="w-24 h-0.5 bg-gradient-to-r from-transparent via-amber-400 to-transparent mx-auto mt-6"></div>
-                </div>
-                
-                <div className="slide-up">
-                  <UserDataForm onSubmit={handleFormSubmit} />
-                </div>
+              <div className="pt-16">
+                <UserDataForm onSubmit={handleFormSubmit} />
               </div>
             )}
 
@@ -321,9 +286,7 @@ const Dashboard = () => {
                   </div>
                 </div>
                 
-                {/* Display Results with CRUD buttons */}
                 {allResults.length === 1 ? (
-                  // Single person - full width card
                   <div className="max-w-5xl mx-auto slide-up">
                     <Card className="shadow-xl border border-gray-200 bg-white rounded-xl">
                       <div className="absolute top-4 right-4 z-10">
@@ -357,12 +320,10 @@ const Dashboard = () => {
                     </Card>
                   </div>
                 ) : (
-                  // Multiple people - grid layout
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     {allResults.map((result, index) => (
                       <div key={`result-${index}-${result.fullName}`} className="slide-up">
                         <Card className="shadow-xl border border-gray-200 bg-white rounded-xl h-full relative">
-                          {/* CRUD Buttons */}
                           <div className="absolute top-4 right-4 z-10 flex gap-2">
                             <Button
                               size="sm"
@@ -436,27 +397,14 @@ const Dashboard = () => {
             )}
 
             {currentView === 'search' && (
-              <div className="space-y-8 pt-16">
-                <div className="text-center mb-12 fade-in">
-                  <h2 className="text-4xl font-light text-amber-700 mb-6">
-                    Search Sacred Records
-                  </h2>
-                  <p className="text-amber-400  max-w-2xl mx-auto text-lg leading-relaxed">
-                    Find previously created numerological analyses by searching with mobile numbers.
-                  </p>
-                  <div className="w-24 h-0.5 bg-gradient-to-r from-transparent via-purple-400 to-transparent mx-auto mt-6"></div>
-                </div>
-                
-                <div className="slide-up">
-                  <SearchTables />
-                </div>
+              <div className="pt-16">
+                <SearchTables />
               </div>
             )}
           </div>
         </div>
       </main>
 
-      {/* User Management Modal */}
       <UserManagementModal
         isOpen={managementModal.isOpen}
         onClose={closeUserModal}
@@ -467,7 +415,6 @@ const Dashboard = () => {
         isMainUser={managementModal.userData?.relation === 'SELF'}
       />
 
-      {/* New Planet Grid Footer */}
       <PlanetGridFooter />
     </div>
   );

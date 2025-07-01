@@ -23,12 +23,7 @@ export const CelestialHeader = ({ currentView, setCurrentView }: CelestialHeader
   }, []);
 
   const handleSearchClick = () => {
-    // Always redirect to search main screen, even if already viewing a search result
     setCurrentView('search');
-    // Force a page refresh to reset any search result state
-    if (currentView === 'search') {
-      window.location.reload();
-    }
   };
 
   return (
@@ -41,21 +36,21 @@ export const CelestialHeader = ({ currentView, setCurrentView }: CelestialHeader
     >
       <div className="max-w-6xl mx-auto px-4 py-4">
         <div className="flex justify-between items-center">
-          {/* Logo Section */}
-          <div className="text-center fade-in">
-            <div className="flex items-center gap-3">
-              <div className="relative">
-                <Sparkles className="w-8 h-8 text-amber-500 floating" />
-                <div className="absolute inset-0 w-8 h-8 bg-amber-400/20 rounded-full blur-sm"></div>
-              </div>
-              <div>
-                <h1 className="text-3xl font-bold mystic-text tracking-wider">ॐ</h1>
-                <p className="text-sm text-amber-600 font-light tracking-widest -mt-1">HEAL YOUR SOUL</p>
-              </div>
+          {/* Logo Section - Left */}
+          <div className="flex items-center gap-3">
+            <div className="relative">
+              <Sparkles className="w-8 h-8 text-amber-500 floating" />
+              <div className="absolute inset-0 w-8 h-8 bg-amber-400/20 rounded-full blur-sm"></div>
             </div>
           </div>
 
-          {/* Navigation */}
+          {/* Center Section - OM and HEAL YOUR SOUL */}
+          <div className="text-center fade-in flex-1">
+            <h1 className="text-5xl font-bold mystic-text tracking-wider mb-1">ॐ</h1>
+            <p className="text-lg text-amber-600 font-serif font-bold tracking-widest">HEAL YOUR SOUL</p>
+          </div>
+
+          {/* Navigation - Right */}
           <nav className="flex items-center gap-6">
             <Button 
               onClick={() => setCurrentView('form')}
