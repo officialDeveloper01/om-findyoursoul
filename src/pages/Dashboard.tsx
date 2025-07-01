@@ -7,7 +7,7 @@ import { CelestialHeader } from '@/components/CelestialHeader';
 import { CelestialLoader } from '@/components/CelestialLoader';
 import { Badge } from '@/components/ui/badge';
 import { calculateAllNumerology } from '@/utils/numerologyCalculator';
-import { ref, set } from 'firebase/database';
+import { ref, set, get } from 'firebase/database';
 import { database } from '@/config/firebase';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -32,6 +32,25 @@ const Dashboard = () => {
     userIndex: -1
   });
   const { user } = useAuth();
+
+  const refreshCurrentResults = useCallback(async () => {
+    if (!currentPhoneNumber || !currentTimestamp || !user?.uid) return;
+
+    try {
+      const entriesRef = ref(database, `users/${currentPhoneNumber}/entries/${currentTimestamp}`);
+      const snapshot = await get(entriesRef);
+      
+      if (snapshot.exists()) {
+        const entryGroup = snapshot.val();
+        if (entryGroup.entries && Array.isArray(entryGroup.entries)) {
+          setAllResults(entryGroup.entries);
+          console.log('Results refreshed with latest data');
+        }
+      }
+    } catch (error) {
+      console.error('Error refreshing results:', error);
+    }
+  }, [currentPhoneNumber, currentTimestamp, user]);
 
   const handleFormSubmit = useCallback(async (data) => {
     console.log('Form submitted with entries:', data);
@@ -202,9 +221,10 @@ const Dashboard = () => {
         });
 
         console.log('Updated existing record:', currentTimestamp);
+        
+        // Immediately refresh the display with updated data
+        await refreshCurrentResults();
       }
-
-      setAllResults(updatedResults);
     } catch (error) {
       console.error('Error saving user:', error);
       throw error;
@@ -226,9 +246,10 @@ const Dashboard = () => {
         });
 
         console.log('Updated existing record after deletion:', currentTimestamp);
+        
+        // Immediately refresh the display
+        await refreshCurrentResults();
       }
-
-      setAllResults(updatedResults);
     } catch (error) {
       console.error('Error deleting user:', error);
       throw error;

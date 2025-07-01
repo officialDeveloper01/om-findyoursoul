@@ -1,3 +1,4 @@
+
 import { useState, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -20,6 +21,7 @@ export const SearchTables = () => {
   const [searched, setSearched] = useState(false);
   const [selectedResults, setSelectedResults] = useState([]);
   const [currentGroupId, setCurrentGroupId] = useState('');
+  const [currentPhoneNumber, setCurrentPhoneNumber] = useState('');
   const [managementModal, setManagementModal] = useState({
     isOpen: false,
     mode: 'add' as 'add' | 'edit',
@@ -50,6 +52,7 @@ export const SearchTables = () => {
       const usersRef = ref(database, 'users');
       const snapshot = await get(usersRef);
       const results: any[] = [];
+      const familyGroupsFound = new Set(); // Track unique family groups
       
       if (snapshot.exists()) {
         const allUsers = snapshot.val();
@@ -65,16 +68,21 @@ export const SearchTables = () => {
               
               // Only include records created by the current user
               if (entryGroup.userId === user.uid && entryGroup.entries && Array.isArray(entryGroup.entries)) {
-                entryGroup.entries.forEach((entry: any, index: number) => {
-                  // Check if name matches (case insensitive)
+                // Check if any member in this family group matches the search
+                const hasMatch = entryGroup.entries.some((entry: any) => {
                   const nameMatches = entry.fullName && 
                     entry.fullName.toLowerCase().includes(fullName.toLowerCase());
-                  
-                  // Check mobile number if provided
                   const mobileMatches = !mobileNumber.trim() || 
                     phoneNumber.includes(mobileNumber.trim());
+                  return nameMatches && mobileMatches;
+                });
+
+                // If we found a match and haven't already processed this group
+                if (hasMatch && !familyGroupsFound.has(entryId)) {
+                  familyGroupsFound.add(entryId);
                   
-                  if (nameMatches && mobileMatches) {
+                  // Add the entire family group, not just the matching member
+                  entryGroup.entries.forEach((entry: any, index: number) => {
                     results.push({
                       id: `${entryId}-${index}`,
                       groupId: entryId,
@@ -83,15 +91,15 @@ export const SearchTables = () => {
                       createdAt: entryGroup.createdAt,
                       userId: entryGroup.userId
                     });
-                  }
-                });
+                  });
+                }
               }
             });
           }
         });
       }
       
-      console.log('Search results:', results);
+      console.log('Search results (full family groups):', results);
       setSearchResults(results);
     } catch (error) {
       console.error('Error searching records:', error);
@@ -118,8 +126,9 @@ export const SearchTables = () => {
       numerologyData: result.numerologyData
     }));
     
-    // Store the current group ID for updates
+    // Store the current group ID and phone number for updates
     setCurrentGroupId(groupId);
+    setCurrentPhoneNumber(groupResults[0]?.phoneNumber || '');
     
     // iOS-safe state update
     requestAnimationFrame(() => {
@@ -127,11 +136,42 @@ export const SearchTables = () => {
     });
   }, [searchResults]);
 
+  const refreshFamilyGroup = useCallback(async () => {
+    if (!currentGroupId || !currentPhoneNumber || !user) return;
+
+    try {
+      const entriesRef = ref(database, `users/${currentPhoneNumber}/entries/${currentGroupId}`);
+      const snapshot = await get(entriesRef);
+      
+      if (snapshot.exists()) {
+        const entryGroup = snapshot.val();
+        if (entryGroup.entries && Array.isArray(entryGroup.entries)) {
+          const refreshedResults = entryGroup.entries.map((entry: any) => ({
+            fullName: entry.fullName,
+            dateOfBirth: entry.dateOfBirth,
+            timeOfBirth: entry.timeOfBirth,
+            placeOfBirth: entry.placeOfBirth,
+            relation: entry.relation,
+            phoneNumber: currentPhoneNumber,
+            gridData: entry.gridData,
+            numerologyData: entry.numerologyData
+          }));
+          
+          setSelectedResults(refreshedResults);
+          console.log('Family group refreshed with updated data');
+        }
+      }
+    } catch (error) {
+      console.error('Error refreshing family group:', error);
+    }
+  }, [currentGroupId, currentPhoneNumber, user]);
+
   const handleBackToSearch = useCallback(() => {
     // iOS-safe state update
     requestAnimationFrame(() => {
       setSelectedResults([]);
       setCurrentGroupId('');
+      setCurrentPhoneNumber('');
     });
   }, []);
 
@@ -191,7 +231,7 @@ export const SearchTables = () => {
           timeOfBirth: userData.timeOfBirth,
           placeOfBirth: userData.placeOfBirth,
           relation: userData.relation,
-          phoneNumber: selectedResults[0]?.phoneNumber || mobileNumber,
+          phoneNumber: currentPhoneNumber,
           gridData: calculatedNumerology.loshuGrid,
           numerologyData: calculatedNumerology,
           createdAt: new Date().toISOString()
@@ -213,24 +253,20 @@ export const SearchTables = () => {
       }
 
       // Update Firebase - Update existing group with user ID
-      if (updatedResults.length > 0) {
-        const phoneNumber = selectedResults[0]?.phoneNumber || mobileNumber;
+      if (updatedResults.length > 0 && currentPhoneNumber && currentGroupId) {
+        const entriesRef = ref(database, `users/${currentPhoneNumber}/entries/${currentGroupId}`);
+        await set(entriesRef, {
+          entries: updatedResults,
+          phoneNumber: currentPhoneNumber,
+          createdAt: new Date().toISOString(),
+          userId: user.uid
+        });
+
+        console.log('Updated existing group:', currentGroupId);
         
-        if (phoneNumber && currentGroupId) {
-          // Update the existing group entry with user ID
-          const entriesRef = ref(database, `users/${phoneNumber}/entries/${currentGroupId}`);
-          await set(entriesRef, {
-            entries: updatedResults,
-            phoneNumber: phoneNumber,
-            createdAt: new Date().toISOString(),
-            userId: user.uid // Ensure user ID is saved
-          });
-
-          console.log('Updated existing group:', currentGroupId);
-        }
+        // Immediately refresh the display with updated data
+        await refreshFamilyGroup();
       }
-
-      setSelectedResults(updatedResults);
     } catch (error) {
       console.error('Error saving user:', error);
       throw error;
@@ -246,26 +282,24 @@ export const SearchTables = () => {
     try {
       const updatedResults = selectedResults.filter((_, index) => index !== managementModal.userIndex);
       
-      // Update Firebase - Update existing group instead of creating new one
-      const phoneNumber = selectedResults[0]?.phoneNumber || mobileNumber;
-      
-      if (phoneNumber && currentGroupId) {
+      // Update Firebase
+      if (currentPhoneNumber && currentGroupId) {
         if (updatedResults.length > 0) {
           // Update the existing group entry
-          const entriesRef = ref(database, `users/${phoneNumber}/entries/${currentGroupId}`);
+          const entriesRef = ref(database, `users/${currentPhoneNumber}/entries/${currentGroupId}`);
           await set(entriesRef, {
             entries: updatedResults,
-            phoneNumber: phoneNumber,
+            phoneNumber: currentPhoneNumber,
             createdAt: new Date().toISOString(),
             userId: user.uid
           });
         } else {
           // If no users left, remove the entire group
-          const entriesRef = ref(database, `users/${phoneNumber}/entries/${currentGroupId}`);
+          const entriesRef = ref(database, `users/${currentPhoneNumber}/entries/${currentGroupId}`);
           await remove(entriesRef);
           
           // Check if this was the last group for this phone number
-          const phoneRef = ref(database, `users/${phoneNumber}`);
+          const phoneRef = ref(database, `users/${currentPhoneNumber}`);
           const snapshot = await get(phoneRef);
           if (snapshot.exists()) {
             const phoneData = snapshot.val();
@@ -277,9 +311,15 @@ export const SearchTables = () => {
         }
 
         console.log('Updated existing group after deletion:', currentGroupId);
+        
+        // Immediately refresh the display
+        if (updatedResults.length > 0) {
+          await refreshFamilyGroup();
+        } else {
+          // If no members left, go back to search
+          handleBackToSearch();
+        }
       }
-
-      setSelectedResults(updatedResults);
     } catch (error) {
       console.error('Error deleting user:', error);
       throw error;
@@ -474,10 +514,13 @@ export const SearchTables = () => {
                 type="text"
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
-                placeholder="Enter full name to search"
+                placeholder="Enter any family member's name"
                 className="border-gray-200 focus:border-amber-400 focus:ring-amber-400"
                 required
               />
+              <p className="text-xs text-gray-500">
+                Search by any family member's name to see the entire family group
+              </p>
             </div>
             
             <div className="space-y-2">
@@ -500,7 +543,7 @@ export const SearchTables = () => {
               className="w-full bg-amber-600 hover:bg-amber-700 text-white"
               disabled={loading}
             >
-              {loading ? 'Searching...' : 'Search Records'}
+              {loading ? 'Searching...' : 'Search Family Records'}
             </Button>
           </form>
         </CardContent>
@@ -510,14 +553,14 @@ export const SearchTables = () => {
       {searched && (
         <div className="space-y-4">
           <h3 className="text-xl font-light text-gray-700 text-center">
-            Search Results for "{fullName}"
+            Family Groups Found for "{fullName}"
             {mobileNumber && ` (${mobileNumber})`}
           </h3>
           
           {Object.keys(groupedResults).length === 0 ? (
             <Card className="text-center py-8">
               <CardContent>
-                <p className="text-gray-500">No records found under this name.</p>
+                <p className="text-gray-500">No family records found under this name.</p>
                 {mobileNumber && (
                   <p className="text-gray-400 text-sm mt-2">
                     Try searching with just the name, or check if the mobile number is correct.
@@ -565,7 +608,7 @@ export const SearchTables = () => {
                           onClick={() => handleShowResults(groupId)}
                           className="bg-amber-600 hover:bg-amber-700 text-white"
                         >
-                          Show Family Analysis
+                          Show Complete Family Analysis
                         </Button>
                       </div>
                     </div>
