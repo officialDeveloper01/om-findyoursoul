@@ -11,6 +11,7 @@ export const LoshoGrid = ({ gridData, userData }) => {
   const [selectedAntarDasha, setSelectedAntarDasha] = useState(null);
   const [showPlaneAnalysis, setShowPlaneAnalysis] = useState(false);
   const [selectedNumber, setSelectedNumber] = useState(null);
+  const [showConductorDetail, setShowConductorDetail] = useState(null);
 
   const hiddenMap = {
     11: 2,
@@ -147,13 +148,19 @@ export const LoshoGrid = ({ gridData, userData }) => {
         dateOfBirth: userData.dateOfBirth,
         conductorIndex: ageIndex
       });
+
+      // Also show the number detail for conductor clicks
+      setShowConductorDetail(conductorNumber);
     } catch (error) {
       console.error('Error calculating Antar Dasha:', error);
     }
   }, [conductorSeries, userData.dateOfBirth]);
 
-  const handleNumberClick = (digit: number) => {
+  // Handle grid number clicks - only show number detail, no Antar Dasha
+  const handleGridNumberClick = (digit: number) => {
     setSelectedNumber(digit);
+    setSelectedAntarDasha(null);
+    setShowConductorDetail(null);
   };
 
   const renderGridCell = (digit: number) => {
@@ -163,7 +170,7 @@ export const LoshoGrid = ({ gridData, userData }) => {
 
     return (
       <button 
-        onClick={() => handleNumberClick(digit)}
+        onClick={() => handleGridNumberClick(digit)}
         className="relative w-20 h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 bg-white border-2 border-gray-400 rounded-lg flex items-center justify-center text-center p-3 hover:bg-gray-50 hover:border-blue-400 transition-colors cursor-pointer shadow-md"
         title={`Click to view detailed analysis for Number ${digit}`}
       >
@@ -218,11 +225,17 @@ export const LoshoGrid = ({ gridData, userData }) => {
     return `${day}/${month}/${year}`;
   };
 
+  // Handle back from number detail
+  const handleBackFromDetail = () => {
+    setSelectedNumber(null);
+    setShowConductorDetail(null);
+  };
+
   if (selectedNumber) {
     return (
       <NumberDetail 
         number={selectedNumber}
-        onBack={() => setSelectedNumber(null)}
+        onBack={handleBackFromDetail}
         userName={userData.fullName}
         dateOfBirth={userData.dateOfBirth}
       />
@@ -370,17 +383,35 @@ export const LoshoGrid = ({ gridData, userData }) => {
         </div>
       </Card>
 
-      {/* Antar Dasha Table */}
+      {/* Antar Dasha Table and Number Detail for Conductor clicks */}
       {selectedAntarDasha && (
-        <AntarDashaTable
-          data={selectedAntarDasha.data}
-          planet={selectedAntarDasha.planet}
-          startAge={selectedAntarDasha.startAge}
-          onClose={() => setSelectedAntarDasha(null)}
-          isPreBirth={selectedAntarDasha.isPreBirth}
-          dateOfBirth={selectedAntarDasha.dateOfBirth}
-          conductorIndex={selectedAntarDasha.conductorIndex}
-        />
+        <div className="space-y-8 mt-8">
+          <AntarDashaTable
+            data={selectedAntarDasha.data}
+            planet={selectedAntarDasha.planet}
+            startAge={selectedAntarDasha.startAge}
+            onClose={() => {
+              setSelectedAntarDasha(null);
+              setShowConductorDetail(null);
+            }}
+            isPreBirth={selectedAntarDasha.isPreBirth}
+            dateOfBirth={selectedAntarDasha.dateOfBirth}
+            conductorIndex={selectedAntarDasha.conductorIndex}
+          />
+          
+          {/* Show Number Detail for conductor clicks */}
+          {showConductorDetail && (
+            <NumberDetail 
+              number={showConductorDetail}
+              onBack={() => {
+                setSelectedAntarDasha(null);
+                setShowConductorDetail(null);
+              }}
+              userName={userData.fullName}
+              dateOfBirth={userData.dateOfBirth}
+            />
+          )}
+        </div>
       )}
     </div>
   );
