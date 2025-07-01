@@ -21,12 +21,6 @@ export const NumberDetail = ({ number, onBack, userName, dateOfBirth }: NumberDe
   };
 
   const content = getNumberData(number);
-  
-  // Filter out Mahadasha - Antardasha section
-  const filteredSections = content.sections.filter(section => 
-    !section.title.toLowerCase().includes('mahadasha') && 
-    !section.title.toLowerCase().includes('antardasha')
-  );
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8 font-calibri">
@@ -63,7 +57,7 @@ export const NumberDetail = ({ number, onBack, userName, dateOfBirth }: NumberDe
 
       {/* Content Sections */}
       <div className="space-y-6">
-        {filteredSections.map((section, index) => (
+        {content.sections.map((section, index) => (
           <Card key={index} className="shadow-lg border-2 border-gray-300 bg-white/95 backdrop-blur-sm rounded-xl">
             <CardHeader>
               <CardTitle className="text-xl md:text-2xl font-bold text-gray-800 border-b border-gray-200 pb-2">
