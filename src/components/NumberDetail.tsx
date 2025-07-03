@@ -50,14 +50,14 @@ export const NumberDetail = ({
         !section.title.toLowerCase().includes('antardasha')
       );
 
-  // For Mahadasha table display
+  // For Mahadasha table display - ONLY show the table, no other content
   if (showOnlyMahadasha && filteredSections.length > 0) {
     const mahadashaSection = filteredSections[0];
     
     return (
-      <div className="max-w-4xl mx-auto px-4 py-6 font-calibri">
+      <div className="max-w-4xl mx-auto px-4 py-4 font-calibri">
         {/* Close Button - Top */}
-        <div className="mb-4 flex justify-center">
+        <div className="mb-3 flex justify-center">
           <Button 
             onClick={onClose || onBack}
             className="bg-red-600 hover:bg-red-700 text-white font-bold"
@@ -68,14 +68,14 @@ export const NumberDetail = ({
         </div>
 
         {/* Mahadasha Table */}
-        <Card className="shadow-xl border-2 border-gray-400 bg-white/90 backdrop-blur-md rounded-xl mb-6">
-          <CardHeader className="text-center pb-3">
+        <Card className="shadow-xl border-2 border-gray-400 bg-white/90 backdrop-blur-md rounded-xl mb-3">
+          <CardHeader className="text-center pb-2">
             <CardTitle className="text-2xl md:text-3xl font-bold text-blue-800">
               Number {number} - Mahadasha Analysis
             </CardTitle>
             <p className="text-lg text-gray-600">Planetary Influence & Timing</p>
             {userName && dateOfBirth && (
-              <div className="mt-3 p-3 bg-gray-50 rounded-lg border border-gray-200">
+              <div className="mt-2 p-2 bg-gray-50 rounded-lg border border-gray-200">
                 <p className="text-gray-700 text-sm">
                   <span className="font-semibold">Analysis for:</span> {userName}
                 </p>
@@ -85,11 +85,11 @@ export const NumberDetail = ({
               </div>
             )}
           </CardHeader>
-          <CardContent className="p-4">
+          <CardContent className="p-3">
             <BorderedTable className="compressed-table">
               <BorderedTableHeader>
                 <BorderedTableRow>
-                  <BorderedTableHead className="text-center font-bold text-gray-800 bg-gray-100">
+                  <BorderedTableHead className="text-center font-bold text-gray-800 bg-gray-100 py-2">
                     {mahadashaSection.title}
                   </BorderedTableHead>
                 </BorderedTableRow>
@@ -97,8 +97,8 @@ export const NumberDetail = ({
               <BorderedTableBody>
                 {mahadashaSection.content.map((line, lineIndex) => (
                   <BorderedTableRow key={lineIndex}>
-                    <BorderedTableCell className="text-gray-700 leading-tight py-2 px-3">
-                      {line === "" ? <div className="h-1"></div> : line}
+                    <BorderedTableCell className="text-gray-700 leading-snug py-1.5 px-3 text-sm">
+                      {line === "" ? <div className="h-0.5"></div> : line}
                     </BorderedTableCell>
                   </BorderedTableRow>
                 ))}
@@ -116,35 +116,6 @@ export const NumberDetail = ({
             <X className="mr-2 h-4 w-4" />
             Close
           </Button>
-        </div>
-
-        {/* Number Details Below Table */}
-        <div className="space-y-4 mt-6">
-          {content.sections.filter(section => 
-            !section.title.toLowerCase().includes('mahadasha') && 
-            !section.title.toLowerCase().includes('antardasha')
-          ).map((section, index) => (
-            <Card key={index} className="shadow-lg border-2 border-gray-300 bg-white/95 backdrop-blur-sm rounded-xl">
-              <CardHeader className="pb-2">
-                <CardTitle className="text-lg md:text-xl font-bold text-gray-800 border-b border-gray-200 pb-1">
-                  {section.title}
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-2 pt-2">
-                {section.content.map((line, lineIndex) => (
-                  <div key={lineIndex}>
-                    {line === "" ? (
-                      <div className="h-1"></div>
-                    ) : (
-                      <p className={`${line.startsWith('•') ? 'ml-4' : ''} ${line.match(/^[A-Z][a-z]+ –/) ? 'font-bold text-base text-blue-700 mt-3' : ''} text-gray-700 leading-tight text-sm`}>
-                        {line}
-                      </p>
-                    )}
-                  </div>
-                ))}
-              </CardContent>
-            </Card>
-          ))}
         </div>
       </div>
     );
