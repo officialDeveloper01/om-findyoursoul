@@ -53,7 +53,7 @@ export const NumberDetail = ({
         !section.title.toLowerCase().includes('antardasha')
       );
 
-  // For bottom number clicks - show Antar Dasha Table only, with button for Mahadasha
+  // For bottom number clicks - show button only, no default table
   if (showOnlyMahadasha) {
     const antarDashaSection = filteredSections[0]; // This is the Antar Dasha table
     
@@ -70,55 +70,7 @@ export const NumberDetail = ({
           </Button>
         </div>
 
-        {/* Antar Dasha Table Only */}
-        {antarDashaSection && (
-          <Card className="shadow-xl border-2 border-gray-400 bg-white/90 backdrop-blur-md rounded-xl mb-3">
-            <CardHeader className="text-center pb-2">
-              <CardTitle className="text-2xl md:text-3xl font-bold text-blue-800">
-                Number {number} - Antar Dasha Analysis
-              </CardTitle>
-              <p className="text-lg text-gray-600">Planetary Timing & Cycles</p>
-              {userName && dateOfBirth && (
-                <div className="mt-2 p-2 bg-gray-50 rounded-lg border border-gray-200">
-                  <p className="text-gray-700 text-sm">
-                    <span className="font-semibold">Analysis for:</span> {userName}
-                  </p>
-                  <p className="text-gray-700 text-sm">
-                    <span className="font-semibold">Date of Birth:</span> {formatDateDDMMYYYY(dateOfBirth)}
-                  </p>
-                </div>
-              )}
-            </CardHeader>
-            <CardContent className="p-3">
-              <BorderedTable className="compressed-table">
-                <BorderedTableHeader>
-                  <BorderedTableRow>
-                    <BorderedTableHead className="text-center font-bold text-gray-800 bg-gray-100 py-2">
-                      {antarDashaSection.title}
-                    </BorderedTableHead>
-                  </BorderedTableRow>
-                </BorderedTableHeader>
-                <BorderedTableBody>
-                  {antarDashaSection.content.map((line, lineIndex) => (
-                    <BorderedTableRow key={lineIndex}>
-                      <BorderedTableCell className={`text-gray-700 py-1.5 px-3 text-sm leading-tight ${
-                        line.startsWith('•') ? 'pl-8' : ''
-                      } ${
-                        line.includes('Positive') || line.includes('Negative') ? 'font-semibold text-blue-700 bg-blue-50' : ''
-                      } ${
-                        line.trim().startsWith('Positive') || line.trim().startsWith('Negative') ? 'pt-2' : ''
-                      }`}>
-                        {line === "" ? <div className="h-1"></div> : line}
-                      </BorderedTableCell>
-                    </BorderedTableRow>
-                  ))}
-                </BorderedTableBody>
-              </BorderedTable>
-            </CardContent>
-          </Card>
-        )}
-
-        {/* Mahadasha – Antardasha Button (Only show if analysis is hidden) */}
+        {/* Mahadasha – Antardasha Button (Always show when analysis is hidden) */}
         {!showMahadashaAnalysis && (
           <div className="flex justify-center mb-3">
             <Button 
