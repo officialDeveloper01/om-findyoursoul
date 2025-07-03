@@ -104,8 +104,12 @@ export const NumberDetail = ({
                 {mahadashaSection.content.map((line, lineIndex) => (
                   <BorderedTableRow key={lineIndex}>
                     <BorderedTableCell className={`text-gray-700 py-1.5 px-3 text-sm leading-tight ${
-                      line.startsWith('•') ? 'pl-6' : ''
-                    } ${line.includes('Positive') || line.includes('Negative') ? 'font-semibold text-blue-700' : ''}`}>
+                      line.startsWith('•') ? 'pl-8' : ''
+                    } ${
+                      line.includes('Positive') || line.includes('Negative') ? 'font-semibold text-blue-700 bg-blue-50' : ''
+                    } ${
+                      line.trim().startsWith('Positive') || line.trim().startsWith('Negative') ? 'pt-2' : ''
+                    }`}>
                       {line === "" ? <div className="h-1"></div> : line}
                     </BorderedTableCell>
                   </BorderedTableRow>
@@ -115,21 +119,21 @@ export const NumberDetail = ({
           </CardContent>
         </Card>
 
-        {/* Toggle Button for Detailed Content */}
+        {/* Toggle Button for Detailed Planet Analysis */}
         <div className="flex justify-center mb-3">
           <Button 
             onClick={() => setShowDetailedContent(!showDetailedContent)}
             variant="outline"
-            className="bg-blue-50 border-blue-300 text-blue-700 hover:bg-blue-100 flex items-center gap-2"
+            className="bg-blue-50 border-blue-300 text-blue-700 hover:bg-blue-100 flex items-center gap-2 px-6 py-2"
           >
             {showDetailedContent ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
-            Mahadasha–Antardasha Details
+            Mahadasha–Antardasha
           </Button>
         </div>
 
-        {/* Detailed Content (Initially Hidden) */}
+        {/* Detailed Planet Analysis Content (Initially Hidden) */}
         {showDetailedContent && detailedSections.length > 0 && (
-          <div className="space-y-4">
+          <div className="space-y-3">
             {detailedSections.map((section, index) => (
               <Card key={index} className="shadow-lg border-2 border-gray-300 bg-white/95 backdrop-blur-sm rounded-xl">
                 <CardHeader className="pb-2">
@@ -144,9 +148,9 @@ export const NumberDetail = ({
                         <div className="h-1"></div>
                       ) : (
                         <p className={`${
-                          line.startsWith('•') ? 'ml-4 text-sm' : ''
+                          line.startsWith('•') ? 'ml-6 text-sm' : ''
                         } ${
-                          line.match(/^[A-Z][a-z]+ –/) ? 'font-bold text-base text-blue-700 mt-2' : 'text-sm'
+                          line.match(/^[A-Z][a-z]+ –/) || line.includes('Positive') || line.includes('Negative') ? 'font-bold text-base text-blue-700 mt-2' : 'text-sm'
                         } text-gray-700 leading-snug`}>
                           {line}
                         </p>
@@ -225,9 +229,9 @@ export const NumberDetail = ({
                     <div className="h-1"></div>
                   ) : (
                     <p className={`${
-                      line.startsWith('•') ? 'ml-4 text-sm' : ''
+                      line.startsWith('•') ? 'ml-6 text-sm' : ''
                     } ${
-                      line.match(/^[A-Z][a-z]+ –/) ? 'font-bold text-base text-blue-700 mt-2' : 'text-sm'
+                      line.match(/^[A-Z][a-z]+ –/) || line.includes('Positive') || line.includes('Negative') ? 'font-bold text-base text-blue-700 mt-2' : 'text-sm'
                     } text-gray-700 leading-snug`}>
                       {line}
                     </p>
