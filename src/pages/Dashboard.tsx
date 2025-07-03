@@ -248,7 +248,7 @@ const Dashboard = () => {
           <div className="max-w-6xl mx-auto px-4 py-12"> 
 
             {currentView === 'form' && (
-              <div className="pt-16">
+              <div className="pt-24">
                 <UserDataForm onSubmit={handleFormSubmit} />
               </div>
             )}
@@ -397,7 +397,7 @@ const Dashboard = () => {
             )}
 
             {currentView === 'search' && (
-              <div className="pt-16">
+              <div className="pt-24">
                 <SearchTables />
               </div>
             )}

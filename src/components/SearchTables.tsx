@@ -334,7 +334,7 @@ export const SearchTables = () => {
           <Button 
             onClick={handleBackToSearch}
             variant="outline"
-            className="mb-6"
+            className="mb-12"
           >
             ← Back to Search Results
           </Button>
