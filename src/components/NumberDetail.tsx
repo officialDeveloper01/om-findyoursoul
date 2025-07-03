@@ -178,6 +178,12 @@ export const NumberDetail = ({
   }
 
   // Regular number detail view (for grid clicks) - Compact layout
+  const [showMahadashaTable, setShowMahadashaTable] = useState(false);
+  const mahadashaSection = content.sections.find(section => 
+    section.title.toLowerCase().includes('mahadasha') || 
+    section.title.toLowerCase().includes('antardasha')
+  );
+
   return (
     <div className="max-w-4xl mx-auto px-4 py-4 font-calibri">
       {/* Top Back Button */}
@@ -252,6 +258,66 @@ export const NumberDetail = ({
           </Card>
         )}
       </div>
+
+      {/* Mahadasha – Antardasha Button */}
+      <div className="flex justify-center mb-4">
+        <Button 
+          onClick={() => setShowMahadashaTable(!showMahadashaTable)}
+          variant="outline"
+          className="bg-blue-50 border-blue-300 text-blue-700 hover:bg-blue-100 flex items-center gap-2 px-6 py-2"
+        >
+          {showMahadashaTable ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+          Mahadasha – Antardasha
+        </Button>
+      </div>
+
+      {/* Mahadasha Table (Initially Hidden) */}
+      {showMahadashaTable && mahadashaSection && (
+        <Card className="shadow-xl border-2 border-gray-400 bg-white/90 backdrop-blur-md rounded-xl mb-4">
+          <CardHeader className="text-center pb-2">
+            <CardTitle className="text-2xl md:text-3xl font-bold text-blue-800">
+              Number {number} - Mahadasha Analysis
+            </CardTitle>
+            <p className="text-lg text-gray-600">Planetary Influence & Timing</p>
+            {userName && dateOfBirth && (
+              <div className="mt-2 p-2 bg-gray-50 rounded-lg border border-gray-200">
+                <p className="text-gray-700 text-sm">
+                  <span className="font-semibold">Analysis for:</span> {userName}
+                </p>
+                <p className="text-gray-700 text-sm">
+                  <span className="font-semibold">Date of Birth:</span> {formatDateDDMMYYYY(dateOfBirth)}
+                </p>
+              </div>
+            )}
+          </CardHeader>
+          <CardContent className="p-3">
+            <BorderedTable className="compressed-table">
+              <BorderedTableHeader>
+                <BorderedTableRow>
+                  <BorderedTableHead className="text-center font-bold text-gray-800 bg-gray-100 py-2">
+                    {mahadashaSection.title}
+                  </BorderedTableHead>
+                </BorderedTableRow>
+              </BorderedTableHeader>
+              <BorderedTableBody>
+                {mahadashaSection.content.map((line, lineIndex) => (
+                  <BorderedTableRow key={lineIndex}>
+                    <BorderedTableCell className={`text-gray-700 py-1.5 px-3 text-sm leading-tight ${
+                      line.startsWith('•') ? 'pl-8' : ''
+                    } ${
+                      line.includes('Positive') || line.includes('Negative') ? 'font-semibold text-blue-700 bg-blue-50' : ''
+                    } ${
+                      line.trim().startsWith('Positive') || line.trim().startsWith('Negative') ? 'pt-2' : ''
+                    }`}>
+                      {line === "" ? <div className="h-1"></div> : line}
+                    </BorderedTableCell>
+                  </BorderedTableRow>
+                ))}
+              </BorderedTableBody>
+            </BorderedTable>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Bottom Back Button */}
       <div className="mt-6 text-center">
