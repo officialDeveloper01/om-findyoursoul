@@ -393,15 +393,6 @@ export const LoshoGrid = ({ gridData, userData }) => {
       {/* Show Number Detail and Antar Dasha Table when conductor is clicked */}
       {selectedNumber && selectedAntarDasha && showMahadashaOnly && (
         <div className="space-y-6 mt-8">
-          <NumberDetail 
-            number={selectedNumber}
-            onBack={handleBackFromNumber}
-            onClose={handleCloseNumberDetail}
-            userName={userData.fullName}
-            dateOfBirth={userData.dateOfBirth}
-            showOnlyMahadasha={true}
-          />
-          
           <AntarDashaTable
             data={selectedAntarDasha.data}
             planet={selectedAntarDasha.planet}
@@ -410,6 +401,15 @@ export const LoshoGrid = ({ gridData, userData }) => {
             isPreBirth={selectedAntarDasha.isPreBirth}
             dateOfBirth={selectedAntarDasha.dateOfBirth}
             conductorIndex={selectedAntarDasha.conductorIndex}
+          />
+
+          <NumberDetail 
+            number={selectedNumber}
+            onBack={handleBackFromNumber}
+            onClose={handleCloseNumberDetail}
+            userName={userData.fullName}
+            dateOfBirth={userData.dateOfBirth}
+            showOnlyMahadasha={true}
           />
         </div>
       )}
