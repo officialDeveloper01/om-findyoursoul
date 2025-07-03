@@ -1,7 +1,8 @@
 
+import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, X } from 'lucide-react';
+import { ArrowLeft, X, ChevronDown, ChevronUp } from 'lucide-react';
 import { getNumberData } from '@/data/numbers';
 import { 
   BorderedTable, 
@@ -29,6 +30,8 @@ export const NumberDetail = ({
   showOnlyMahadasha = false,
   onClose
 }: NumberDetailProps) => {
+  const [showDetails, setShowDetails] = useState(false);
+
   const formatDateDDMMYYYY = (dateString: string) => {
     const date = new Date(dateString);
     const day = date.getDate().toString().padStart(2, '0');
@@ -50,14 +53,20 @@ export const NumberDetail = ({
         !section.title.toLowerCase().includes('antardasha')
       );
 
-  // For Mahadasha table display - ONLY show the table, no other content
+  // For Mahadasha table display - show table first, then toggle for details
   if (showOnlyMahadasha && filteredSections.length > 0) {
     const mahadashaSection = filteredSections[0];
+    
+    // Get all other sections for the toggle
+    const otherSections = content.sections.filter(section => 
+      !section.title.toLowerCase().includes('mahadasha') && 
+      !section.title.toLowerCase().includes('antardasha')
+    );
     
     return (
       <div className="max-w-4xl mx-auto px-4 py-4 font-calibri">
         {/* Close Button - Top */}
-        <div className="mb-3 flex justify-center">
+        <div className="mb-4 flex justify-center">
           <Button 
             onClick={onClose || onBack}
             className="bg-red-600 hover:bg-red-700 text-white font-bold"
@@ -68,14 +77,14 @@ export const NumberDetail = ({
         </div>
 
         {/* Mahadasha Table */}
-        <Card className="shadow-xl border-2 border-gray-400 bg-white/90 backdrop-blur-md rounded-xl mb-3">
-          <CardHeader className="text-center pb-2">
+        <Card className="shadow-xl border-2 border-gray-400 bg-white/90 backdrop-blur-md rounded-xl mb-4">
+          <CardHeader className="text-center pb-3">
             <CardTitle className="text-2xl md:text-3xl font-bold text-blue-800">
               Number {number} - Mahadasha Analysis
             </CardTitle>
             <p className="text-lg text-gray-600">Planetary Influence & Timing</p>
             {userName && dateOfBirth && (
-              <div className="mt-2 p-2 bg-gray-50 rounded-lg border border-gray-200">
+              <div className="mt-3 p-3 bg-gray-50 rounded-lg border border-gray-200">
                 <p className="text-gray-700 text-sm">
                   <span className="font-semibold">Analysis for:</span> {userName}
                 </p>
@@ -85,11 +94,11 @@ export const NumberDetail = ({
               </div>
             )}
           </CardHeader>
-          <CardContent className="p-3">
+          <CardContent className="p-4">
             <BorderedTable className="compressed-table">
               <BorderedTableHeader>
                 <BorderedTableRow>
-                  <BorderedTableHead className="text-center font-bold text-gray-800 bg-gray-100 py-2">
+                  <BorderedTableHead className="text-center font-bold text-gray-800 bg-gray-100 py-3">
                     {mahadashaSection.title}
                   </BorderedTableHead>
                 </BorderedTableRow>
@@ -97,8 +106,12 @@ export const NumberDetail = ({
               <BorderedTableBody>
                 {mahadashaSection.content.map((line, lineIndex) => (
                   <BorderedTableRow key={lineIndex}>
-                    <BorderedTableCell className="text-gray-700 leading-snug py-1.5 px-3 text-sm">
-                      {line === "" ? <div className="h-0.5"></div> : line}
+                    <BorderedTableCell className={`text-gray-700 leading-relaxed py-2 px-4 text-sm ${
+                      line.startsWith('•') ? 'pl-8' : ''
+                    } ${
+                      line.includes('Positive') || line.includes('Negative') ? 'font-semibold text-blue-700 pt-3' : ''
+                    }`}>
+                      {line === "" ? <div className="h-1"></div> : line}
                     </BorderedTableCell>
                   </BorderedTableRow>
                 ))}
@@ -107,8 +120,52 @@ export const NumberDetail = ({
           </CardContent>
         </Card>
 
+        {/* Toggle Button */}
+        <div className="flex justify-center mb-4">
+          <Button 
+            onClick={() => setShowDetails(!showDetails)}
+            variant="outline"
+            className="bg-blue-600 hover:bg-blue-700 text-white border-blue-600 flex items-center gap-2"
+          >
+            {showDetails ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+            {showDetails ? 'Hide' : 'Show'} Number Details
+          </Button>
+        </div>
+
+        {/* Number Details (Hidden by default) */}
+        {showDetails && (
+          <div className="space-y-4">
+            {otherSections.map((section, index) => (
+              <Card key={index} className="shadow-lg border border-gray-300 bg-white/95 backdrop-blur-sm rounded-xl">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-lg font-bold text-gray-800 border-b border-gray-200 pb-2">
+                    {section.title}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  {section.content.map((line, lineIndex) => (
+                    <div key={lineIndex}>
+                      {line === "" ? (
+                        <div className="h-1"></div>
+                      ) : (
+                        <p className={`${
+                          line.startsWith('•') ? 'ml-4 text-sm' : ''
+                        } ${
+                          line.match(/^[A-Z][a-z]+ –/) ? 'font-bold text-md text-blue-700 mt-3' : 'text-sm'
+                        } text-gray-700 leading-snug`}>
+                          {line}
+                        </p>
+                      )}
+                    </div>
+                  ))}
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        )}
+
         {/* Close Button - Bottom */}
-        <div className="flex justify-center">
+        <div className="flex justify-center mt-4">
           <Button 
             onClick={onClose || onBack}
             className="bg-red-600 hover:bg-red-700 text-white font-bold"
@@ -157,22 +214,26 @@ export const NumberDetail = ({
         </CardHeader>
       </Card>
 
-      {/* Content Sections */}
-      <div className="space-y-6">
+      {/* Content Sections - Compact Layout */}
+      <div className="space-y-4">
         {filteredSections.map((section, index) => (
-          <Card key={index} className="shadow-lg border-2 border-gray-300 bg-white/95 backdrop-blur-sm rounded-xl">
-            <CardHeader>
-              <CardTitle className="text-xl md:text-2xl font-bold text-gray-800 border-b border-gray-200 pb-2">
+          <Card key={index} className="shadow-lg border border-gray-300 bg-white/95 backdrop-blur-sm rounded-xl">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-lg md:text-xl font-bold text-gray-800 border-b border-gray-200 pb-2">
                 {section.title}
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-3">
+            <CardContent className="space-y-2">
               {section.content.map((line, lineIndex) => (
                 <div key={lineIndex}>
                   {line === "" ? (
-                    <div className="h-2"></div>
+                    <div className="h-1"></div>
                   ) : (
-                    <p className={`${line.startsWith('•') ? 'ml-4' : ''} ${line.match(/^[A-Z][a-z]+ –/) ? 'font-bold text-lg text-blue-700 mt-4' : ''} text-gray-700 leading-relaxed`}>
+                    <p className={`${
+                      line.startsWith('•') ? 'ml-4 text-sm' : ''
+                    } ${
+                      line.match(/^[A-Z][a-z]+ –/) ? 'font-bold text-md text-blue-700 mt-3' : 'text-sm'
+                    } text-gray-700 leading-snug`}>
                       {line}
                     </p>
                   )}
@@ -183,9 +244,9 @@ export const NumberDetail = ({
         ))}
         
         {filteredSections.length === 0 && (
-          <Card className="shadow-lg border-2 border-gray-300 bg-white/95 backdrop-blur-sm rounded-xl">
-            <CardContent className="text-center py-8">
-              <p className="text-gray-600">
+          <Card className="shadow-lg border border-gray-300 bg-white/95 backdrop-blur-sm rounded-xl">
+            <CardContent className="text-center py-6">
+              <p className="text-gray-600 text-sm">
                 Content for this number is being prepared.
               </p>
             </CardContent>

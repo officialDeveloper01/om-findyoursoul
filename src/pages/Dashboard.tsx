@@ -245,10 +245,10 @@ const Dashboard = () => {
 
       <main className="relative">
         <div className="bg-gradient-to-b from-transparent via-white/95 to-white min-h-screen">
-          <div className="max-w-6xl mx-auto px-4 py-12"> 
+          <div className="max-w-6xl mx-auto px-4 py-4"> 
 
             {currentView === 'form' && (
-              <div className="pt-16">
+              <div className="pt-4">
                 <UserDataForm onSubmit={handleFormSubmit} />
               </div>
             )}
@@ -260,7 +260,7 @@ const Dashboard = () => {
             )}
 
             {currentView === 'results' && allResults.length > 0 && (
-              <div className="space-y-8 pt-16">
+              <div className="space-y-6 pt-4">
                 <div className="text-center fade-in">
                   <h2 className="text-4xl font-light text-amber-700 mb-2">
                     Your Sacred Analysis
@@ -397,7 +397,7 @@ const Dashboard = () => {
             )}
 
             {currentView === 'search' && (
-              <div className="pt-16">
+              <div className="pt-4">
                 <SearchTables />
               </div>
             )}
