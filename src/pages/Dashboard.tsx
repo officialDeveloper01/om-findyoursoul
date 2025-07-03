@@ -245,17 +245,17 @@ const Dashboard = () => {
 
       <main className="relative">
         <div className="bg-gradient-to-b from-transparent via-white/95 to-white min-h-screen">
-          <div className="max-w-6xl mx-auto px-4 py-12">
-            
-            {isLoading && (
-              <div className="text-center mb-8">
-                <CelestialLoader />
-              </div>
-            )}
+          <div className="max-w-6xl mx-auto px-4 py-12"> 
 
             {currentView === 'form' && (
               <div className="pt-16">
                 <UserDataForm onSubmit={handleFormSubmit} />
+              </div>
+            )}
+
+            {isLoading && (
+              <div className="text-center mb-8">
+                <CelestialLoader />
               </div>
             )}
 
