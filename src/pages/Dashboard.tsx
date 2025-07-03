@@ -248,7 +248,7 @@ const Dashboard = () => {
           <div className="max-w-6xl mx-auto px-4 py-4"> 
 
             {currentView === 'form' && (
-              <div className="pt-4">
+              <div className="pt-12">
                 <UserDataForm onSubmit={handleFormSubmit} />
               </div>
             )}
@@ -260,7 +260,7 @@ const Dashboard = () => {
             )}
 
             {currentView === 'results' && allResults.length > 0 && (
-              <div className="space-y-6 pt-4">
+              <div className="space-y-6 pt-12">
                 <div className="text-center fade-in">
                   <h2 className="text-4xl font-light text-amber-700 mb-2">
                     Your Sacred Analysis
@@ -397,7 +397,7 @@ const Dashboard = () => {
             )}
 
             {currentView === 'search' && (
-              <div className="pt-4">
+              <div className="pt-12">
                 <SearchTables />
               </div>
             )}
