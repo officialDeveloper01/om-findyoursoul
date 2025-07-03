@@ -60,7 +60,7 @@ export const NumberDetail = ({
     return (
       <div className="max-w-4xl mx-auto px-4 py-4 font-calibri">
         {/* Close Button - Top */}
-        <div className="mb-3 flex justify-center">
+        {/* <div className="mb-3 flex justify-center">
           <Button 
             onClick={onClose || onBack}
             className="bg-red-600 hover:bg-red-700 text-white font-bold"
@@ -68,7 +68,7 @@ export const NumberDetail = ({
             <X className="mr-2 h-4 w-4" />
             Close
           </Button>
-        </div>
+        </div> */}
 
         {/* Mahadasha – Antardasha Button (Always show when analysis is hidden) */}
         {!showMahadashaAnalysis && (
@@ -87,6 +87,15 @@ export const NumberDetail = ({
         {/* Detailed Mahadasha Analysis (Initially Hidden) */}
         {showMahadashaAnalysis && antarDashaSection && (
           <Card className="shadow-xl border-2 border-gray-400 bg-white/90 backdrop-blur-md rounded-xl mb-3">
+            <div className="flex justify-left pt-3 pb-2 px-4">
+              <Button 
+                onClick={() => setShowMahadashaAnalysis(false)}
+                className="bg-amber-600 hover:bg-amber-700 text-white font-bold"
+              >
+                <ArrowLeft className="mr-2 h-4 w-4" />
+                Back
+              </Button>
+            </div>
             <CardHeader className="text-center pb-2">
               <CardTitle className="text-2xl md:text-3xl font-bold text-blue-800">
                 Number {number} - Mahadasha Analysis
@@ -144,7 +153,7 @@ export const NumberDetail = ({
         )}
 
         {/* Close Button - Bottom */}
-        <div className="flex justify-center">
+        {/* <div className="flex justify-center">
           <Button 
             onClick={onClose || onBack}
             className="bg-red-600 hover:bg-red-700 text-white font-bold"
@@ -152,7 +161,7 @@ export const NumberDetail = ({
             <X className="mr-2 h-4 w-4" />
             Close
           </Button>
-        </div>
+        </div> */}
       </div>
     );
   }
