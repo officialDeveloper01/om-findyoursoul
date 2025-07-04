@@ -76,7 +76,7 @@ export const CelestialHeader = ({ currentView, setCurrentView, onBackToSearch, s
               <img 
                 src="/lovable-uploads/e1415cba-51c5-4a61-b523-642f2de6934b.png" 
                 alt="Ganesh Om Logo" 
-                className="w-12 h-12 md:w-16 md:h-16 object-contain floating"
+                className="w-12 h-12 md:w-16 md:h-16 object-contain"
               />
             </div>
             <p className="text-lg md:text-2xl text-amber-600 font-serif font-bold tracking-widest mystic-text">
