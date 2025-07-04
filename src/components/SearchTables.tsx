@@ -263,6 +263,7 @@ export const SearchTables = ({ onBackToSearch, onShowingResults }: SearchTablesP
           timeOfBirth: userData.timeOfBirth,
           placeOfBirth: userData.placeOfBirth,
           relation: userData.relation || updatedResults[managementModal.userIndex].relation,
+          phoneNumber: currentPhoneNumber,
           gridData: calculatedNumerology.loshuGrid,
           numerologyData: calculatedNumerology
         };
@@ -280,11 +281,18 @@ export const SearchTables = ({ onBackToSearch, onShowingResults }: SearchTablesP
 
         console.log('Updated existing group:', currentGroupId);
         
-        // Immediately refresh the display with updated data
+        // Update local state first for immediate UI feedback
+        setSelectedResults(updatedResults);
+        
+        // Then refresh from database to confirm persistence
         await refreshFamilyGroup();
+        
+        // Show success message
+        alert('Record updated successfully!');
       }
     } catch (error) {
       console.error('Error saving user:', error);
+      alert('Error updating record. Please try again.');
       throw error;
     }
   };
@@ -514,7 +522,7 @@ export const SearchTables = ({ onBackToSearch, onShowingResults }: SearchTablesP
             <div className="space-y-2">
               <Label htmlFor="nameSearch" className="flex items-center gap-2 text-gray-700">
                 <User size={16} />
-                Full Name <span className="text-red-500">*</span>
+                Full Name <span className="text-gray-400">(Optional)</span>
               </Label>
               <Input
                 id="nameSearch"
@@ -523,7 +531,6 @@ export const SearchTables = ({ onBackToSearch, onShowingResults }: SearchTablesP
                 onChange={(e) => setFullName(e.target.value)}
                 placeholder="Enter any family member's name"
                 className="border-gray-200 focus:border-amber-400 focus:ring-amber-400"
-                required
               />
               <p className="text-xs text-gray-500">
                 Search by any family member's name to see the entire family group

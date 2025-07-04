@@ -124,6 +124,7 @@ const Dashboard = () => {
 
   const handleBackToSearchResults = useCallback(() => {
     setShowingSearchResults(false);
+    setCurrentView('search');
   }, []);
 
   const handleNewEntry = useCallback(() => {
