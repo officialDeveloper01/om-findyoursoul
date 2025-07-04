@@ -183,21 +183,21 @@ export const LoshoGrid = ({ gridData, userData }) => {
     return (
       <button 
         onClick={() => handleGridNumberClick(digit)}
-        className="relative w-20 h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 bg-white border-2 border-gray-400 rounded-lg flex items-center justify-center text-center p-3 hover:bg-gray-50 hover:border-blue-400 transition-colors cursor-pointer shadow-md"
+        className="relative w-16 h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 bg-white border-2 border-gray-400 rounded-lg flex items-center justify-center text-center p-2 md:p-3 hover:bg-gray-50 hover:border-blue-400 transition-colors cursor-pointer shadow-md"
         title={`Click to view detailed analysis for Number ${digit}`}
       >
         {count > 0 && (
-          <div className="text-xl md:text-2xl lg:text-3xl font-bold text-gray-800 flex flex-wrap justify-center items-center">
+          <div className="text-lg md:text-xl lg:text-2xl font-bold text-gray-800 flex flex-wrap justify-center items-center">
             {String(digit).repeat(count)}
           </div>
         )}
         {hiddenCount > 0 && (
-          <div className="absolute top-1 right-1 w-5 h-5 md:w-6 md:h-6 px-1 py-0.5 rounded-full border-2 border-green-600 text-green-600 text-xs md:text-sm flex items-center justify-center font-bold">
+          <div className="absolute top-0.5 right-0.5 w-4 h-4 md:w-5 md:h-5 px-0.5 py-0.5 rounded-full border-2 border-green-600 text-green-600 text-xs flex items-center justify-center font-bold">
             {String(digit).repeat(hiddenCount)}
           </div>
         )}
         {dashCount > 0 && (
-          <div className="absolute inset-0 flex items-center justify-center text-red-600 font-extrabold text-2xl md:text-3xl pointer-events-none">
+          <div className="absolute inset-0 flex items-center justify-center text-red-600 font-extrabold text-xl md:text-2xl pointer-events-none">
             {"_".repeat(dashCount)}
           </div>
         )}
@@ -333,9 +333,9 @@ export const LoshoGrid = ({ gridData, userData }) => {
           </CardHeader>
 
           <CardContent className="space-y-8">
-            {/* Lo Shu Grid - Improved spacing and responsiveness */}
+            {/* Lo Shu Grid - Reduced spacing for tighter layout */}
             <div className="flex justify-center items-center">
-              <div className="grid grid-cols-3 gap-4 md:gap-6 lg:gap-8 p-6 md:p-8 lg:p-10 border-2 border-gray-400 rounded-lg bg-white/90 shadow-lg">
+              <div className="grid grid-cols-3 gap-2 md:gap-3 lg:gap-4 p-4 md:p-6 lg:p-8 border-2 border-gray-400 rounded-lg bg-white/90 shadow-lg">
                 {gridNumbers.flat().map((digit, index) => (
                   <div key={`grid-cell-${digit}-${index}`} className="flex justify-center items-center">
                     {renderGridCell(digit)}
@@ -361,23 +361,23 @@ export const LoshoGrid = ({ gridData, userData }) => {
                   <p className="font-bold text-gray-500">Click on any number below to view Antar Dasha table & Mahadasha details</p>
                 </div> */}
                 
-                {/* Ages Row - Clean bordered table design with stronger borders */}
+                {/* Ages Row - Clean bordered table design with tighter mobile spacing */}
                 <div className="border-2 border-gray-400 rounded-lg overflow-hidden bg-white/90 backdrop-blur-sm">
                   <div className="grid grid-cols-11 bg-gray-100 border-b-2 border-gray-400">
                     {conductorSeries.map((age, index) => (
-                      <div key={`age-${age}-${index}`} className="text-center font-bold text-gray-700 py-2 px-2 border-r border-gray-400 last:border-r-0">
+                      <div key={`age-${age}-${index}`} className="text-center font-bold text-gray-700 py-1 md:py-2 px-1 md:px-2 border-r border-gray-400 last:border-r-0 text-xs md:text-sm">
                         {age}
                       </div>
                     ))}
                   </div>
                   
-                  {/* Conductor Numbers Row - Clickable with stronger borders */}
+                  {/* Conductor Numbers Row - Clickable with tighter mobile spacing */}
                   <div className="grid grid-cols-11">
                     {bottomValues.map((number, index) => (
                       <button
                         key={`conductor-${number}-${index}`}
                         onClick={() => handleConductorClick(number, index)}
-                        className="bg-amber-50 hover:bg-amber-100 py-2 px-2 text-center font-bold text-amber-800 transition-colors cursor-pointer border-r border-gray-400 last:border-r-0"
+                        className="bg-amber-50 hover:bg-amber-100 py-1 md:py-2 px-1 md:px-2 text-center font-bold text-amber-800 transition-colors cursor-pointer border-r border-gray-400 last:border-r-0 text-xs md:text-sm"
                         title={`Click to view ${planetMap[number]?.name || 'Unknown'} Maha Dasha`}
                       >
                         {number}

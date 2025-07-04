@@ -30,6 +30,7 @@ const Dashboard = () => {
     userData: null,
     userIndex: -1
   });
+  const [showingSearchResults, setShowingSearchResults] = useState(false);
   const { user } = useAuth();
 
   const refreshCurrentResults = useCallback(async () => {
@@ -120,6 +121,10 @@ const Dashboard = () => {
       setIsLoading(false);
     }
   }, [user]);
+
+  const handleBackToSearchResults = useCallback(() => {
+    setShowingSearchResults(false);
+  }, []);
 
   const handleNewEntry = useCallback(() => {
     if (typeof window !== 'undefined') {
@@ -241,7 +246,12 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen celestial-bg">
-      <CelestialHeader currentView={currentView} setCurrentView={setCurrentView} />
+      <CelestialHeader 
+        currentView={currentView} 
+        setCurrentView={setCurrentView}
+        showBackToSearch={showingSearchResults}
+        onBackToSearch={handleBackToSearchResults}
+      />
 
       <main className="relative">
         <div className="bg-gradient-to-b from-transparent via-white/95 to-white min-h-screen">
@@ -398,7 +408,10 @@ const Dashboard = () => {
 
             {currentView === 'search' && (
               <div className="pt-24">
-                <SearchTables />
+                <SearchTables 
+                  onBackToSearch={handleBackToSearchResults}
+                  onShowingResults={setShowingSearchResults}
+                />
               </div>
             )}
           </div>

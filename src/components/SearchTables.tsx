@@ -13,7 +13,12 @@ import { UserManagementModal } from './UserManagementModal';
 import { useAuth } from '@/hooks/useAuth';
 import { calculateAllNumerology } from '@/utils/numerologyCalculator';
 
-export const SearchTables = () => {
+interface SearchTablesProps {
+  onBackToSearch?: () => void;
+  onShowingResults?: (showing: boolean) => void;
+}
+
+export const SearchTables = ({ onBackToSearch, onShowingResults }: SearchTablesProps = {}) => {
   const [fullName, setFullName] = useState('');
   const [mobileNumber, setMobileNumber] = useState('');
   const [searchResults, setSearchResults] = useState([]);
@@ -130,11 +135,14 @@ export const SearchTables = () => {
     setCurrentGroupId(groupId);
     setCurrentPhoneNumber(groupResults[0]?.phoneNumber || '');
     
+    // Notify parent that we're showing results
+    onShowingResults?.(true);
+    
     // iOS-safe state update
     requestAnimationFrame(() => {
       setSelectedResults(formattedResults);
     });
-  }, [searchResults]);
+  }, [searchResults, onShowingResults]);
 
   const refreshFamilyGroup = useCallback(async () => {
     if (!currentGroupId || !currentPhoneNumber || !user) return;
@@ -167,13 +175,21 @@ export const SearchTables = () => {
   }, [currentGroupId, currentPhoneNumber, user]);
 
   const handleBackToSearch = useCallback(() => {
+    // Notify parent that we're no longer showing results
+    onShowingResults?.(false);
+    
+    // Call parent's back handler if provided
+    if (onBackToSearch) {
+      onBackToSearch();
+    }
+    
     // iOS-safe state update
     requestAnimationFrame(() => {
       setSelectedResults([]);
       setCurrentGroupId('');
       setCurrentPhoneNumber('');
     });
-  }, []);
+  }, [onBackToSearch, onShowingResults]);
 
   // Check if user is logged in
   if (!user) {
@@ -329,16 +345,7 @@ export const SearchTables = () => {
   // If showing results, display them in responsive grid with CRUD functionality
   if (selectedResults.length > 0) {
     return (
-      <div className="max-w-6xl mx-auto space-y-6">
-        <div className="text-center">
-          <Button 
-            onClick={handleBackToSearch}
-            variant="outline"
-            className="mb-12"
-          >
-            ← Back to Search Results
-          </Button>
-        </div>
+      <div className="max-w-6xl mx-auto space-y-6 pt-20">
         
         <div className="text-center mb-8">
           <h3 className="text-2xl font-light text-amber-600 mb-2">

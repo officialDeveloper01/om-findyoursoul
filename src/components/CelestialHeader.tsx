@@ -7,20 +7,35 @@ import { Sun, Plus } from 'lucide-react';
 interface CelestialHeaderProps {
   currentView: string;
   setCurrentView: (view: string) => void;
+  onBackToSearch?: () => void;
+  showBackToSearch?: boolean;
 }
 
-export const CelestialHeader = ({ currentView, setCurrentView }: CelestialHeaderProps) => {
+export const CelestialHeader = ({ currentView, setCurrentView, onBackToSearch, showBackToSearch }: CelestialHeaderProps) => {
   const [scrolled, setScrolled] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
   const { user, logout } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 10);
+      const currentScrollY = window.scrollY;
+      
+      setScrolled(currentScrollY > 10);
+      
+      // Hide header when scrolling down, show when scrolling up
+      if (currentScrollY > lastScrollY && currentScrollY > 100) {
+        setIsVisible(false);
+      } else {
+        setIsVisible(true);
+      }
+      
+      setLastScrollY(currentScrollY);
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [lastScrollY]);
 
   const handleSearchClick = () => {
     setCurrentView('search');
@@ -30,20 +45,25 @@ export const CelestialHeader = ({ currentView, setCurrentView }: CelestialHeader
     <header 
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         scrolled 
-          ? 'bg-white/90 backdrop-blur-md shadow-lg border-b border-amber-200/50' 
+          ? 'bg-white/95 backdrop-blur-md shadow-lg border-b border-gray-200' 
           : 'bg-transparent'
-      }`}
+      } ${isVisible ? 'translate-y-0' : '-translate-y-full'}`}
     >
       <div className="max-w-6xl mx-auto px-4 py-4">
         <div className="flex justify-between items-center">
-          {/* Left Section - New Analysis Button */}
-          <div className="flex items-center">
+          {/* Left Section - Navigation Buttons */}
+          <div className="flex items-center gap-3">
+            {showBackToSearch && onBackToSearch && (
+              <Button 
+                onClick={onBackToSearch}
+                className="bg-gray-200 text-black hover:bg-gray-300 font-medium px-4 py-2 rounded-lg transition-colors"
+              >
+                ← Back to Search Results
+              </Button>
+            )}
             <Button 
               onClick={() => setCurrentView('form')}
-              variant={currentView === 'form' ? 'default' : 'ghost'}
-              className={`sacred-button text-white font-medium ${
-                currentView === 'form' ? '' : 'bg-transparent text-slate-700 hover:text-amber-600'
-              }`}
+              className="bg-gray-200 text-black hover:bg-gray-300 font-medium px-4 py-2 rounded-lg transition-colors"
             >
               <Plus className="w-4 h-4 mr-2" />
               New Analysis
@@ -52,41 +72,36 @@ export const CelestialHeader = ({ currentView, setCurrentView }: CelestialHeader
 
           {/* Center Section - Ganesh Logo and HEAL YOUR SOUL */}
           <div className="text-center fade-in flex-1 flex flex-col items-center">
-            <div className="mb-2">
+            <div className="mb-1">
               <img 
                 src="/lovable-uploads/e1415cba-51c5-4a61-b523-642f2de6934b.png" 
                 alt="Ganesh Om Logo" 
-                className="w-16 h-16 object-contain floating"
+                className="w-12 h-12 md:w-16 md:h-16 object-contain floating"
               />
             </div>
-            <p className="text-2xl text-amber-600 font-serif font-bold tracking-widest mystic-text">
+            <p className="text-lg md:text-2xl text-amber-600 font-serif font-bold tracking-widest mystic-text">
               HEAL YOUR SOUL
             </p>
           </div>
 
           {/* Right Section - Search and User Info */}
-          <nav className="flex items-center gap-6">
+          <nav className="flex items-center gap-3">
             <Button 
               onClick={handleSearchClick}
-              variant={currentView === 'search' ? 'default' : 'ghost'}
-              className={`sacred-button text-white font-medium ${
-                currentView === 'search' ? '' : 'bg-transparent text-slate-700 hover:text-amber-600'
-              }`}
+              className="bg-gray-200 text-black hover:bg-gray-300 font-medium px-4 py-2 rounded-lg transition-colors"
             >
               <Sun className="w-4 h-4 mr-2" />
               Search Records
             </Button>
 
             {/* User Info */}
-            <div className="flex items-center gap-4 ml-4 pl-4 border-l border-amber-200">
-              <span className="text-amber-900 text-sm font-medium">
+            <div className="flex items-center gap-3 ml-3 pl-3 border-l border-gray-300">
+              <span className="text-gray-700 text-sm font-medium hidden md:block">
                 {user?.email?.split('@')[0]}
               </span>
               <Button 
                 onClick={logout} 
-                variant="outline" 
-                size="sm"
-                className="border-amber-200 text-slate-600 hover:bg-amber-50 hover:border-amber-300"
+                className="bg-gray-200 text-black hover:bg-gray-300 font-medium px-4 py-2 rounded-lg transition-colors text-sm"
               >
                 Sign Out
               </Button>
