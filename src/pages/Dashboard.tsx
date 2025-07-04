@@ -270,7 +270,7 @@ const Dashboard = () => {
             )}
 
             {currentView === 'results' && allResults.length > 0 && (
-              <div className="space-y-8 pt-16">
+              <div className="space-y-6 pt-16 min-h-screen">
                 <div className="text-center fade-in">
                   <h2 className="text-4xl font-light text-amber-700 mb-2">
                     Your Sacred Analysis

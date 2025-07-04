@@ -237,17 +237,7 @@ export const LoshoGrid = ({ gridData, userData }) => {
     return `${day}/${month}/${year}`;
   };
 
-  if (selectedNumber && !selectedAntarDasha && !showMahadashaOnly) {
-    return (
-      <NumberDetail 
-        number={selectedNumber}
-        onBack={handleBackFromNumber}
-        userName={userData.fullName}
-        dateOfBirth={userData.dateOfBirth}
-        showOnlyMahadasha={false}
-      />
-    );
-  }
+  // Remove this - we want to show NumberDetail below the grid instead of replacing it
 
   if (showPlaneAnalysis) {
     return (
@@ -263,10 +253,10 @@ export const LoshoGrid = ({ gridData, userData }) => {
   }
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8 font-calibri">
+    <div className="max-w-4xl mx-auto px-2 md:px-4 py-4 font-calibri min-h-screen flex flex-col">
       {/* User Info Table with stronger borders */}
-      <Card className="shadow-xl border-2 border-gray-400 bg-white/90 backdrop-blur-md rounded-xl mb-8">
-        <CardContent className="p-6">
+      <Card className="shadow-xl border-2 border-gray-400 bg-white/90 backdrop-blur-md rounded-xl mb-4">
+        <CardContent className="p-4 md:p-6">
           <div className="grid grid-cols-2 gap-y-3 gap-x-8">
             {/* Row 1 */}
             <div className="flex justify-between items-center border-b border-gray-300 pb-2">
@@ -312,30 +302,27 @@ export const LoshoGrid = ({ gridData, userData }) => {
       </Card>
 
       {/* Main Grid Card with celestial background */}
-      <Card className="shadow-xl border-2 border-gray-400 bg-white/10 backdrop-blur-md rounded-xl celestial-bg relative overflow-hidden">
+      <Card className="shadow-xl border-2 border-gray-400 bg-white/10 backdrop-blur-md rounded-xl celestial-bg relative overflow-hidden flex-1">
         {/* Semi-transparent overlay for readability */}
         <div className="absolute inset-0 bg-white/85 backdrop-blur-sm"></div>
         
         <div className="relative z-10">
-          <CardHeader className="text-center pb-4">
-            {/* <CardTitle className="text-3xl md:text-4xl font-bold text-blue-800">
-              Analysis
-            </CardTitle> */}
+          <CardHeader className="text-center pb-2 md:pb-4">
             {/* Plane Analysis Button */}
             <div className="text-center">
               <Button 
                 onClick={() => setShowPlaneAnalysis(true)}
-                className="bg-amber-600 hover:bg-amber-700 text-white font-bold px-6 py-2"
+                className="bg-amber-600 hover:bg-amber-700 text-white font-bold px-4 md:px-6 py-2"
               >
                 Plane Analysis
               </Button>
             </div>
           </CardHeader>
 
-          <CardContent className="space-y-8">
+          <CardContent className="space-y-4 md:space-y-6 p-4 md:p-6">
             {/* Lo Shu Grid - Reduced spacing for tighter layout */}
             <div className="flex justify-center items-center">
-              <div className="grid grid-cols-3 gap-2 md:gap-3 lg:gap-4 p-4 md:p-6 lg:p-8 border-2 border-gray-400 rounded-lg bg-white/90 shadow-lg">
+              <div className="grid grid-cols-3 gap-1 md:gap-2 p-3 md:p-4 border-2 border-gray-400 rounded-lg bg-white/90 shadow-lg">
                 {gridNumbers.flat().map((digit, index) => (
                   <div key={`grid-cell-${digit}-${index}`} className="flex justify-center items-center">
                     {renderGridCell(digit)}
@@ -355,7 +342,7 @@ export const LoshoGrid = ({ gridData, userData }) => {
 
             {/* Conductor Series - Clickable for Antar Dasha */}
             {conductorSeries.length > 0 && bottomValues.length > 0 && (
-              <div className="space-y-3">
+              <div className="space-y-2 md:space-y-3">
                 {/* <div className="text-center">
                   <h3 className="font-bold text-gray-700">Conductor Series (Maha Dasha)</h3>
                   <p className="font-bold text-gray-500">Click on any number below to view Antar Dasha table & Mahadasha details</p>
@@ -365,7 +352,7 @@ export const LoshoGrid = ({ gridData, userData }) => {
                 <div className="border-2 border-gray-400 rounded-lg overflow-hidden bg-white/90 backdrop-blur-sm">
                   <div className="grid grid-cols-11 bg-gray-100 border-b-2 border-gray-400">
                     {conductorSeries.map((age, index) => (
-                      <div key={`age-${age}-${index}`} className="text-center font-bold text-gray-700 py-1 md:py-2 px-1 md:px-2 border-r border-gray-400 last:border-r-0 text-xs md:text-sm">
+                      <div key={`age-${age}-${index}`} className="text-center font-bold text-gray-700 py-1 px-0.5 md:px-1 border-r border-gray-400 last:border-r-0 text-xs">
                         {age}
                       </div>
                     ))}
@@ -377,7 +364,7 @@ export const LoshoGrid = ({ gridData, userData }) => {
                       <button
                         key={`conductor-${number}-${index}`}
                         onClick={() => handleConductorClick(number, index)}
-                        className="bg-amber-50 hover:bg-amber-100 py-1 md:py-2 px-1 md:px-2 text-center font-bold text-amber-800 transition-colors cursor-pointer border-r border-gray-400 last:border-r-0 text-xs md:text-sm"
+                        className="bg-amber-50 hover:bg-amber-100 py-1 px-0.5 md:px-1 text-center font-bold text-amber-800 transition-colors cursor-pointer border-r border-gray-400 last:border-r-0 text-xs"
                         title={`Click to view ${planetMap[number]?.name || 'Unknown'} Maha Dasha`}
                       >
                         {number}
@@ -415,17 +402,32 @@ export const LoshoGrid = ({ gridData, userData }) => {
         </div>
       )}
 
+      {/* Show Number Detail below the grid when a grid number is clicked */}
+      {selectedNumber && !selectedAntarDasha && !showMahadashaOnly && (
+        <div className="mt-6">
+          <NumberDetail 
+            number={selectedNumber}
+            onBack={handleBackFromNumber}
+            userName={userData.fullName}
+            dateOfBirth={userData.dateOfBirth}
+            showOnlyMahadasha={false}
+          />
+        </div>
+      )}
+
       {/* Antar Dasha Table only (when no number detail is shown) */}
       {selectedAntarDasha && !selectedNumber && (
-        <AntarDashaTable
-          data={selectedAntarDasha.data}
-          planet={selectedAntarDasha.planet}
-          startAge={selectedAntarDasha.startAge}
-          onClose={() => setSelectedAntarDasha(null)}
-          isPreBirth={selectedAntarDasha.isPreBirth}
-          dateOfBirth={selectedAntarDasha.dateOfBirth}
-          conductorIndex={selectedAntarDasha.conductorIndex}
-        />
+        <div className="mt-6">
+          <AntarDashaTable
+            data={selectedAntarDasha.data}
+            planet={selectedAntarDasha.planet}
+            startAge={selectedAntarDasha.startAge}
+            onClose={() => setSelectedAntarDasha(null)}
+            isPreBirth={selectedAntarDasha.isPreBirth}
+            dateOfBirth={selectedAntarDasha.dateOfBirth}
+            conductorIndex={selectedAntarDasha.conductorIndex}
+          />
+        </div>
       )}
     </div>
   );

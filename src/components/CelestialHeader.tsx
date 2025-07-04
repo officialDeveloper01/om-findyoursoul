@@ -23,8 +23,8 @@ export const CelestialHeader = ({ currentView, setCurrentView, onBackToSearch, s
       
       setScrolled(currentScrollY > 10);
       
-      // Hide header when scrolling down, show when scrolling up
-      if (currentScrollY > lastScrollY && currentScrollY > 100) {
+      // Hide header when scrolling away from top, show only when at top
+      if (currentScrollY > 50) {
         setIsVisible(false);
       } else {
         setIsVisible(true);
