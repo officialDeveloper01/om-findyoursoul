@@ -307,7 +307,7 @@ export const LoshoGrid = ({ gridData, userData }) => {
         <div className="absolute inset-0 bg-white/85 backdrop-blur-sm"></div>
         
         <div className="relative z-10">
-          <CardHeader className="text-center pb-2 md:pb-4">
+          <CardHeader className="text-center pb-1 md:pb-2">
             {/* Plane Analysis Button */}
             <div className="text-center">
               <Button 
@@ -319,7 +319,7 @@ export const LoshoGrid = ({ gridData, userData }) => {
             </div>
           </CardHeader>
 
-          <CardContent className="space-y-4 md:space-y-6 p-4 md:p-6">
+          <CardContent className="space-y-3 md:space-y-4 p-4 md:p-6">
             {/* Lo Shu Grid - Reduced spacing for tighter layout */}
             <div className="flex justify-center items-center">
               <div className="grid grid-cols-3 gap-1 md:gap-2 p-3 md:p-4 border-2 border-gray-400 rounded-lg bg-white/90 shadow-lg">
@@ -348,23 +348,23 @@ export const LoshoGrid = ({ gridData, userData }) => {
                   <p className="font-bold text-gray-500">Click on any number below to view Antar Dasha table & Mahadasha details</p>
                 </div> */}
                 
-                {/* Ages Row - Clean bordered table design with tighter mobile spacing */}
+                 {/* Ages Row - Enlarged for better visibility */}
                 <div className="border-2 border-gray-400 rounded-lg overflow-hidden bg-white/90 backdrop-blur-sm">
                   <div className="grid grid-cols-11 bg-gray-100 border-b-2 border-gray-400">
                     {conductorSeries.map((age, index) => (
-                      <div key={`age-${age}-${index}`} className="text-center font-bold text-gray-700 py-1 px-0.5 md:px-1 border-r border-gray-400 last:border-r-0 text-xs">
+                      <div key={`age-${age}-${index}`} className="text-center font-bold text-gray-700 py-2 md:py-3 px-1 md:px-2 border-r border-gray-400 last:border-r-0 text-sm md:text-base">
                         {age}
                       </div>
                     ))}
                   </div>
                   
-                  {/* Conductor Numbers Row - Clickable with tighter mobile spacing */}
+                  {/* Conductor Numbers Row - Enlarged for better visibility */}
                   <div className="grid grid-cols-11">
                     {bottomValues.map((number, index) => (
                       <button
                         key={`conductor-${number}-${index}`}
                         onClick={() => handleConductorClick(number, index)}
-                        className="bg-amber-50 hover:bg-amber-100 py-1 px-0.5 md:px-1 text-center font-bold text-amber-800 transition-colors cursor-pointer border-r border-gray-400 last:border-r-0 text-xs"
+                        className="bg-amber-50 hover:bg-amber-100 py-2 md:py-3 px-1 md:px-2 text-center font-bold text-amber-800 transition-colors cursor-pointer border-r border-gray-400 last:border-r-0 text-sm md:text-base"
                         title={`Click to view ${planetMap[number]?.name || 'Unknown'} Maha Dasha`}
                       >
                         {number}
