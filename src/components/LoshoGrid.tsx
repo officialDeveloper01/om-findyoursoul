@@ -318,9 +318,18 @@ export const LoshoGrid = ({ gridData, userData }) => {
         
         <div className="relative z-10">
           <CardHeader className="text-center pb-4">
-            <CardTitle className="text-3xl md:text-4xl font-bold text-blue-800">
+            {/* <CardTitle className="text-3xl md:text-4xl font-bold text-blue-800">
               Analysis
-            </CardTitle>
+            </CardTitle> */}
+            {/* Plane Analysis Button */}
+            <div className="text-center">
+              <Button 
+                onClick={() => setShowPlaneAnalysis(true)}
+                className="bg-amber-600 hover:bg-amber-700 text-white font-bold px-6 py-2"
+              >
+                Plane Analysis
+              </Button>
+            </div>
           </CardHeader>
 
           <CardContent className="space-y-8">
@@ -336,29 +345,21 @@ export const LoshoGrid = ({ gridData, userData }) => {
             </div>
 
             {/* Grid Instructions */}
-            <div className="text-center">
+            {/* <div className="text-center">
               <p className="text-gray-600 text-sm md:text-base">
                 Click on any number in the grid above to view detailed analysis
               </p>
-            </div>
+            </div> */}
 
-            {/* Plane Analysis Button */}
-            <div className="text-center">
-              <Button 
-                onClick={() => setShowPlaneAnalysis(true)}
-                className="bg-amber-600 hover:bg-amber-700 text-white font-bold px-6 py-2"
-              >
-                Plane Analysis
-              </Button>
-            </div>
+            
 
             {/* Conductor Series - Clickable for Antar Dasha */}
             {conductorSeries.length > 0 && bottomValues.length > 0 && (
               <div className="space-y-3">
-                <div className="text-center">
+                {/* <div className="text-center">
                   <h3 className="font-bold text-gray-700">Conductor Series (Maha Dasha)</h3>
                   <p className="font-bold text-gray-500">Click on any number below to view Antar Dasha table & Mahadasha details</p>
-                </div>
+                </div> */}
                 
                 {/* Ages Row - Clean bordered table design with stronger borders */}
                 <div className="border-2 border-gray-400 rounded-lg overflow-hidden bg-white/90 backdrop-blur-sm">
