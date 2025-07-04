@@ -75,36 +75,43 @@ export const LoshoGrid = ({ gridData, userData }) => {
   ];
 
   const calculateDashes = useCallback(() => {
-    const dashes: Record<number, number> = {};
-    const gridCells = gridNumbers.flat();
-    
-    for (let i = 0; i < gridCells.length; i++) {
-      const digit = gridCells[i];
-      const actualCount = frequencies[digit] || 0;
-      const hiddenCount = hiddenNumbers[digit] || 0;
+  const dashes: Record<number, number> = {};
+  const gridCells = gridNumbers.flat();
+  const reductionSources: Record<number, Set<number>> = {};
 
-      if (actualCount > 1) {
-        const total = digit * actualCount;
-        const reduced = singleDigitSum(total);
-        if (!frequencies[reduced]) {
-          dashes[reduced] = (dashes[reduced] || 0) + 1;
-        }
-      }
+  for (const digit of gridCells) {
+    const actualCount = frequencies[digit] || 0;
+    const hiddenCount = hiddenNumbers[digit] || 0;
+    const totalCount = actualCount + hiddenCount;
 
-      if (
-        (actualCount > 0 || hiddenCount > 1) &&
-        !(actualCount === 0 && hiddenCount === 1)
-      ) {
-        const total = digit * (actualCount + hiddenCount);
-        const reduced = singleDigitSum(total);
-        if (!frequencies[reduced] && !dashes[reduced]) {
-          dashes[reduced] = 1;
+    // Rule: apply only if digit is present more than once
+    if (totalCount >= 2) {
+      const reduced = singleDigitSum(digit * totalCount);
+
+      // Only if the reduced digit is truly missing from actual frequency
+      if (!frequencies[reduced]) {
+        if (!reductionSources[reduced]) {
+          reductionSources[reduced] = new Set();
         }
+
+        // Each digit should count only once toward reduced
+        reductionSources[reduced].add(digit);
       }
     }
+  }
 
-    return dashes;
-  }, [frequencies, hiddenNumbers]);
+  // Convert sets into count, max 3
+  Object.entries(reductionSources).forEach(([num, sourceSet]) => {
+    dashes[+num] = Math.min(3, sourceSet.size);
+  });
+
+  return dashes;
+}, [frequencies, hiddenNumbers]);
+
+
+
+
+
 
   const dashes = calculateDashes();
 
@@ -197,9 +204,9 @@ export const LoshoGrid = ({ gridData, userData }) => {
           </div>
         )}
         {dashCount > 0 && (
-          <div className="absolute inset-0 flex items-center justify-center text-red-600 font-extrabold text-xl md:text-2xl pointer-events-none gap-6 px-1 min-w-full">
+          <div className="absolute inset-0 flex items-center justify-center text-red-600 font-extrabold text-xl md:text-2xl pointer-events-none gap-1.5">
             {Array.from({ length: dashCount }, (_, i) => (
-              <span key={i} className="flex-shrink-0">–</span>
+              <span key={i}>–</span>
             ))}
           </div>
         )}
