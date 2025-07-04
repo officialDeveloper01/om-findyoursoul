@@ -65,7 +65,13 @@ const Signup = () => {
               <div className="absolute inset-0 w-12 h-12 bg-purple-400/20 rounded-full blur-lg"></div>
             </div>
             <div>
-              <h1 className="text-6xl font-bold mystic-text tracking-wider">ॐ</h1>
+              <h1 className="text-6xl font-bold mystic-text tracking-wider">
+                <img 
+                src="/lovable-uploads/e1415cba-51c5-4a61-b523-642f2de6934b.png" 
+                alt="Ganesh Om Logo" 
+                className="w-12 h-12 md:w-16 md:h-16 object-contain justify-center mx-auto"
+              />
+              </h1>
               <p className="text-amber-300 font-light tracking-widest text-lg">HEAL YOUR SOUL</p>
             </div>
             <div className="relative">
