@@ -43,8 +43,8 @@ export const SearchTables = ({ onBackToSearch, onShowingResults }: SearchTablesP
       return;
     }
 
-    if (!fullName.trim()) {
-      alert('Please enter a name to search.');
+    if (!fullName.trim() && !mobileNumber.trim()) {
+      alert('Please enter either a name or mobile number to search.');
       return;
     }
 
@@ -75,8 +75,8 @@ export const SearchTables = ({ onBackToSearch, onShowingResults }: SearchTablesP
               if (entryGroup.userId === user.uid && entryGroup.entries && Array.isArray(entryGroup.entries)) {
                 // Check if any member in this family group matches the search
                 const hasMatch = entryGroup.entries.some((entry: any) => {
-                  const nameMatches = entry.fullName && 
-                    entry.fullName.toLowerCase().includes(fullName.toLowerCase());
+                  const nameMatches = !fullName.trim() || (entry.fullName && 
+                    entry.fullName.toLowerCase().includes(fullName.toLowerCase()));
                   const mobileMatches = !mobileNumber.trim() || 
                     phoneNumber.includes(mobileNumber.trim());
                   return nameMatches && mobileMatches;

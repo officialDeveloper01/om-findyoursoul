@@ -197,8 +197,10 @@ export const LoshoGrid = ({ gridData, userData }) => {
           </div>
         )}
         {dashCount > 0 && (
-          <div className="absolute inset-0 flex items-center justify-center text-red-600 font-extrabold text-xl md:text-2xl pointer-events-none">
-            {"_".repeat(dashCount)}
+          <div className="absolute inset-0 flex items-center justify-center text-red-600 font-extrabold text-xl md:text-2xl pointer-events-none gap-1.5">
+            {Array.from({ length: dashCount }, (_, i) => (
+              <span key={i}>–</span>
+            ))}
           </div>
         )}
       </button>
