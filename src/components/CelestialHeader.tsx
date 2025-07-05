@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/hooks/useAuth';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Sun, Plus } from 'lucide-react';
 
 interface CelestialHeaderProps {
@@ -15,6 +15,7 @@ export const CelestialHeader = () => {
   const [lastScrollY, setLastScrollY] = useState(0);
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -37,7 +38,12 @@ export const CelestialHeader = () => {
   }, [lastScrollY]);
 
   const handleSearchClick = () => {
-    navigate('/search');
+    // If already on search page, force refresh to restart search
+    if (location.pathname === '/search') {
+      navigate(0); // Force refresh the current route
+    } else {
+      navigate('/search');
+    }
   };
 
   const handleNewAnalysisClick = () => {
