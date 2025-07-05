@@ -281,7 +281,7 @@ export const NumberDetail = ({
           <p className="text-lg text-gray-600">
             {content.subtitle}
           </p>
-          {userName && dateOfBirth && (
+          {/* {userName && dateOfBirth && (
             <div className="mt-2 p-2 bg-gray-50 rounded-lg border border-gray-200">
               <p className="text-gray-700 text-sm">
                 <span className="font-semibold">Analysis for:</span> {userName}
@@ -290,7 +290,7 @@ export const NumberDetail = ({
                 <span className="font-semibold">Date of Birth:</span> {formatDateDDMMYYYY(dateOfBirth)}
               </p>
             </div>
-          )}
+          )} */}
         </CardHeader>
       </Card>
 
