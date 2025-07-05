@@ -206,14 +206,14 @@ const PlanetGridFooter = () => {
       <div className="max-w-6xl mx-auto space-y-12">
         
         {/* Title Section */}
-        <div className="text-center mb-6">
+        {/* <div className="text-center mb-6">
           <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-2">
             Sacred Numerology Grid System
           </h2>
           <p className="text-sm md:text-base text-gray-600">
             Complete planetary influence and plane analysis system
           </p>
-        </div>
+        </div> */}
 
         {/* Unified 5x5 Grid Layout */}
         <div className="grid grid-cols-5 gap-0 max-w-5xl mx-auto border border-gray-300 shadow-lg">
@@ -276,9 +276,9 @@ const PlanetGridFooter = () => {
 
 
         {/* Copyright */}
-        <div className="text-center text-gray-500 text-xs md:text-sm border-t border-gray-200 pt-4 md:pt-6">
+        {/* <div className="text-center text-gray-500 text-xs md:text-sm border-t border-gray-200 pt-4 md:pt-6">
           <p>&copy; 2024 Sacred Numerology. All rights reserved.</p>
-        </div>
+        </div> */}
       </div>
     </footer>
   );

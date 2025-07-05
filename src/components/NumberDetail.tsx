@@ -98,19 +98,19 @@ export const NumberDetail = ({
             </div>
             <CardHeader className="text-center pb-2">
               <CardTitle className="text-2xl md:text-3xl font-bold text-blue-800">
-                Number {number} - Mahadasha Analysis
+                Number {number} - Mahadasha Analysis <span className="font-semibold"> for:</span> {userName}
               </CardTitle>
-              <p className="text-lg text-gray-600">Planetary Influence & Timing</p>
-              {userName && dateOfBirth && (
+              {/* <p className="text-lg text-gray-600">Planetary Influence & Timing</p> */}
+              {/* {userName && dateOfBirth && (
                 <div className="mt-2 p-2 bg-gray-50 rounded-lg border border-gray-200">
                   <p className="text-gray-700 text-sm">
-                    <span className="font-semibold">Analysis for:</span> {userName}
+                    
                   </p>
                   <p className="text-gray-700 text-sm">
                     <span className="font-semibold">Date of Birth:</span> {formatDateDDMMYYYY(dateOfBirth)}
                   </p>
                 </div>
-              )}
+              )} */}
             </CardHeader>
             <CardContent className="p-3">
               <BorderedTable className="compressed-table">
