@@ -98,7 +98,7 @@ export const CelestialHeader = ({ currentView, setCurrentView, onBackToSearch, s
                 className="bg-gray-200 text-black hover:bg-gray-300 font-medium px-2 sm:px-4 py-2 rounded-lg transition-colors text-xs sm:text-sm"
               >
                 <span className="hidden xs:inline">Sign Out</span>
-                <span className="xs:hidden">Out</span>
+                <span className="xs:hidden">Sign Out</span>
               </Button>
             </div>
           </nav>
