@@ -204,7 +204,7 @@ export const NumberDetail = ({
               </Button>
             </div>
             <CardHeader className="text-center pb-2">
-              <CardTitle className="text-2xl md:text-3xl font-bold text-blue-800">
+              <CardTitle className="text-2xl md:text-xl font-bold text-blue-800">
                 Number {number} - Mahadasha Analysis <span className="font-semibold"> for:</span> {userName}
               </CardTitle>
               {/* <p className="text-lg text-gray-600">Planetary Influence & Timing</p> */}
