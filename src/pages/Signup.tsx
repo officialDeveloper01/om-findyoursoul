@@ -67,7 +67,7 @@ const Signup = () => {
             <div>
               <h1 className="text-6xl font-bold mystic-text tracking-wider">
                 <img 
-                src="/lovable-uploads/e1415cba-51c5-4a61-b523-642f2de6934b.png" 
+                src="/lovable-uploads/app-icon.png" 
                 alt="Ganesh Om Logo" 
                 className="w-12 h-12 md:w-16 md:h-16 object-contain justify-center mx-auto"
               />
