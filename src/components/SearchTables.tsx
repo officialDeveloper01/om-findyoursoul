@@ -354,24 +354,16 @@ export const SearchTables = ({ onBackToSearch, onShowingResults }: SearchTablesP
   if (selectedResults.length > 0) {
     return (
       <div className="max-w-6xl mx-auto space-y-6 pt-20">
-        
-        <div className="text-center mb-8">
-          <h3 className="text-2xl font-light text-amber-600 mb-2">
-            Family Reading Results
-          </h3>
-          <p className="text-amber-400">
-            {selectedResults.length} member{selectedResults.length > 1 ? 's' : ''} found
-          </p>
-          <div className="flex justify-center gap-4 mt-4">
+          <div className="flex justify-center">
             <Button 
               onClick={() => openUserModal('add')}
-              className="bg-amber-600 hover:bg-amber-700 text-white flex items-center gap-2"
+              className="bg-amber-600 hover:bg-amber-700 text-white flex items-center"
             >
               <Plus size={16} />
               Add Family Member
             </Button>
           </div>
-        </div>
+        
 
         {/* Display Results with CRUD buttons */}
         {selectedResults.length === 1 ? (

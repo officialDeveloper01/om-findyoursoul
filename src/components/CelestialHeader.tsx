@@ -99,7 +99,7 @@ export const CelestialHeader = () => {
 
             {/* User Info */}
             <div className="flex items-center gap-1 sm:gap-3 ml-1 sm:ml-3 pl-1 sm:pl-3 border-l border-gray-300">
-              <span className="text-gray-700 text-xs sm:text-sm font-medium hidden md:block">
+              <span className="text-amber-300 text-xs sm:text-sm font-medium hidden md:block">
                 {user?.email?.split('@')[0]}
               </span>
               <Button 

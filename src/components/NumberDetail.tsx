@@ -286,11 +286,11 @@ export const NumberDetail = ({
         {filteredSections.map((section, index) => (
   <Card key={index} className="shadow-lg border-2 border-gray-300 bg-white/95 backdrop-blur-sm rounded-xl">
     <CardHeader className="pb-2">
-      <CardTitle className="text-lg font-bold text-blue-600 border-b border-gray-200 pb-1 mt-4 mb-2">
+      <CardTitle className="text-lg font-bold text-blue-600 border-b border-gray-200">
         {section.title}
       </CardTitle>
     </CardHeader>
-    <CardContent className="space-y-1 pt-2">
+    <CardContent className="text-s space-y-1 pt-2 ">
       {section.content.map((line, lineIndex) => {
         const isSubheading = line.match(/^[A-Z][a-z]+ –/) || 
                              line.includes('Positive') || 
@@ -310,10 +310,10 @@ export const NumberDetail = ({
             ) : (
               <p className={`leading-snug ${
                 isBulletPoint 
-                  ? 'ml-6 text-sm font-bold text-gray-800'
+                  ? 'ml-6 text-l font-bold text-gray-800'
                   : isSubheading 
                   ? 'font-bold text-orange-600 mt-2 mb-1 text-base'
-                  : 'text-sm font-bold text-gray-800'
+                  : 'text-l font-bold text-gray-800'
               }`}>
                 {line}
               </p>
