@@ -282,7 +282,7 @@ export const LoshoGrid = ({ gridData, userData }) => {
   }
 
   return (
-    <div className="max-w-4xl mx-auto px-2 md:px-4 py-4 font-calibri min-h-screen flex flex-col">
+    <div className="max-w-4xl mx-auto px-2 md:px-4 py-4 font-calibri">
       {/* User Info Table - Compact */}
       <Card className="shadow-xl border-2 border-gray-400 bg-white/90 backdrop-blur-md rounded-xl mb-4 max-w-2xl mx-auto">
         <CardContent className="p-3">
@@ -353,7 +353,7 @@ export const LoshoGrid = ({ gridData, userData }) => {
             </div>
           </CardHeader>
 
-          <CardContent className="space-y-3 md:space-y-4 p-4 md:p-6">
+          <CardContent className="space-y-3 p-3 md:p-4">
             {/* Lo Shu Grid - Reduced spacing for tighter layout */}
             <div className="flex justify-center items-center">
               <div className="grid grid-cols-3 gap-1 md:gap-2 p-3 md:p-4 border-2 border-gray-400 rounded-lg bg-white/90 shadow-lg">
@@ -376,7 +376,7 @@ export const LoshoGrid = ({ gridData, userData }) => {
 
             {/* Conductor Series - Clickable for Antar Dasha */}
             {conductorSeries.length > 0 && bottomValues.length > 0 && (
-              <div className="space-y-2 md:space-y-3">
+              <div>
                 {/* <div className="text-center">
                   <h3 className="font-bold text-gray-700">Conductor Series (Maha Dasha)</h3>
                   <p className="font-bold text-gray-500">Click on any number below to view Antar Dasha table & Mahadasha details</p>
