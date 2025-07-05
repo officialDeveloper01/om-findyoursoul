@@ -51,59 +51,54 @@ export const CelestialHeader = ({ currentView, setCurrentView, onBackToSearch, s
     >
       <div className="max-w-6xl mx-auto px-4 py-4">
         <div className="flex justify-between items-center">
-          {/* Left Section - Navigation Buttons */}
-          <div className="flex items-center gap-3">
-            {showBackToSearch && onBackToSearch && (
-              <Button 
-                onClick={onBackToSearch}
-                className="bg-gray-200 text-black hover:bg-gray-300 font-medium px-4 py-2 rounded-lg transition-colors"
-              >
-                ← Back to Search Results
-              </Button>
-            )}
+          {/* Left Section - Navigation Button */}
+          <div className="flex items-center">
             <Button 
               onClick={() => setCurrentView('form')}
-              className="bg-gray-200 text-black hover:bg-gray-300 font-medium px-4 py-2 rounded-lg transition-colors"
+              className="bg-gray-200 text-black hover:bg-gray-300 font-medium px-2 sm:px-4 py-2 rounded-lg transition-colors text-xs sm:text-sm"
             >
-              <Plus className="w-4 h-4 mr-2" />
-              New Analysis
+              <Plus className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
+              <span className="hidden xs:inline">New Analysis</span>
+              <span className="xs:hidden">New</span>
             </Button>
           </div>
 
           {/* Center Section - Ganesh Logo and HEAL YOUR SOUL */}
-          <div className="text-center fade-in flex-1 flex flex-col items-center">
+          <div className="text-center fade-in flex-1 flex flex-col items-center px-2">
             <div className="mb-1">
               <img 
                 src="/lovable-uploads/e1415cba-51c5-4a61-b523-642f2de6934b.png" 
                 alt="Ganesh Om Logo" 
-                className="w-12 h-12 md:w-16 md:h-16 object-contain"
+                className="w-8 h-8 sm:w-12 sm:h-12 md:w-16 md:h-16 object-contain"
               />
             </div>
-            <p className="text-lg md:text-2xl text-amber-600 font-serif font-bold tracking-widest mystic-text">
+            <p className="text-sm sm:text-lg md:text-2xl text-amber-600 font-serif font-bold tracking-widest mystic-text">
               HEAL YOUR SOUL
             </p>
           </div>
 
           {/* Right Section - Search and User Info */}
-          <nav className="flex items-center gap-3">
+          <nav className="flex items-center gap-1 sm:gap-3">
             <Button 
               onClick={handleSearchClick}
-              className="bg-gray-200 text-black hover:bg-gray-300 font-medium px-4 py-2 rounded-lg transition-colors"
+              className="bg-gray-200 text-black hover:bg-gray-300 font-medium px-2 sm:px-4 py-2 rounded-lg transition-colors text-xs sm:text-sm"
             >
-              <Sun className="w-4 h-4 mr-2" />
-              Search Records
+              <Sun className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
+              <span className="hidden xs:inline">Search Records</span>
+              <span className="xs:hidden">Search</span>
             </Button>
 
             {/* User Info */}
-            <div className="flex items-center gap-3 ml-3 pl-3 border-l border-gray-300">
-              <span className="text-gray-700 text-sm font-medium hidden md:block">
+            <div className="flex items-center gap-1 sm:gap-3 ml-1 sm:ml-3 pl-1 sm:pl-3 border-l border-gray-300">
+              <span className="text-gray-700 text-xs sm:text-sm font-medium hidden md:block">
                 {user?.email?.split('@')[0]}
               </span>
               <Button 
                 onClick={logout} 
-                className="bg-gray-200 text-black hover:bg-gray-300 font-medium px-4 py-2 rounded-lg transition-colors text-sm"
+                className="bg-gray-200 text-black hover:bg-gray-300 font-medium px-2 sm:px-4 py-2 rounded-lg transition-colors text-xs sm:text-sm"
               >
-                Sign Out
+                <span className="hidden xs:inline">Sign Out</span>
+                <span className="xs:hidden">Out</span>
               </Button>
             </div>
           </nav>
