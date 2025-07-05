@@ -32,6 +32,113 @@ export const NumberDetail = ({
   const [showDetailedContent, setShowDetailedContent] = useState(false);
   const [showMahadashaAnalysis, setShowMahadashaAnalysis] = useState(false);
 
+  const renderAntarDashaCards = (content: string[]) => {
+    const cards: JSX.Element[] = [];
+    let currentCard: { heading: string; positive: string[]; negative: string[] } | null = null;
+    
+    for (let i = 0; i < content.length; i++) {
+      const line = content[i].trim();
+      
+      // Check if this is a heading (contains " – " for Antardasha pairs)
+      if (line.includes(' – ') && !line.startsWith('•') && !line.includes('Positive') && !line.includes('Negative')) {
+        // Save previous card if exists
+        if (currentCard) {
+          cards.push(
+            <Card key={cards.length} className="shadow-lg border border-gray-200 bg-white rounded-lg">
+              <CardContent className="p-4">
+                <h3 className="font-bold text-lg text-blue-800 mb-3">{currentCard.heading}</h3>
+                
+                {currentCard.positive.length > 0 && (
+                  <div className="mb-3">
+                    <h4 className="font-bold text-green-700 mb-1">Positive</h4>
+                    <ul className="space-y-1">
+                      {currentCard.positive.map((item, idx) => (
+                        <li key={idx} className="text-sm text-gray-700 ml-2">• {item}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                
+                {currentCard.negative.length > 0 && (
+                  <div>
+                    <h4 className="font-bold text-red-700 mb-1">Negative</h4>
+                    <ul className="space-y-1">
+                      {currentCard.negative.map((item, idx) => (
+                        <li key={idx} className="text-sm text-gray-700 ml-2">• {item}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          );
+        }
+        
+        // Start new card
+        currentCard = { heading: line, positive: [], negative: [] };
+      } else if (currentCard && line.includes('Positive')) {
+        // Continue collecting content for current section
+      } else if (currentCard && line.includes('Negative')) {
+        // Continue collecting content for current section
+      } else if (currentCard && line.startsWith('•')) {
+        // Add bullet point to appropriate section
+        const bulletText = line.substring(1).trim();
+        // Look back to find if we're in Positive or Negative section
+        let sectionType = 'positive';
+        for (let j = i - 1; j >= 0; j--) {
+          if (content[j].includes('Negative')) {
+            sectionType = 'negative';
+            break;
+          } else if (content[j].includes('Positive')) {
+            sectionType = 'positive';
+            break;
+          }
+        }
+        
+        if (sectionType === 'negative') {
+          currentCard.negative.push(bulletText);
+        } else {
+          currentCard.positive.push(bulletText);
+        }
+      }
+    }
+    
+    // Add the last card
+    if (currentCard) {
+      cards.push(
+        <Card key={cards.length} className="shadow-lg border border-gray-200 bg-white rounded-lg">
+          <CardContent className="p-4">
+            <h3 className="font-bold text-lg text-blue-800 mb-3">{currentCard.heading}</h3>
+            
+            {currentCard.positive.length > 0 && (
+              <div className="mb-3">
+                <h4 className="font-bold text-green-700 mb-1">Positive</h4>
+                <ul className="space-y-1">
+                  {currentCard.positive.map((item, idx) => (
+                    <li key={idx} className="text-sm text-gray-700 ml-2">• {item}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            
+            {currentCard.negative.length > 0 && (
+              <div>
+                <h4 className="font-bold text-red-700 mb-1">Negative</h4>
+                <ul className="space-y-1">
+                  {currentCard.negative.map((item, idx) => (
+                    <li key={idx} className="text-sm text-gray-700 ml-2">• {item}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      );
+    }
+    
+    return cards;
+  };
+
   const formatDateDDMMYYYY = (dateString: string) => {
     const date = new Date(dateString);
     const day = date.getDate().toString().padStart(2, '0');
@@ -113,30 +220,9 @@ export const NumberDetail = ({
               )} */}
             </CardHeader>
             <CardContent className="p-3">
-              <BorderedTable className="compressed-table">
-                <BorderedTableHeader>
-                  <BorderedTableRow>
-                    <BorderedTableHead className="text-center font-bold text-gray-800 bg-gray-100 py-2">
-                      Mahadasha Analysis
-                    </BorderedTableHead>
-                  </BorderedTableRow>
-                </BorderedTableHeader>
-                <BorderedTableBody>
-                  {antarDashaSection.content.map((line, lineIndex) => (
-                    <BorderedTableRow key={lineIndex}>
-                      <BorderedTableCell className={`text-gray-700 py-1.5 px-3 text-sm leading-tight ${
-                        line.startsWith('•') ? 'pl-8' : ''
-                      } ${
-                        line.includes('Positive') || line.includes('Negative') ? 'font-semibold text-blue-700 bg-blue-50' : ''
-                      } ${
-                        line.trim().startsWith('Positive') || line.trim().startsWith('Negative') ? 'pt-2' : ''
-                      }`}>
-                        {line === "" ? <div className="h-1"></div> : line}
-                      </BorderedTableCell>
-                    </BorderedTableRow>
-                  ))}
-                </BorderedTableBody>
-              </BorderedTable>
+              <div className="space-y-4">
+                {renderAntarDashaCards(antarDashaSection.content)}
+              </div>
             </CardContent>
             
             {/* Back Button inside Mahadasha section */}
@@ -280,30 +366,9 @@ export const NumberDetail = ({
             )}
           </CardHeader>
           <CardContent className="p-3">
-            <BorderedTable className="compressed-table">
-              <BorderedTableHeader>
-                <BorderedTableRow>
-                  <BorderedTableHead className="text-center font-bold text-gray-800 bg-gray-100 py-2">
-                    {mahadashaSection.title}
-                  </BorderedTableHead>
-                </BorderedTableRow>
-              </BorderedTableHeader>
-              <BorderedTableBody>
-                {mahadashaSection.content.map((line, lineIndex) => (
-                  <BorderedTableRow key={lineIndex}>
-                    <BorderedTableCell className={`text-gray-700 py-1.5 px-3 text-sm leading-tight ${
-                      line.startsWith('•') ? 'pl-8' : ''
-                    } ${
-                      line.includes('Positive') || line.includes('Negative') ? 'font-semibold text-blue-700 bg-blue-50' : ''
-                    } ${
-                      line.trim().startsWith('Positive') || line.trim().startsWith('Negative') ? 'pt-2' : ''
-                    }`}>
-                      {line === "" ? <div className="h-1"></div> : line}
-                    </BorderedTableCell>
-                  </BorderedTableRow>
-                ))}
-              </BorderedTableBody>
-            </BorderedTable>
+              <div className="space-y-4">
+                {renderAntarDashaCards(mahadashaSection.content)}
+              </div>
           </CardContent>
         </Card>
       )}
