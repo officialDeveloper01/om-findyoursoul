@@ -323,13 +323,13 @@ export const LoshoGrid = ({ gridData, userData }) => {
             {/* Row 3: Bhagyaank | Time */}
             <div className="grid grid-cols-2 gap-x-6">
               <div className="flex justify-between items-center">
-                <span className="text-gray-600 font-medium text-sm">BHAGYAANK:</span>
-                <span className="font-semibold text-blue-700 text-sm">{numerologyData.conductor || 0}</span>
-              </div>
-              <div className="flex justify-between items-center border-l border-gray-300 pl-3">
                 <span className="text-gray-600 font-medium text-sm">Time:</span>
                 <span className="font-semibold text-gray-800 whitespace-nowrap text-sm">{formatTime(userData.timeOfBirth)}</span>
               </div>
+              <div className="flex justify-between items-center border-l border-gray-300 pl-3">
+                <span className="text-gray-600 font-medium text-sm">BHAGYAANK:</span>
+                <span className="font-semibold text-blue-700 text-sm">{numerologyData.conductor || 0}</span>
+              </div>           
             </div>
           </div>
         </CardContent>
