@@ -243,10 +243,7 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen celestial-bg">
-      <CelestialHeader 
-        currentView={currentView} 
-        setCurrentView={setCurrentView}
-      />
+      <CelestialHeader />
 
       <main className="relative">
         <div className="bg-gradient-to-b from-transparent via-white/95 to-white min-h-screen">

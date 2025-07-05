@@ -5,10 +5,7 @@ import PlanetGridFooter from '@/components/PlanetGridFooter';
 const SearchPage = () => {
   return (
     <div className="min-h-screen celestial-bg">
-      <CelestialHeader 
-        currentView="search" 
-        setCurrentView={() => {}} // Not used in search page
-      />
+      <CelestialHeader />
 
       <main className="relative">
         <div className="bg-gradient-to-b from-transparent via-white/95 to-white min-h-screen">

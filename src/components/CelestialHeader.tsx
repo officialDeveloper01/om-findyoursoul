@@ -6,13 +6,10 @@ import { useNavigate } from 'react-router-dom';
 import { Sun, Plus } from 'lucide-react';
 
 interface CelestialHeaderProps {
-  currentView: string;
-  setCurrentView: (view: string) => void;
-  onBackToSearch?: () => void;
-  showBackToSearch?: boolean;
+  // No props needed - header handles its own navigation
 }
 
-export const CelestialHeader = ({ currentView, setCurrentView, onBackToSearch, showBackToSearch }: CelestialHeaderProps) => {
+export const CelestialHeader = () => {
   const [scrolled, setScrolled] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
@@ -43,6 +40,10 @@ export const CelestialHeader = ({ currentView, setCurrentView, onBackToSearch, s
     navigate('/search');
   };
 
+  const handleNewAnalysisClick = () => {
+    navigate('/dashboard');
+  };
+
   return (
     <header 
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
@@ -56,7 +57,7 @@ export const CelestialHeader = ({ currentView, setCurrentView, onBackToSearch, s
           {/* Left Section - Navigation Button */}
           <div className="flex items-center">
             <Button 
-              onClick={() => setCurrentView('form')}
+              onClick={handleNewAnalysisClick}
               className="bg-gray-200 text-black hover:bg-gray-300 font-medium px-2 sm:px-4 py-2 rounded-lg transition-colors text-xs sm:text-sm"
             >
               <Plus className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
