@@ -446,9 +446,6 @@ export const SearchTables = ({ onBackToSearch, onShowingResults }: SearchTablesP
 
                   <div className="p-6">
                     <div className="text-center mb-6">
-                      <h4 className="text-xl font-semibold text-blue-800 mb-3">
-                        {result.fullName}
-                      </h4>
                       <Badge 
                         variant="outline" 
                         className={`
