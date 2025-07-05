@@ -297,47 +297,47 @@ export const NumberDetail = ({
       {/* Content Sections - Compact */}
       <div className="space-y-4">
         {filteredSections.map((section, index) => (
-          <Card key={index} className="shadow-lg border-2 border-gray-300 bg-white/95 backdrop-blur-sm rounded-xl">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-lg font-bold text-blue-600 border-b border-gray-200 pb-1 mt-4 mb-2">
-                {section.title}
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-1 pt-2">
-              {section.content.map((line, lineIndex) => {
-                // Determine line type for styling
-                const isSubheading = line.match(/^[A-Z][a-z]+ –/) || 
-                                   line.includes('Positive') || 
-                                   line.includes('Negative') ||
-                                   line.includes('Spiritual & Devotional') ||
-                                   line.includes('Gemstone Remedy') ||
-                                   line.includes('Yogic & Lifestyle') ||
-                                   line.includes('Destiny Ratio') ||
-                                   line.includes('Days)');
-                
-                const isBulletPoint = line.startsWith('•');
-                
-                return (
-                  <div key={lineIndex}>
-                    {line === "" ? (
-                      <div className="h-1"></div>
-                    ) : (
-                      <p className={`${
-                        isBulletPoint 
-                          ? 'ml-6 text-sm font-normal text-gray-700' 
-                          : isSubheading
-                          ? 'font-bold text-orange-600 mt-2 mb-1 text-base'
-                          : 'text-sm font-normal text-gray-700'
-                      } leading-snug`}>
-                        {line}
-                      </p>
-                    )}
-                  </div>
-                );
-              })}
-            </CardContent>
-          </Card>
-        ))}
+  <Card key={index} className="shadow-lg border-2 border-gray-300 bg-white/95 backdrop-blur-sm rounded-xl">
+    <CardHeader className="pb-2">
+      <CardTitle className="text-lg font-bold text-blue-600 border-b border-gray-200 pb-1 mt-4 mb-2">
+        {section.title}
+      </CardTitle>
+    </CardHeader>
+    <CardContent className="space-y-1 pt-2">
+      {section.content.map((line, lineIndex) => {
+        const isSubheading = line.match(/^[A-Z][a-z]+ –/) || 
+                             line.includes('Positive') || 
+                             line.includes('Negative') ||
+                             line.includes('Spiritual & Devotional') ||
+                             line.includes('Gemstone Remedy') ||
+                             line.includes('Yogic & Lifestyle') ||
+                             line.includes('Destiny Ratio') ||
+                             line.includes('Days)');
+
+        const isBulletPoint = line.startsWith('•');
+
+        return (
+          <div key={lineIndex}>
+            {line === "" ? (
+              <div className="h-1"></div>
+            ) : (
+              <p className={`leading-snug ${
+                isBulletPoint 
+                  ? 'ml-6 text-sm font-bold text-gray-800'
+                  : isSubheading 
+                  ? 'font-bold text-orange-600 mt-2 mb-1 text-base'
+                  : 'text-sm font-bold text-gray-800'
+              }`}>
+                {line}
+              </p>
+            )}
+          </div>
+        );
+      })}
+    </CardContent>
+  </Card>
+))}
+
         
         {filteredSections.length === 0 && (
           <Card className="shadow-lg border-2 border-gray-300 bg-white/95 backdrop-blur-sm rounded-xl">
@@ -351,7 +351,7 @@ export const NumberDetail = ({
       </div>
 
       {/* Mahadasha – Antardasha Button */}
-      <div className="flex justify-center mb-4">
+      {/* <div className="flex justify-center mb-4">
         <Button 
           onClick={() => setShowMahadashaTable(!showMahadashaTable)}
           variant="outline"
@@ -360,10 +360,10 @@ export const NumberDetail = ({
           {showMahadashaTable ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
           Mahadasha – Antardasha
         </Button>
-      </div>
+      </div> */}
 
       {/* Mahadasha Table (Initially Hidden) */}
-      {showMahadashaTable && mahadashaSection && (
+      {/* {showMahadashaTable && mahadashaSection && (
         <Card className="shadow-xl border-2 border-gray-400 bg-white/90 backdrop-blur-md rounded-xl mb-4">
           <CardHeader className="text-center pb-2">
             <CardTitle className="text-2xl md:text-3xl font-bold text-blue-800">
@@ -387,10 +387,10 @@ export const NumberDetail = ({
               </div>
           </CardContent>
         </Card>
-      )}
+      )} */}
 
       {/* Bottom Back Button */}
-      <div className="mt-6 text-center">
+      {/* <div className="mt-6 text-center">
         <Button 
           onClick={onBack}
           className="bg-amber-600 hover:bg-amber-700 text-white font-bold"
@@ -398,7 +398,7 @@ export const NumberDetail = ({
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back to Analysis
         </Button>
-      </div>
+      </div> */}
     </div>
   );
 };
