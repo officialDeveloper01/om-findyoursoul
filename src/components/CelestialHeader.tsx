@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/hooks/useAuth';
+import { useNavigate } from 'react-router-dom';
 import { Sun, Plus } from 'lucide-react';
 
 interface CelestialHeaderProps {
@@ -16,6 +17,7 @@ export const CelestialHeader = ({ currentView, setCurrentView, onBackToSearch, s
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const { user, logout } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -38,6 +40,7 @@ export const CelestialHeader = ({ currentView, setCurrentView, onBackToSearch, s
   }, [lastScrollY]);
 
   const handleSearchClick = () => {
+    navigate('/dashboard', { replace: true });
     setCurrentView('search');
   };
 
