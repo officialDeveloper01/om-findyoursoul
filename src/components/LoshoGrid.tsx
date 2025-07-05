@@ -76,42 +76,62 @@ export const LoshoGrid = ({ gridData, userData }) => {
 
   const calculateDashes = useCallback(() => {
   const dashes: Record<number, number> = {};
+  const reductionCounts: Record<number, number> = {};
   const gridCells = gridNumbers.flat();
-  const reductionSources: Record<number, Set<number>> = {};
 
-  for (const digit of gridCells) {
+  // Keep track of how many times each digit has triggered a reduction
+  const reductionTracker: Record<number, Set<number>> = {};
+
+  for (let i = 0; i < gridCells.length; i++) {
+    const digit = gridCells[i];
     const actualCount = frequencies[digit] || 0;
     const hiddenCount = hiddenNumbers[digit] || 0;
-    const totalCount = actualCount + hiddenCount;
 
-    // Rule: apply only if digit is present more than once
-    if (totalCount >= 2) {
-      const reduced = singleDigitSum(digit * totalCount);
+    // Rule 1 – actual count > 1
+    if (actualCount > 1) {
+      const total = digit * actualCount;
+      const reduced = singleDigitSum(total);
 
-      // Only if the reduced digit is truly missing from actual frequency
       if (!frequencies[reduced]) {
-        if (!reductionSources[reduced]) {
-          reductionSources[reduced] = new Set();
+        if (!reductionTracker[reduced]) {
+          reductionTracker[reduced] = new Set();
         }
 
-        // Each digit should count only once toward reduced
-        reductionSources[reduced].add(digit);
+        if (!reductionTracker[reduced].has(digit)) {
+          reductionCounts[reduced] = (reductionCounts[reduced] || 0) + 1;
+          reductionTracker[reduced].add(digit);
+        }
+      }
+    }
+
+    // Rule 2 – combined actual + hidden
+    if (
+      (actualCount > 0 || hiddenCount > 1) &&
+      !(actualCount === 0 && hiddenCount === 1)
+    ) {
+      const total = digit * (actualCount + hiddenCount);
+      const reduced = singleDigitSum(total);
+
+      if (!frequencies[reduced]) {
+        if (!reductionTracker[reduced]) {
+          reductionTracker[reduced] = new Set();
+        }
+
+        if (!reductionTracker[reduced].has(digit)) {
+          reductionCounts[reduced] = (reductionCounts[reduced] || 0) + 1;
+          reductionTracker[reduced].add(digit);
+        }
       }
     }
   }
 
-  // Convert sets into count, max 3
-  Object.entries(reductionSources).forEach(([num, sourceSet]) => {
-    dashes[+num] = Math.min(3, sourceSet.size);
+  // Limit to max 3 dashes
+  Object.entries(reductionCounts).forEach(([num, count]) => {
+    dashes[+num] = Math.min(count, 3);
   });
 
   return dashes;
 }, [frequencies, hiddenNumbers]);
-
-
-
-
-
 
   const dashes = calculateDashes();
 
