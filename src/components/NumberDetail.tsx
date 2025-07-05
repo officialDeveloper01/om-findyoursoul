@@ -202,23 +202,10 @@ export const NumberDetail = ({
                 <ArrowLeft className="mr-2 h-4 w-4" />
                 Back
               </Button>
-            </div>
-            <CardHeader className="text-center pb-2">
-              <CardTitle className="text-2xl md:text-xl font-bold text-blue-800">
-                Number {number} - Mahadasha Analysis <span className="font-semibold"> for:</span> {userName}
+              <CardTitle className="text-2xl md:text-xl font-bold text-blue-800 ml-4">
+                Number {number} - Mahadasha Analysis
               </CardTitle>
-              {/* <p className="text-lg text-gray-600">Planetary Influence & Timing</p> */}
-              {/* {userName && dateOfBirth && (
-                <div className="mt-2 p-2 bg-gray-50 rounded-lg border border-gray-200">
-                  <p className="text-gray-700 text-sm">
-                    
-                  </p>
-                  <p className="text-gray-700 text-sm">
-                    <span className="font-semibold">Date of Birth:</span> {formatDateDDMMYYYY(dateOfBirth)}
-                  </p>
-                </div>
-              )} */}
-            </CardHeader>
+            </div>
             <CardContent className="p-3">
               <div className="space-y-4">
                 {renderAntarDashaCards(antarDashaSection.content)}
