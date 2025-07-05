@@ -283,54 +283,53 @@ export const LoshoGrid = ({ gridData, userData }) => {
 
   return (
     <div className="max-w-4xl mx-auto px-2 md:px-4 py-4 font-calibri min-h-screen flex flex-col">
-      {/* User Info Table with stronger borders */}
-      <Card className="shadow-xl border-2 border-gray-400 bg-white/90 backdrop-blur-md rounded-xl mb-4">
-        <CardContent className="p-4 md:p-6">
+      {/* User Info Table - Compact */}
+      <Card className="shadow-xl border-2 border-gray-400 bg-white/90 backdrop-blur-md rounded-xl mb-4 max-w-2xl mx-auto">
+        <CardContent className="p-3">
           {/* Name spans full width */}
-          <div className="mb-4 pb-3 border-b-2 border-gray-300">
+          <div className="mb-3 pb-2 border-b-2 border-gray-300">
             <div className="text-center">
-              <span className="font-bold text-gray-800 text-xl">{userData.fullName}</span>
+              <span className="font-semibold text-gray-800 text-lg">{userData.fullName}</span>
             </div>
           </div>
           
           {/* Remaining fields in 3 rows, 2 columns each */}
-          <div className="space-y-3">
+          <div className="space-y-2">
             {/* Row 1: Age | Name Number */}
-            <div className="grid grid-cols-2 gap-x-8">
-              <div className="flex justify-between items-center border-b border-gray-300 pb-2">
-                <span className="text-gray-600 font-bold text-sm md:text-base">DOB:</span>
-                <span className="font-bold text-gray-800 text-sm md:text-base">{formatDateDDMMYYYY(userData.dateOfBirth)}</span>
+            <div className="grid grid-cols-2 gap-x-6">
+              <div className="flex justify-between items-center border-b border-gray-300 pb-1">
+                <span className="text-gray-600 font-medium text-sm">Age:</span>
+                <span className="font-semibold text-gray-800 text-sm">{calculateAge(userData.dateOfBirth)} years</span>
               </div>
               
-              <div className="flex justify-between items-center border-b border-gray-300 pb-2 border-l border-gray-300 pl-4">
-                <span className="text-gray-600 font-bold text-sm md:text-base">Name Number:</span>
-                <span className="font-bold text-gray-800 text-sm md:text-base">{numerologyData.chaldeanNumbers?.nameNumber || 0}</span>
+              <div className="flex justify-between items-center border-b border-gray-300 pb-1 border-l border-gray-300 pl-3">
+                <span className="text-gray-600 font-medium text-sm">Name Number:</span>
+                <span className="font-semibold text-gray-800 text-sm">{numerologyData.chaldeanNumbers?.nameNumber || 0}</span>
               </div>
             </div>
 
             {/* Row 2: DOB | Mulaank */}
-            <div className="grid grid-cols-2 gap-x-8">
-              <div className="flex justify-between items-center border-b border-gray-300 pb-2">
-                <span className="text-gray-600 font-bold text-sm md:text-base">Age:</span>
-                <span className="font-bold text-gray-800 text-sm md:text-base">{calculateAge(userData.dateOfBirth)} years</span>
+            <div className="grid grid-cols-2 gap-x-6">
+              <div className="flex justify-between items-center border-b border-gray-300 pb-1">
+                <span className="text-gray-600 font-medium text-sm">DOB:</span>
+                <span className="font-semibold text-gray-800 text-sm">{formatDateDDMMYYYY(userData.dateOfBirth)}</span>
               </div>
-              <div className="flex justify-between items-center border-b border-gray-300 pb-2 border-l border-gray-300 pl-4">
-                <span className="text-gray-600 font-bold text-sm md:text-base">MULAANK:</span>
-                <span className="font-bold text-amber-700 text-sm md:text-base">{numerologyData.driver || 0}</span>
+              <div className="flex justify-between items-center border-b border-gray-300 pb-1 border-l border-gray-300 pl-3">
+                <span className="text-gray-600 font-medium text-sm">MULAANK:</span>
+                <span className="font-semibold text-amber-700 text-sm">{numerologyData.driver || 0}</span>
               </div>
             </div>
 
             {/* Row 3: Bhagyaank | Time */}
-            <div className="grid grid-cols-2 gap-x-8">
-              <div className="flex justify-between items-center ">
-                <span className="text-gray-600 font-bold text-sm md:text-base">Time:</span>
-                <span className="font-bold text-gray-800 whitespace-nowrap text-sm md:text-base">{formatTime(userData.timeOfBirth)}</span>
+            <div className="grid grid-cols-2 gap-x-6">
+              <div className="flex justify-between items-center">
+                <span className="text-gray-600 font-medium text-sm">BHAGYAANK:</span>
+                <span className="font-semibold text-blue-700 text-sm">{numerologyData.conductor || 0}</span>
               </div>
-              <div className="flex justify-between items-center border-l border-gray-300 pl-4">
-                <span className="text-gray-600 font-bold text-sm md:text-base">BHAGYAANK:</span>
-                <span className="font-bold text-blue-700 text-sm md:text-base">{numerologyData.conductor || 0}</span>
+              <div className="flex justify-between items-center border-l border-gray-300 pl-3">
+                <span className="text-gray-600 font-medium text-sm">Time:</span>
+                <span className="font-semibold text-gray-800 whitespace-nowrap text-sm">{formatTime(userData.timeOfBirth)}</span>
               </div>
-              
             </div>
           </div>
         </CardContent>

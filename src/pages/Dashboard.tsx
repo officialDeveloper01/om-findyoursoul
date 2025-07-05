@@ -299,7 +299,7 @@ const Dashboard = () => {
                 
                 {allResults.length === 1 ? (
                   <div className="max-w-5xl mx-auto slide-up">
-                    <Card className="shadow-xl border border-gray-200 bg-white rounded-xl">
+                    <Card className="shadow-xl border border-gray-200 bg-white rounded-xl max-w-3xl mx-auto">
                       <div className="absolute top-4 right-4 z-10">
                         <Button
                           size="sm"
@@ -311,7 +311,7 @@ const Dashboard = () => {
                           Edit
                         </Button>
                       </div>
-                      <div className="p-6">
+                      <div className="p-4">
                         <LoshoGrid 
                           gridData={{
                             frequencies: allResults[0].gridData,
@@ -335,12 +335,12 @@ const Dashboard = () => {
                     {allResults.map((result, index) => (
                       <div key={`result-${index}-${result.fullName}`} className="slide-up">
                         <Card className="shadow-xl border border-gray-200 bg-white rounded-xl h-full relative">
-                          <div className="absolute top-4 right-4 z-10 flex gap-2">
+                          <div className="absolute top-2 right-2 z-10 flex gap-1">
                             <Button
                               size="sm"
                               variant="outline"
                               onClick={() => openUserModal('edit', result, index)}
-                              className="flex items-center gap-1"
+                              className="flex items-center gap-1 p-1 h-7"
                             >
                               <Edit size={12} />
                             </Button>
@@ -357,32 +357,14 @@ const Dashboard = () => {
                                   });
                                   handleUserDelete();
                                 }}
-                                className="flex items-center gap-1 text-red-600 hover:text-red-700"
+                                className="flex items-center gap-1 text-red-600 hover:text-red-700 p-1 h-7"
                               >
                                 <Trash2 size={12} />
                               </Button>
                             )}
                           </div>
 
-                          <div className="p-6">
-                            <div className="text-center mb-6">
-                              <h3 className="text-xl font-semibold text-blue-800 mb-3">
-                                {result.fullName}
-                              </h3>
-                              <Badge 
-                                variant="outline" 
-                                className={`
-                                  px-3 py-1 text-sm font-medium rounded-full
-                                  ${result.relation === 'SELF' 
-                                    ? 'bg-amber-100 text-amber-700 border-amber-300' 
-                                    : 'bg-blue-100 text-blue-700 border-blue-300'
-                                  }
-                                `}
-                              >
-                                {result.relation === 'SELF' ? 'Main' : result.relation}
-                              </Badge>
-                            </div>
-                            
+                          <div className="p-3">
                             <LoshoGrid 
                               gridData={{
                                 frequencies: result.gridData,
