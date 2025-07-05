@@ -2,7 +2,7 @@ import { useState, useCallback } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { UserDataForm } from '@/components/UserDataForm';
 import { LoshoGrid } from '@/components/LoshoGrid';
-import { SearchTables } from '@/components/SearchTables';
+
 import { CelestialHeader } from '@/components/CelestialHeader';
 import { CelestialLoader } from '@/components/CelestialLoader';
 import { Badge } from '@/components/ui/badge';
@@ -30,7 +30,7 @@ const Dashboard = () => {
     userData: null,
     userIndex: -1
   });
-  const [showingSearchResults, setShowingSearchResults] = useState(false);
+  
   const { user } = useAuth();
 
   const refreshCurrentResults = useCallback(async () => {
@@ -122,10 +122,6 @@ const Dashboard = () => {
     }
   }, [user]);
 
-  const handleBackToSearchResults = useCallback(() => {
-    setShowingSearchResults(false);
-    setCurrentView('search');
-  }, []);
 
   const handleNewEntry = useCallback(() => {
     if (typeof window !== 'undefined') {
@@ -250,8 +246,6 @@ const Dashboard = () => {
       <CelestialHeader 
         currentView={currentView} 
         setCurrentView={setCurrentView}
-        showBackToSearch={showingSearchResults}
-        onBackToSearch={handleBackToSearchResults}
       />
 
       <main className="relative">
@@ -389,14 +383,6 @@ const Dashboard = () => {
               </div>
             )}
 
-            {currentView === 'search' && (
-              <div className="pt-24">
-                <SearchTables 
-                  onBackToSearch={handleBackToSearchResults}
-                  onShowingResults={setShowingSearchResults}
-                />
-              </div>
-            )}
           </div>
         </div>
       </main>
