@@ -298,9 +298,10 @@ export const LoshoGrid = ({ gridData, userData }) => {
             {/* Row 1: Age | Name Number */}
             <div className="grid grid-cols-2 gap-x-8">
               <div className="flex justify-between items-center border-b border-gray-300 pb-2">
-                <span className="text-gray-600 font-bold text-sm md:text-base">Age:</span>
-                <span className="font-bold text-gray-800 text-sm md:text-base">{calculateAge(userData.dateOfBirth)} years</span>
+                <span className="text-gray-600 font-bold text-sm md:text-base">DOB:</span>
+                <span className="font-bold text-gray-800 text-sm md:text-base">{formatDateDDMMYYYY(userData.dateOfBirth)}</span>
               </div>
+              
               <div className="flex justify-between items-center border-b border-gray-300 pb-2 border-l border-gray-300 pl-4">
                 <span className="text-gray-600 font-bold text-sm md:text-base">Name Number:</span>
                 <span className="font-bold text-gray-800 text-sm md:text-base">{numerologyData.chaldeanNumbers?.nameNumber || 0}</span>
@@ -310,8 +311,8 @@ export const LoshoGrid = ({ gridData, userData }) => {
             {/* Row 2: DOB | Mulaank */}
             <div className="grid grid-cols-2 gap-x-8">
               <div className="flex justify-between items-center border-b border-gray-300 pb-2">
-                <span className="text-gray-600 font-bold text-sm md:text-base">DOB:</span>
-                <span className="font-bold text-gray-800 text-sm md:text-base">{formatDateDDMMYYYY(userData.dateOfBirth)}</span>
+                <span className="text-gray-600 font-bold text-sm md:text-base">Age:</span>
+                <span className="font-bold text-gray-800 text-sm md:text-base">{calculateAge(userData.dateOfBirth)} years</span>
               </div>
               <div className="flex justify-between items-center border-b border-gray-300 pb-2 border-l border-gray-300 pl-4">
                 <span className="text-gray-600 font-bold text-sm md:text-base">MULAANK:</span>
@@ -321,14 +322,15 @@ export const LoshoGrid = ({ gridData, userData }) => {
 
             {/* Row 3: Bhagyaank | Time */}
             <div className="grid grid-cols-2 gap-x-8">
-              <div className="flex justify-between items-center">
-                <span className="text-gray-600 font-bold text-sm md:text-base">BHAGYAANK:</span>
-                <span className="font-bold text-blue-700 text-sm md:text-base">{numerologyData.conductor || 0}</span>
-              </div>
-              <div className="flex justify-between items-center border-l border-gray-300 pl-4">
+              <div className="flex justify-between items-center ">
                 <span className="text-gray-600 font-bold text-sm md:text-base">Time:</span>
                 <span className="font-bold text-gray-800 whitespace-nowrap text-sm md:text-base">{formatTime(userData.timeOfBirth)}</span>
               </div>
+              <div className="flex justify-between items-center border-l border-gray-300 pl-4">
+                <span className="text-gray-600 font-bold text-sm md:text-base">BHAGYAANK:</span>
+                <span className="font-bold text-blue-700 text-sm md:text-base">{numerologyData.conductor || 0}</span>
+              </div>
+              
             </div>
           </div>
         </CardContent>
