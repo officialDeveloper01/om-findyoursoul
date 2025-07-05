@@ -299,26 +299,42 @@ export const NumberDetail = ({
         {filteredSections.map((section, index) => (
           <Card key={index} className="shadow-lg border-2 border-gray-300 bg-white/95 backdrop-blur-sm rounded-xl">
             <CardHeader className="pb-2">
-              <CardTitle className="text-lg font-bold text-gray-800 border-b border-gray-200 pb-1">
+              <CardTitle className="text-lg font-bold text-blue-600 border-b border-gray-200 pb-1 mt-4 mb-2">
                 {section.title}
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-1 pt-2">
-              {section.content.map((line, lineIndex) => (
-                <div key={lineIndex}>
-                  {line === "" ? (
-                    <div className="h-1"></div>
-                  ) : (
-                    <p className={`${
-                      line.startsWith('•') ? 'ml-6 text-sm' : ''
-                    } ${
-                      line.match(/^[A-Z][a-z]+ –/) || line.includes('Positive') || line.includes('Negative') ? 'font-bold text-base text-blue-700 mt-2' : 'text-sm'
-                    } text-gray-700 leading-snug`}>
-                      {line}
-                    </p>
-                  )}
-                </div>
-              ))}
+              {section.content.map((line, lineIndex) => {
+                // Determine line type for styling
+                const isSubheading = line.match(/^[A-Z][a-z]+ –/) || 
+                                   line.includes('Positive') || 
+                                   line.includes('Negative') ||
+                                   line.includes('Spiritual & Devotional') ||
+                                   line.includes('Gemstone Remedy') ||
+                                   line.includes('Yogic & Lifestyle') ||
+                                   line.includes('Destiny Ratio') ||
+                                   line.includes('Days)');
+                
+                const isBulletPoint = line.startsWith('•');
+                
+                return (
+                  <div key={lineIndex}>
+                    {line === "" ? (
+                      <div className="h-1"></div>
+                    ) : (
+                      <p className={`${
+                        isBulletPoint 
+                          ? 'ml-6 text-sm font-normal text-gray-700' 
+                          : isSubheading
+                          ? 'font-bold text-orange-600 mt-2 mb-1 text-base'
+                          : 'text-sm font-normal text-gray-700'
+                      } leading-snug`}>
+                        {line}
+                      </p>
+                    )}
+                  </div>
+                );
+              })}
             </CardContent>
           </Card>
         ))}
