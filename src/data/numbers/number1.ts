@@ -1,14 +1,11 @@
 
 export const number1Data = {
   title: "ALL ABOUT NUMBER 1",
-  subtitle: "(Alphabets – A, I, J, Q, Y)",
+  subtitle: "Alphabets – A, I, J, Q, Y | SUN – Surya – Related to Career | WATER element - North",
   sections: [
     {
-      title: "Basic Information",
+      title: "Friendly, Neutral & Enemy Planets",
       content: [
-        "It represents WATER element and lies in the North",
-        "SUN – Surya – Related to Career (1, 19 & 28)",
-        "",
         "Friendly Planet – Chandra, Mangal & Guru",
         "Neutral Planet – Budh & Ketu", 
         "Enemy Planet – Shani, Shukra & Rahu"
