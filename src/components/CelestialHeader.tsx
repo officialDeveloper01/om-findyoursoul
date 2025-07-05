@@ -40,7 +40,7 @@ export const CelestialHeader = ({ currentView, setCurrentView, onBackToSearch, s
   }, [lastScrollY]);
 
   const handleSearchClick = () => {
-    navigate('/dashboard', { replace: true });
+    navigate('/dashboard');
     setCurrentView('search');
   };
 
