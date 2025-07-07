@@ -293,7 +293,7 @@ export const NumberDetail = ({
     <CardContent className="text-s space-y-1 pt-2">
       {section.content.map((line, lineIndex) => {
         // Primary headings (blue and distinct)
-        const isPrimaryHeading = line.includes('Daily Chanting') ||
+        const isPrimaryHeading =
                                 line.includes('Spiritual Remedies') ||
                                 line.includes('Astrological Remedies') ||
                                 line.includes('Fasting & Rituals') ||
@@ -306,6 +306,7 @@ export const NumberDetail = ({
 
         // Subheadings (orange and secondary style)
         const isSubheading = line.includes("Do's") ||
+                            line.includes('Daily Chanting') ||
                             line.includes("Don'ts") ||
                             line.includes('Positive') || 
                             line.includes('Negative') ||
@@ -314,6 +315,9 @@ export const NumberDetail = ({
                             line.includes('Yogic & Lifestyle') ||
                             line.includes('Destiny Ratio') ||
                             line.includes('Days)') ||
+                            line.includes('Shani Remedy') ||
+                            line.includes('Simple')||
+                            line.includes('Other Powerful Remedies')
                             line.match(/^[A-Z][a-z]+ –/);
 
         const isBulletPoint = line.startsWith('•');
