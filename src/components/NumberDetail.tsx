@@ -290,30 +290,47 @@ export const NumberDetail = ({
         {section.title}
       </CardTitle>
     </CardHeader>
-    <CardContent className="text-s space-y-1 pt-2 ">
+    <CardContent className="text-s space-y-1 pt-2">
       {section.content.map((line, lineIndex) => {
-        const isSubheading = line.match(/^[A-Z][a-z]+ –/) || 
-                             line.includes('Positive') || 
-                             line.includes('Negative') ||
-                             line.includes('Spiritual & Devotional') ||
-                             line.includes('Gemstone Remedy') ||
-                             line.includes('Yogic & Lifestyle') ||
-                             line.includes('Destiny Ratio') ||
-                             line.includes('Days)');
+        // Primary headings (blue and distinct)
+        const isPrimaryHeading = line.includes('Daily Chanting') ||
+                                line.includes('Spiritual Remedies') ||
+                                line.includes('Astrological Remedies') ||
+                                line.includes('Fasting & Rituals') ||
+                                line.includes('Gemstone Remedies') ||
+                                line.includes('Herbal & Ayurvedic Remedies') ||
+                                line.includes('Yogic & Lifestyle Remedies') ||
+                                line.includes('Behavioral / Karmic Corrections') ||
+                                line.includes('Other Powerful Mantras') ||
+                                line.includes('Powerful Shani Mantra Ritual');
+
+        // Subheadings (orange and secondary style)
+        const isSubheading = line.includes("Do's") ||
+                            line.includes("Don'ts") ||
+                            line.includes('Positive') || 
+                            line.includes('Negative') ||
+                            line.includes('Spiritual & Devotional') ||
+                            line.includes('Gemstone Remedy') ||
+                            line.includes('Yogic & Lifestyle') ||
+                            line.includes('Destiny Ratio') ||
+                            line.includes('Days)') ||
+                            line.match(/^[A-Z][a-z]+ –/);
 
         const isBulletPoint = line.startsWith('•');
 
         return (
           <div key={lineIndex}>
             {line === "" ? (
-              <div className="h-1"></div>
+              <div className="h-2"></div>
             ) : (
-              <p className={`leading-snug ${
-                isBulletPoint 
-                  ? 'ml-6 text-l font-bold text-gray-800'
+              <p className={`leading-relaxed ${
+                isPrimaryHeading
+                  ? 'font-bold text-blue-700 mt-4 mb-2 text-lg border-b border-blue-200 pb-1'
+                  : isBulletPoint 
+                  ? 'ml-4 text-base font-bold text-gray-800 mt-1'
                   : isSubheading 
-                  ? 'font-bold text-orange-600 mt-2 mb-1 text-base'
-                  : 'text-l font-bold text-gray-800'
+                  ? 'font-bold text-orange-600 mt-3 mb-1 text-base'
+                  : 'text-base font-bold text-gray-800'
               }`}>
                 {line}
               </p>
