@@ -1,7 +1,7 @@
 
 export const number2Data = {
   title: "ALL ABOUT NUMBER 2",
-  subtitle: "Alphabets – B, K, R | MOON– Chandra – Related to Marriage & Relationship | EARTH element - South West",
+  subtitle: "Alphabets – B, K, R | MOON – Chandra – Related to Marriage & Relationship | EARTH element - South West",
   sections: [
     {
       title: "Friendly, Neutral & Enemy Planets",
