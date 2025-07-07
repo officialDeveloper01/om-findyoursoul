@@ -317,8 +317,16 @@ export const NumberDetail = ({
                             line.includes('Days)') ||
                             line.includes('Shani Remedy') ||
                             line.includes('Simple')||
-                            line.includes('Other Powerful Remedies')
+                            line.includes('Other Powerful Remedies') ||
                             line.match(/^[A-Z][a-z]+ –/);
+
+        // Sub-sub-headings (darker orange or italic bold)
+        const isSubSubheading = line.includes('Avoid') ||
+                               line.includes('Practice') ||
+                               line.includes('Powerful Shani Mantra Ritual') && !isPrimaryHeading;
+
+        // Mantras (deep purple/saffron highlighting)
+        const isMantra = line.startsWith('ॐ') && (line.includes(':') || line.includes('–'));
 
         const isBulletPoint = line.startsWith('•');
 
@@ -330,10 +338,14 @@ export const NumberDetail = ({
               <p className={`leading-relaxed ${
                 isPrimaryHeading
                   ? 'font-bold text-blue-700 mt-4 mb-2 text-lg border-b border-blue-200 pb-1'
+                  : isMantra
+                  ? 'font-bold text-purple-700 mt-2 mb-1 text-base bg-purple-50 px-2 py-1 rounded'
                   : isBulletPoint 
                   ? 'ml-4 text-base font-bold text-gray-800 mt-1'
                   : isSubheading 
                   ? 'font-bold text-orange-600 mt-3 mb-1 text-base'
+                  : isSubSubheading
+                  ? 'font-bold text-orange-800 mt-2 mb-1 text-sm italic'
                   : 'text-base font-bold text-gray-800'
               }`}>
                 {line}
