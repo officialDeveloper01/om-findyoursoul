@@ -35,6 +35,8 @@ export const SearchTables = ({ onBackToSearch, onShowingResults }: SearchTablesP
   });
   const { user } = useAuth();
 
+  const [searchResultInfo, setSearchResultInfo] = useState('');
+
   const handleSearch = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -51,61 +53,150 @@ export const SearchTables = ({ onBackToSearch, onShowingResults }: SearchTablesP
     setLoading(true);
     setSearched(true);
     setSelectedResults([]);
+    setSearchResultInfo('');
     
     try {
       // Search through all users data
       const usersRef = ref(database, 'users');
       const snapshot = await get(usersRef);
-      const results: any[] = [];
+      let results: any[] = [];
       const familyGroupsFound = new Set(); // Track unique family groups
+      let searchType = '';
       
       if (snapshot.exists()) {
         const allUsers = snapshot.val();
         
-        // Iterate through all phone numbers
-        Object.keys(allUsers).forEach(phoneNumber => {
-          const phoneData = allUsers[phoneNumber];
+        // Helper function to check numerology number matches
+        const checkNumerologyMatch = (entry: any, searchNumber: string) => {
+          if (!entry.numerologyData) return false;
+          const num = searchNumber.trim();
+          const nameNumber = entry.numerologyData.chaldeanNumbers?.nameNumber?.toString();
+          const driver = entry.numerologyData.driver?.toString();
+          const conductor = entry.numerologyData.conductor?.toString();
           
-          if (phoneData.entries) {
-            // Handle new structure with entries
-            Object.keys(phoneData.entries).forEach(entryId => {
-              const entryGroup = phoneData.entries[entryId];
-              
-              // Only include records created by the current user
-              if (entryGroup.userId === user.uid && entryGroup.entries && Array.isArray(entryGroup.entries)) {
-                // Check if any member in this family group matches the search
-                const hasMatch = entryGroup.entries.some((entry: any) => {
-                  const nameMatches = !fullName.trim() || (entry.fullName && 
-                    entry.fullName.toLowerCase().includes(fullName.toLowerCase()));
-                  const mobileMatches = !mobileNumber.trim() || 
-                    phoneNumber.includes(mobileNumber.trim());
-                  return nameMatches && mobileMatches;
-                });
+          return nameNumber === num || driver === num || conductor === num;
+        };
 
-                // If we found a match and haven't already processed this group
-                if (hasMatch && !familyGroupsFound.has(entryId)) {
-                  familyGroupsFound.add(entryId);
-                  
-                  // Add the entire family group, not just the matching member
-                  entryGroup.entries.forEach((entry: any, index: number) => {
-                    results.push({
-                      id: `${entryId}-${index}`,
-                      groupId: entryId,
-                      phoneNumber: phoneNumber,
-                      ...entry,
-                      createdAt: entryGroup.createdAt,
-                      userId: entryGroup.userId
-                    });
+        // Helper function to perform search with given criteria
+        const performSearch = (nameOnly = false, numberOnly = false, numerologyOnly = false) => {
+          const searchResults: any[] = [];
+          const groupsFound = new Set();
+          
+          Object.keys(allUsers).forEach(phoneNumber => {
+            const phoneData = allUsers[phoneNumber];
+            
+            if (phoneData.entries) {
+              Object.keys(phoneData.entries).forEach(entryId => {
+                const entryGroup = phoneData.entries[entryId];
+                
+                if (entryGroup.userId === user.uid && entryGroup.entries && Array.isArray(entryGroup.entries)) {
+                  const hasMatch = entryGroup.entries.some((entry: any) => {
+                    let nameMatches = true;
+                    let mobileMatches = true;
+                    let numerologyMatches = true;
+                    
+                    if (!nameOnly && !numerologyOnly) {
+                      // Check mobile number match
+                      mobileMatches = !mobileNumber.trim() || phoneNumber.includes(mobileNumber.trim());
+                    }
+                    
+                    if (!numberOnly && !numerologyOnly) {
+                      // Check name match
+                      nameMatches = !fullName.trim() || (entry.fullName && 
+                        entry.fullName.toLowerCase().includes(fullName.toLowerCase()));
+                    }
+                    
+                    if (numerologyOnly) {
+                      // Check numerology number match
+                      numerologyMatches = mobileNumber.trim() ? checkNumerologyMatch(entry, mobileNumber) : false;
+                      nameMatches = !fullName.trim() || (entry.fullName && 
+                        entry.fullName.toLowerCase().includes(fullName.toLowerCase()));
+                    }
+                    
+                    if (nameOnly) {
+                      return nameMatches;
+                    }
+                    if (numberOnly) {
+                      return mobileMatches;
+                    }
+                    if (numerologyOnly) {
+                      return nameMatches && numerologyMatches;
+                    }
+                    
+                    return nameMatches && mobileMatches;
                   });
+
+                  if (hasMatch && !groupsFound.has(entryId)) {
+                    groupsFound.add(entryId);
+                    
+                    entryGroup.entries.forEach((entry: any, index: number) => {
+                      searchResults.push({
+                        id: `${entryId}-${index}`,
+                        groupId: entryId,
+                        phoneNumber: phoneNumber,
+                        ...entry,
+                        createdAt: entryGroup.createdAt,
+                        userId: entryGroup.userId
+                      });
+                    });
+                  }
+                }
+              });
+            }
+          });
+          
+          return searchResults;
+        };
+
+        // Search strategy based on input
+        if (fullName.trim() && mobileNumber.trim()) {
+          // Both name and number provided
+          results = performSearch(); // Try exact match first
+          
+          if (results.length === 0) {
+            // Try name only
+            results = performSearch(true, false);
+            if (results.length > 0) {
+              searchType = 'name only (mobile number not found)';
+            } else {
+              // Try mobile number only
+              results = performSearch(false, true);
+              if (results.length > 0) {
+                searchType = 'mobile number only (name not found)';
+              } else {
+                // Try numerology numbers
+                results = performSearch(false, false, true);
+                if (results.length > 0) {
+                  searchType = 'numerology number match (mobile number was numerology data)';
                 }
               }
-            });
+            }
+          } else {
+            searchType = 'exact match found';
           }
-        });
+        } else if (fullName.trim() && !mobileNumber.trim()) {
+          // Only name provided
+          results = performSearch(true, false);
+          searchType = 'name search';
+        } else if (!fullName.trim() && mobileNumber.trim()) {
+          // Only number provided
+          results = performSearch(false, true); // Try mobile number first
+          
+          if (results.length === 0) {
+            // Try numerology numbers
+            results = performSearch(false, false, true);
+            if (results.length > 0) {
+              searchType = 'numerology number match';
+            }
+          } else {
+            searchType = 'mobile number search';
+          }
+        }
       }
       
       console.log('Search results (full family groups):', results);
       setSearchResults(results);
+      setSearchResultInfo(searchType);
     } catch (error) {
       console.error('Error searching records:', error);
       alert('Error searching records. Please try again.');
@@ -555,10 +646,17 @@ export const SearchTables = ({ onBackToSearch, onShowingResults }: SearchTablesP
       {/* Search Results */}
       {searched && (
         <div className="space-y-4">
-          <h3 className="text-xl font-light text-gray-700 text-center">
-            Family Groups Found for "{fullName}"
-            {mobileNumber && ` (${mobileNumber})`}
-          </h3>
+          <div className="text-center">
+            <h3 className="text-xl font-light text-gray-700">
+              Family Groups Found for "{fullName}"
+              {mobileNumber && ` (${mobileNumber})`}
+            </h3>
+            {searchResultInfo && (
+              <p className="text-sm text-amber-600 mt-1 font-medium">
+                Showing results for: {searchResultInfo}
+              </p>
+            )}
+          </div>
           
           {Object.keys(groupedResults).length === 0 ? (
             <Card className="text-center py-8">
