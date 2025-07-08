@@ -151,7 +151,7 @@ export const StruggleAnalysis = ({ onBack, userName, dateOfBirth }: StruggleAnal
             <table className="w-full border border-gray-400 rounded-lg overflow-hidden bg-white text-xs leading-tight">
               <thead className="bg-amber-100">
                 <tr>
-                  <th className="border border-gray-300 px-2 py-2 text-left font-bold text-gray-700">Numbers</th>
+                  <th className="border border-gray-300 px-2 py-2 text-left font-bold text-gray-700">No</th>
                   <th className="border border-gray-300 px-2 py-2 text-left font-bold text-gray-700">Planets</th>
                   <th className="border border-gray-300 px-2 py-2 text-left font-bold text-gray-700">Area of Struggle</th>
                   <th className="border border-gray-300 px-2 py-2 text-left font-bold text-gray-700">Struggle Signs</th>
