@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { AntarDashaTable } from './AntarDashaTable';
 import { PlaneAnalysis } from './PlaneAnalysis';
+import { StruggleAnalysis } from './StruggleAnalysis';
 import { NumberDetail } from './NumberDetail';
 import { CompactNumerologyRow } from './CompactNumerologyRow';
 import { calculateAntarDasha, calculatePreBirthAntarDasha, planetMap } from '@/utils/antarDashaCalculator';
@@ -11,6 +12,7 @@ import { getDriverConductorAnalysis } from '@/data/driverConductorAnalysis';
 export const LoshoGrid = ({ gridData, userData }) => {
   const [selectedAntarDasha, setSelectedAntarDasha] = useState(null);
   const [showPlaneAnalysis, setShowPlaneAnalysis] = useState(false);
+  const [showStruggleAnalysis, setShowStruggleAnalysis] = useState(false);
   const [selectedNumber, setSelectedNumber] = useState(null);
   const [showMahadashaOnly, setShowMahadashaOnly] = useState(false);
 
@@ -282,6 +284,18 @@ export const LoshoGrid = ({ gridData, userData }) => {
     );
   }
 
+  if (showStruggleAnalysis) {
+    return (
+      <div className="max-w-4xl mx-auto px-4 py-8 font-calibri">
+        <StruggleAnalysis 
+          onBack={() => setShowStruggleAnalysis(false)}
+          userName={userData.fullName}
+          dateOfBirth={userData.dateOfBirth}
+        />
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-4xl mx-auto px-2 md:px-4 py-4 font-calibri">
       {/* User Info Table - Compact */}
@@ -373,13 +387,19 @@ export const LoshoGrid = ({ gridData, userData }) => {
         
         <div className="relative z-10">
           <CardHeader className="text-center pb-1 md:pb-2">
-            {/* Plane Analysis Button */}
-            <div className="text-center">
+            {/* Analysis Buttons */}
+            <div className="text-center flex flex-wrap justify-center gap-3">
               <Button 
                 onClick={() => setShowPlaneAnalysis(true)}
                 className="bg-amber-600 hover:bg-amber-700 text-white font-bold px-4 md:px-6 py-2"
               >
                 Plane Analysis
+              </Button>
+              <Button 
+                onClick={() => setShowStruggleAnalysis(true)}
+                className="bg-amber-600 hover:bg-amber-700 text-white font-bold px-4 md:px-6 py-2"
+              >
+                Age of Struggle End
               </Button>
             </div>
           </CardHeader>
