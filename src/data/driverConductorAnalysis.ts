@@ -1,107 +1,108 @@
 export interface DriverConductorAnalysis {
   result: string;
   outcome: string;
+  struggleEndAge: string;
 }
 
 export const driverConductorAnalysisData: Record<number, Record<number, DriverConductorAnalysis>> = {
   1: {
-    1: { result: "Neutral", outcome: "Strong leadership, but ego clashes, lonely path" },
-    2: { result: "❌ Challenging", outcome: "Emotional imbalance; dominance vs diplomacy" },
-    3: { result: "✅ Good", outcome: "Confident, creative leader; excellent communicator" },
-    4: { result: "Neutral", outcome: "Hardworking but rigid; emotionally distant" },
-    5: { result: "✅ Good", outcome: "Dynamic, charming leader; success in business" },
-    6: { result: "❌ Challenging", outcome: "Dominates in love, ego blocks bonding" },
-    7: { result: "Neutral", outcome: "Intellectual path; spiritual lessons; isolation" },
-    8: { result: "Neutral", outcome: "Ambitious, karmic path; late success." },
-    9: { result: "✅ Good", outcome: "Selfless leader; spiritual and emotional journey" }
+    1: { result: "Neutral", outcome: "Strong leadership, but ego clashes, lonely path", struggleEndAge: "33 – 36 Age" },
+    2: { result: "❌ Challenging", outcome: "Emotional imbalance; dominance vs diplomacy", struggleEndAge: "34 – 37 Age" },
+    3: { result: "✅ Good", outcome: "Confident, creative leader; excellent communicator", struggleEndAge: "30 – 33 Age" },
+    4: { result: "Neutral", outcome: "Hardworking but rigid; emotionally distant", struggleEndAge: "38 – 42 Age" },
+    5: { result: "✅ Good", outcome: "Dynamic, charming leader; success in business", struggleEndAge: "34 – 36 Age" },
+    6: { result: "❌ Challenging", outcome: "Dominates in love, ego blocks bonding", struggleEndAge: "36 – 39 Age" },
+    7: { result: "Neutral", outcome: "Intellectual path; spiritual lessons; isolation", struggleEndAge: "40 – 44 Age" },
+    8: { result: "Neutral", outcome: "Ambitious, karmic path; late success.", struggleEndAge: "39 – 43 Age" },
+    9: { result: "✅ Good", outcome: "Selfless leader; spiritual and emotional journey", struggleEndAge: "32 – 35 Age" }
   },
   2: {
-    1: { result: "Neutral", outcome: "Sensitive to control; needs harmony in relationships" },
-    2: { result: "❌ Challenging", outcome: "Over-sensitive, emotional confusion, indecisiveness" },
-    3: { result: "✅ Good", outcome: "Emotional yet expressive; family-oriented, Moody" },
-    4: { result: "Neutral", outcome: "Security-loving but rigid, Emotion meets stability;" },
-    5: { result: "Neutral", outcome: "Restless in love, inconsistent relationships" },
-    6: { result: "✅ Good", outcome: "Nurturing, romantic, ideal for marriage and love" },
-    7: { result: "❌ Challenging", outcome: "Strained bonds, Spiritual-emotional mismatch;" },
-    8: { result: "❌ Challenging", outcome: "Emotionally burdened; family/karmic tension" },
-    9: { result: "Neutral", outcome: "Generous but emotionally burdened, Mood Swing" }
+    1: { result: "Neutral", outcome: "Sensitive to control; needs harmony in relationships", struggleEndAge: "34 – 36 Age" },
+    2: { result: "❌ Challenging", outcome: "Over-sensitive, emotional confusion, indecisiveness", struggleEndAge: "35 – 38 Age" },
+    3: { result: "✅ Good", outcome: "Emotional yet expressive; family-oriented, Moody", struggleEndAge: "33 – 36 Age" },
+    4: { result: "Neutral", outcome: "Security-loving but rigid, Emotion meets stability;", struggleEndAge: "38 – 42 Age" },
+    5: { result: "Neutral", outcome: "Restless in love, inconsistent relationships", struggleEndAge: "34 – 37 Age" },
+    6: { result: "✅ Good", outcome: "Nurturing, romantic, ideal for marriage and love", struggleEndAge: "36 – 39 Age" },
+    7: { result: "❌ Challenging", outcome: "Strained bonds, Spiritual-emotional mismatch;", struggleEndAge: "40 – 44 Age" },
+    8: { result: "❌ Challenging", outcome: "Emotionally burdened; family/karmic tension", struggleEndAge: "39 – 43 Age" },
+    9: { result: "Neutral", outcome: "Generous but emotionally burdened, Mood Swing", struggleEndAge: "34 – 36 Age" }
   },
   3: {
-    1: { result: "✅ Good", outcome: "Charismatic speaker; success in media, Leadership" },
-    2: { result: "Neutral", outcome: "Emotional creativity, good bonding, Mood swing" },
-    3: { result: "❌ Challenging", outcome: "Scattered Energy, over-talkative" },
-    4: { result: "Neutral", outcome: "Creative with structure; overly critical tendencies" },
-    5: { result: "✅ Good", outcome: "Social, Playful, Networking magnet, Playful, Versatile" },
-    6: { result: "✅ Good", outcome: "Artistic, romantic, balanced life" },
-    7: { result: "Neutral", outcome: "Spiritual artist, philosophical, needs emotional grounding" },
-    8: { result: "❌ Challenging", outcome: "Creative blocks due to karmic delay" },
-    9: { result: "✅ Good", outcome: "Expressive, Visionary; creative with spiritual touch" }
+    1: { result: "✅ Good", outcome: "Charismatic speaker; success in media, Leadership", struggleEndAge: "30 – 33 Age" },
+    2: { result: "Neutral", outcome: "Emotional creativity, good bonding, Mood swing", struggleEndAge: "32 – 35 Age" },
+    3: { result: "❌ Challenging", outcome: "Scattered Energy, over-talkative", struggleEndAge: "30 – 32 Age" },
+    4: { result: "Neutral", outcome: "Creative with structure; overly critical tendencies", struggleEndAge: "36 – 40 Age" },
+    5: { result: "✅ Good", outcome: "Social, Playful, Networking magnet, Playful, Versatile", struggleEndAge: "32 – 34 Age" },
+    6: { result: "✅ Good", outcome: "Artistic, romantic, balanced life", struggleEndAge: "34 – 37 Age" },
+    7: { result: "Neutral", outcome: "Spiritual artist, philosophical, needs emotional grounding", struggleEndAge: "38 – 42 Age" },
+    8: { result: "❌ Challenging", outcome: "Creative blocks due to karmic delay", struggleEndAge: "39 – 43 Age" },
+    9: { result: "✅ Good", outcome: "Expressive, Visionary; creative with spiritual touch", struggleEndAge: "32 – 35 Age" }
   },
   4: {
-    1: { result: "Neutral", outcome: "Practical but stiff; power struggle, controlling tendencies" },
-    2: { result: "Neutral", outcome: "Rigid emotions, needs flexibility" },
-    3: { result: "Neutral", outcome: "Analytical with creative edge; balanced, Cautious success" },
-    4: { result: "❌ Challenging", outcome: "Over-disciplined, lacks adaptability and spontaneity" },
-    5: { result: "Neutral", outcome: "Smart but lacks consistency, struggles with restlessness" },
-    6: { result: "✅ Good", outcome: "Responsible family provider, grounded emotions" },
-    7: { result: "❌ Challenging", outcome: "Intellectual blockages; Mental tension, isolation, late success" },
-    8: { result: "❌ Challenging", outcome: "Hard work, long struggle, late success" },
-    9: { result: "Neutral", outcome: "Structured humanitarian; emotionally detached" }
+    1: { result: "Neutral", outcome: "Practical but stiff; power struggle, controlling tendencies", struggleEndAge: "38 – 42 Age" },
+    2: { result: "Neutral", outcome: "Rigid emotions, needs flexibility", struggleEndAge: "37 – 40 Age" },
+    3: { result: "Neutral", outcome: "Analytical with creative edge; balanced, Cautious success", struggleEndAge: "35 – 38 Age" },
+    4: { result: "❌ Challenging", outcome: "Over-disciplined, lacks adaptability and spontaneity", struggleEndAge: "42 – 46 Age" },
+    5: { result: "Neutral", outcome: "Smart but lacks consistency, struggles with restlessness", struggleEndAge: "37 – 39 Age" },
+    6: { result: "✅ Good", outcome: "Responsible family provider, grounded emotions", struggleEndAge: "38 – 42 Age" },
+    7: { result: "❌ Challenging", outcome: "Intellectual blockages; Mental tension, isolation, late success", struggleEndAge: "42 – 45 Age" },
+    8: { result: "❌ Challenging", outcome: "Hard work, long struggle, late success", struggleEndAge: "43 – 46 Age" },
+    9: { result: "Neutral", outcome: "Structured humanitarian; emotionally detached", struggleEndAge: "36 – 39 Age" }
   },
   5: {
-    1: { result: "✅ Good", outcome: "Influential leader with charm and energy" },
-    2: { result: "Neutral", outcome: "Expressive but emotionally inconsistent" },
-    3: { result: "✅ Good", outcome: "Creative, vibrant, good in sales/media Highly social" },
-    4: { result: "Neutral", outcome: "Multi-talented but scattered focus" },
-    5: { result: "❌ Challenging", outcome: "Overactive mind; restless, lacks stability & Focus, Distracted" },
-    6: { result: "✅ Good", outcome: "Romantic, sensual; lucky in relationships, magnetic personality" },
-    7: { result: "Neutral", outcome: "Spiritually curious, Intellectual but emotionally unstable" },
-    8: { result: "❌ Challenging", outcome: "Unstable ambition, karmic delays, struggles in middle life" },
-    9: { result: "Neutral", outcome: "Talkative, Philanthropic energy, Unstable desires" }
+    1: { result: "✅ Good", outcome: "Influential leader with charm and energy", struggleEndAge: "34 – 36 Age" },
+    2: { result: "Neutral", outcome: "Expressive but emotionally inconsistent", struggleEndAge: "34 – 37 Age" },
+    3: { result: "✅ Good", outcome: "Creative, vibrant, good in sales/media Highly social", struggleEndAge: "32 – 35 Age" },
+    4: { result: "Neutral", outcome: "Multi-talented but scattered focus", struggleEndAge: "36 – 39 Age" },
+    5: { result: "❌ Challenging", outcome: "Overactive mind; restless, lacks stability & Focus, Distracted", struggleEndAge: "34 – 36 Age" },
+    6: { result: "✅ Good", outcome: "Romantic, sensual; lucky in relationships, magnetic personality", struggleEndAge: "36 – 39 Age" },
+    7: { result: "Neutral", outcome: "Spiritually curious, Intellectual but emotionally unstable", struggleEndAge: "38 – 42 Age" },
+    8: { result: "❌ Challenging", outcome: "Unstable ambition, karmic delays, struggles in middle life", struggleEndAge: "39 – 43 Age" },
+    9: { result: "Neutral", outcome: "Talkative, Philanthropic energy, Unstable desires", struggleEndAge: "34 – 37 Age" }
   },
   6: {
-    1: { result: "❌ Challenging", outcome: "Loving but dominating; emotional tension in marriage" },
-    2: { result: "✅ Good", outcome: "Romantic and nurturing; peaceful domestic life" },
-    3: { result: "✅ Good", outcome: "Artistic harmony and expression; well-suited for design/art" },
-    4: { result: "Neutral", outcome: "Responsible but emotionally burdened early in life" },
-    5: { result: "✅ Good", outcome: "Adventurous in love, good for social life, Attractive personality" },
-    6: { result: "❌ Challenging", outcome: "Over-responsibility, suffocation in family, Emotional drain" },
-    7: { result: "❌ Challenging", outcome: "Emotional sacrifice, tension in love, Spiritual-emotional burden;" },
-    8: { result: "❌ Challenging", outcome: "Family burdened with karma; duties overpower desires" },
-    9: { result: "✅ Good", outcome: "Spiritual healer; love through service" }
+    1: { result: "❌ Challenging", outcome: "Loving but dominating; emotional tension in marriage", struggleEndAge: "36 – 39 Age" },
+    2: { result: "✅ Good", outcome: "Romantic and nurturing; peaceful domestic life", struggleEndAge: "36 – 39 Age" },
+    3: { result: "✅ Good", outcome: "Artistic harmony and expression; well-suited for design/art", struggleEndAge: "34 – 37 Age" },
+    4: { result: "Neutral", outcome: "Responsible but emotionally burdened early in life", struggleEndAge: "38 – 41 Age" },
+    5: { result: "✅ Good", outcome: "Adventurous in love, good for social life, Attractive personality", struggleEndAge: "36 – 39 Age" },
+    6: { result: "❌ Challenging", outcome: "Over-responsibility, suffocation in family, Emotional drain", struggleEndAge: "37 – 40 Age" },
+    7: { result: "❌ Challenging", outcome: "Emotional sacrifice, tension in love, Spiritual-emotional burden;", struggleEndAge: "38 – 42 Age" },
+    8: { result: "❌ Challenging", outcome: "Family burdened with karma; duties overpower desires", struggleEndAge: "39 – 43 Age" },
+    9: { result: "✅ Good", outcome: "Spiritual healer; love through service", struggleEndAge: "36 – 38 Age" }
   },
   7: {
-    1: { result: "Neutral", outcome: "Detached thinker with leadership qualities, visionary" },
-    2: { result: "❌ Challenging", outcome: "Emotionally disconnected; relationship issues" },
-    3: { result: "Neutral", outcome: "Spiritual speaker, deep thinker; can be good in academics/art" },
-    4: { result: "❌ Challenging", outcome: "Over-analytical; late success; isolation" },
-    5: { result: "Neutral", outcome: "Deep thinker, mentally scattered, seeks freedom; needs balance" },
-    6: { result: "❌ Challenging", outcome: "Emotionally burdened, Spiritual detachment from worldly duties" },
-    7: { result: "❌ Challenging", outcome: "Too much introspection, lonely path; prone to isolation or anxiety" },
-    8: { result: "❌ Challenging", outcome: "Spiritual with karmic blocks; severe delays, Karma-heavy intellect" },
-    9: { result: "✅ Good", outcome: "Highly spiritual, Enlightened soul, gives to society & sacrifices for others" }
+    1: { result: "Neutral", outcome: "Detached thinker with leadership qualities, visionary", struggleEndAge: "40 – 44 Age" },
+    2: { result: "❌ Challenging", outcome: "Emotionally disconnected; relationship issues", struggleEndAge: "38 – 42 Age" },
+    3: { result: "Neutral", outcome: "Spiritual speaker, deep thinker; can be good in academics/art", struggleEndAge: "36 – 39 Age" },
+    4: { result: "❌ Challenging", outcome: "Over-analytical; late success; isolation", struggleEndAge: "40 – 45 Age" },
+    5: { result: "Neutral", outcome: "Deep thinker, mentally scattered, seeks freedom; needs balance", struggleEndAge: "37 – 41 Age" },
+    6: { result: "❌ Challenging", outcome: "Emotionally burdened, Spiritual detachment from worldly duties", struggleEndAge: "39 – 43 Age" },
+    7: { result: "❌ Challenging", outcome: "Too much introspection, lonely path; prone to isolation or anxiety", struggleEndAge: "45 – 48 Age" },
+    8: { result: "❌ Challenging", outcome: "Spiritual with karmic blocks; severe delays, Karma-heavy intellect", struggleEndAge: "42 – 46 Age" },
+    9: { result: "✅ Good", outcome: "Highly spiritual, Enlightened soul, gives to society & sacrifices for others", struggleEndAge: "38 – 42 Age" }
   },
   8: {
-    1: { result: "Neutral", outcome: "High achiever with ego; must act ethically" },
-    2: { result: "❌ Challenging", outcome: "Emotional burden, blocked expression; karma in family life" },
-    3: { result: "Neutral", outcome: "Powerful speaker with authority, moody, but struggles emotionally" },
-    4: { result: "❌ Challenging", outcome: "Rigid thinking, Karmic burden; heavy responsibility and delay" },
-    5: { result: "❌ Challenging", outcome: "Powerful but restless achiever; lack of peace" },
-    6: { result: "❌ Challenging", outcome: "Family baggage Burdens; dominating in relationships" },
-    7: { result: "❌ Challenging", outcome: "Spiritual struggle, Struggles with mental peace; past life karma" },
-    8: { result: "❌ Challenging", outcome: "Severe karmic life, extreme delays, setbacks" },
-    9: { result: "❌ Challenging", outcome: "Overgiving, burnout, spiritual debt" }
+    1: { result: "Neutral", outcome: "High achiever with ego; must act ethically", struggleEndAge: "39 – 43 Age" },
+    2: { result: "❌ Challenging", outcome: "Emotional burden, blocked expression; karma in family life", struggleEndAge: "38 – 42 Age" },
+    3: { result: "Neutral", outcome: "Powerful speaker with authority, moody, but struggles emotionally", struggleEndAge: "36 – 39 Age" },
+    4: { result: "❌ Challenging", outcome: "Rigid thinking, Karmic burden; heavy responsibility and delay", struggleEndAge: "42 – 46 Age" },
+    5: { result: "❌ Challenging", outcome: "Powerful but restless achiever; lack of peace", struggleEndAge: "38 – 41 Age" },
+    6: { result: "❌ Challenging", outcome: "Family baggage Burdens; dominating in relationships", struggleEndAge: "40 – 43 Age" },
+    7: { result: "❌ Challenging", outcome: "Spiritual struggle, Struggles with mental peace; past life karma", struggleEndAge: "42 – 46 Age" },
+    8: { result: "❌ Challenging", outcome: "Severe karmic life, extreme delays, setbacks", struggleEndAge: "44 – 48 Age" },
+    9: { result: "❌ Challenging", outcome: "Overgiving, burnout, spiritual debt", struggleEndAge: "40 – 43 Age" }
   },
   9: {
-    1: { result: "Neutral", outcome: "Visionary but emotional; needs discipline." },
-    2: { result: "❌ Challenging", outcome: "Over-giving, drains energy, Too emotional; suffers due to others" },
-    3: { result: "✅ Good", outcome: "Creative humanitarian, joyful speaker, Visionary" },
-    4: { result: "Neutral", outcome: "Responsible, Humanitarian with structure; late growth" },
-    5: { result: "Neutral", outcome: "Spiritual traveller, restless" },
-    6: { result: "✅ Good", outcome: "Nurturing and emotional healer, strong family support" },
-    7: { result: "✅ Good", outcome: "Mystical, selfless, Spiritual path; renunciation and enlightenment" },
-    8: { result: "❌ Challenging", outcome: "Burnout from karmic burden and emotional struggle" },
-    9: { result: "❌ Challenging", outcome: "Self-sacrificing, emotionally weak; needs to guard personal health" }
+    1: { result: "Neutral", outcome: "Visionary but emotional; needs discipline.", struggleEndAge: "32 – 35 Age" },
+    2: { result: "❌ Challenging", outcome: "Over-giving, drains energy, Too emotional; suffers due to others", struggleEndAge: "34 – 37 Age" },
+    3: { result: "✅ Good", outcome: "Creative humanitarian, joyful speaker, Visionary", struggleEndAge: "32 – 35 Age" },
+    4: { result: "Neutral", outcome: "Responsible, Humanitarian with structure; late growth", struggleEndAge: "36 – 39 Age" },
+    5: { result: "Neutral", outcome: "Spiritual traveller, restless", struggleEndAge: "34 – 36 Age" },
+    6: { result: "✅ Good", outcome: "Nurturing and emotional healer, strong family support", struggleEndAge: "36 – 39 Age" },
+    7: { result: "✅ Good", outcome: "Mystical, selfless, Spiritual path; renunciation and enlightenment", struggleEndAge: "38 – 42 Age" },
+    8: { result: "❌ Challenging", outcome: "Burnout from karmic burden and emotional struggle", struggleEndAge: "40 – 44 Age" },
+    9: { result: "❌ Challenging", outcome: "Self-sacrificing, emotionally weak; needs to guard personal health", struggleEndAge: "36 – 38 Age" }
   }
 };
 
