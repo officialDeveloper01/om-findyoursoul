@@ -6,6 +6,7 @@ import { PlaneAnalysis } from './PlaneAnalysis';
 import { NumberDetail } from './NumberDetail';
 import { CompactNumerologyRow } from './CompactNumerologyRow';
 import { calculateAntarDasha, calculatePreBirthAntarDasha, planetMap } from '@/utils/antarDashaCalculator';
+import { getDriverConductorAnalysis } from '@/data/driverConductorAnalysis';
 
 export const LoshoGrid = ({ gridData, userData }) => {
   const [selectedAntarDasha, setSelectedAntarDasha] = useState(null);
@@ -291,6 +292,29 @@ export const LoshoGrid = ({ gridData, userData }) => {
             <div className="text-center">
               <span className="font-semibold text-gray-800 text-lg">{userData.fullName}</span>
             </div>
+            
+            {/* Driver-Conductor Analysis Summary */}
+            {(() => {
+              const driver = numerologyData.driver || 0;
+              const conductor = numerologyData.conductor || 0;
+              const analysis = getDriverConductorAnalysis(driver, conductor);
+              
+              if (analysis) {
+                return (
+                  <div className="mt-2 space-y-1 text-sm">
+                    <div className="flex justify-between items-center">
+                      <span className="text-gray-600 font-medium">Result:</span>
+                      <span className="font-semibold text-gray-800">{analysis.result}</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-gray-600 font-medium">Outcome:</span>
+                      <span className="font-semibold text-gray-800">{analysis.outcome}</span>
+                    </div>
+                  </div>
+                );
+              }
+              return null;
+            })()}
           </div>
           
           {/* Remaining fields in 3 rows, 2 columns each */}
