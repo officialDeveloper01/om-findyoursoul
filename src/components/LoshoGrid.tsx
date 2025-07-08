@@ -350,15 +350,10 @@ export const LoshoGrid = ({ gridData, userData }) => {
         <div className="flex items-center gap-2 mb-1">
           <span className="text-gray-600 font-medium text-sm">Result:</span>
           <span className={`text-sm font-bold ${analysis.result.includes('Good') ? 'text-green-600' : analysis.result.includes('Challenging') ? 'text-red-600' : 'text-yellow-600'}`}>
-            {analysis.result}
+            {analysis.result} -  <span className="text-gray-600 font-semiboldfont-medium text-sm mt-0.5">{analysis.outcome}</span>
           </span>
         </div>
-        <div className="flex gap-2">
-          <span className="text-gray-600 font-medium text-sm mt-0.5">Outcome:</span>
-          <div className="text-sm font-semibold text-gray-800 leading-snug whitespace-pre-line">
-            {analysis.outcome}
-          </div>
-        </div>
+        
       </div>
     );
   }

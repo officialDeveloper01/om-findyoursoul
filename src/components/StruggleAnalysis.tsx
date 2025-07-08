@@ -140,20 +140,13 @@ export const StruggleAnalysis = ({ onBack, userName, dateOfBirth }: StruggleAnal
         </Button>
         
         <CardTitle className="text-lg font-bold text-gray-700 mb-1">
-          Age of Struggle End Analysis
+          Age of Struggle End
         </CardTitle>
-        <div className="text-center">
-          <p className="font-semibold text-gray-800 text-sm">{userName}</p>
-          <p className="text-gray-600 text-xs">{new Date(dateOfBirth).toLocaleDateString()}</p>
-        </div>
       </CardHeader>
 
       <CardContent className="space-y-4 p-4 max-h-96 overflow-y-auto">
         {/* Table 1: Struggles by Planet */}
         <div>
-          <h3 className="text-base font-bold text-gray-700 mb-2 text-center">
-            Struggles by Planet
-          </h3>
           <div className="overflow-x-auto">
             <table className="w-full border border-gray-400 rounded-lg overflow-hidden bg-white text-xs leading-tight">
               <thead className="bg-amber-100">
