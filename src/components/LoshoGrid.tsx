@@ -293,28 +293,7 @@ export const LoshoGrid = ({ gridData, userData }) => {
               <span className="font-semibold text-gray-800 text-lg">{userData.fullName}</span>
             </div>
             
-            {/* Driver-Conductor Analysis Summary */}
-            {(() => {
-              const driver = numerologyData.driver || 0;
-              const conductor = numerologyData.conductor || 0;
-              const analysis = getDriverConductorAnalysis(driver, conductor);
-              
-              if (analysis) {
-                return (
-                  <div className="mt-2 space-y-1 text-sm">
-                    <div className="flex justify-between items-center">
-                      <span className="text-gray-600 font-medium">Result:</span>
-                      <span className="font-semibold text-gray-800">{analysis.result}</span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span className="text-gray-600 font-medium">Outcome:</span>
-                      <span className="font-semibold text-gray-800">{analysis.outcome}</span>
-                    </div>
-                  </div>
-                );
-              }
-              return null;
-            })()}
+            
           </div>
           
           {/* Remaining fields in 3 rows, 2 columns each */}
@@ -356,6 +335,34 @@ export const LoshoGrid = ({ gridData, userData }) => {
               </div>           
             </div>
           </div>
+          <div className="grid grid-cols-2 gap-x-6">
+          {/* Driver-Conductor Analysis Summary */}
+{(() => {
+  const driver = numerologyData.driver || 0;
+  const conductor = numerologyData.conductor || 0;
+  const analysis = getDriverConductorAnalysis(driver, conductor);
+
+  if (analysis) {
+    return (
+      <div className="col-span-2 mt-3 border-t pt-2 border-gray-300">
+        <div className="flex items-center gap-2 mb-1">
+          <span className="text-gray-600 font-medium text-sm">Result:</span>
+          <span className={`text-sm font-bold ${analysis.result.includes('Good') ? 'text-green-600' : analysis.result.includes('Challenging') ? 'text-red-600' : 'text-yellow-600'}`}>
+            {analysis.result}
+          </span>
+        </div>
+        <div className="flex gap-2">
+          <span className="text-gray-600 font-medium text-sm mt-0.5">Outcome:</span>
+          <div className="text-sm font-semibold text-gray-800 leading-snug whitespace-pre-line">
+            {analysis.outcome}
+          </div>
+        </div>
+      </div>
+    );
+  }
+  return null;
+})()}
+            </div>
         </CardContent>
       </Card>
 
