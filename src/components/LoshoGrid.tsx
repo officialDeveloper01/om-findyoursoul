@@ -284,18 +284,6 @@ export const LoshoGrid = ({ gridData, userData }) => {
     );
   }
 
-  if (showStruggleAnalysis) {
-    return (
-      <div className="max-w-4xl mx-auto px-4 py-8 font-calibri">
-        <StruggleAnalysis 
-          onBack={() => setShowStruggleAnalysis(false)}
-          userName={userData.fullName}
-          dateOfBirth={userData.dateOfBirth}
-        />
-      </div>
-    );
-  }
-
   return (
     <div className="max-w-4xl mx-auto px-2 md:px-4 py-4 font-calibri">
       {/* User Info Table - Compact */}
@@ -511,6 +499,17 @@ export const LoshoGrid = ({ gridData, userData }) => {
             isPreBirth={selectedAntarDasha.isPreBirth}
             dateOfBirth={selectedAntarDasha.dateOfBirth}
             conductorIndex={selectedAntarDasha.conductorIndex}
+          />
+        </div>
+      )}
+
+      {/* Struggle Analysis below the grid */}
+      {showStruggleAnalysis && (
+        <div className="mt-6">
+          <StruggleAnalysis 
+            onBack={() => setShowStruggleAnalysis(false)}
+            userName={userData.fullName}
+            dateOfBirth={userData.dateOfBirth}
           />
         </div>
       )}

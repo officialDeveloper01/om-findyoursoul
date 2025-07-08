@@ -127,100 +127,98 @@ export const StruggleAnalysis = ({ onBack, userName, dateOfBirth }: StruggleAnal
   ];
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8 font-calibri">
-      <Card className="shadow-xl border-2 border-gray-400 bg-white/90 backdrop-blur-md rounded-xl">
-        <CardHeader className="text-center pb-6 relative">
+    <Card className="shadow-xl border-2 border-gray-400 bg-white/90 backdrop-blur-md rounded-xl">
+      <CardHeader className="text-center pb-3 relative">
+        <Button
+          onClick={onBack}
+          variant="outline"
+          size="sm"
+          className="absolute top-2 right-2 flex items-center gap-1 text-xs"
+        >
+          <ArrowLeft size={14} />
+          Back
+        </Button>
+        
+        <CardTitle className="text-lg font-bold text-gray-700 mb-1">
+          Age of Struggle End Analysis
+        </CardTitle>
+        <div className="text-center">
+          <p className="font-semibold text-gray-800 text-sm">{userName}</p>
+          <p className="text-gray-600 text-xs">{new Date(dateOfBirth).toLocaleDateString()}</p>
+        </div>
+      </CardHeader>
+
+      <CardContent className="space-y-4 p-4 max-h-96 overflow-y-auto">
+        {/* Table 1: Struggles by Planet */}
+        <div>
+          <h3 className="text-base font-bold text-gray-700 mb-2 text-center">
+            Struggles by Planet
+          </h3>
+          <div className="overflow-x-auto">
+            <table className="w-full border border-gray-400 rounded-lg overflow-hidden bg-white text-xs leading-tight">
+              <thead className="bg-amber-100">
+                <tr>
+                  <th className="border border-gray-300 px-2 py-2 text-left font-bold text-gray-700">Numbers</th>
+                  <th className="border border-gray-300 px-2 py-2 text-left font-bold text-gray-700">Planets</th>
+                  <th className="border border-gray-300 px-2 py-2 text-left font-bold text-gray-700">Area of Struggle</th>
+                  <th className="border border-gray-300 px-2 py-2 text-left font-bold text-gray-700">Struggle Signs</th>
+                  <th className="border border-gray-300 px-2 py-2 text-left font-bold text-gray-700">Struggle End</th>
+                </tr>
+              </thead>
+              <tbody>
+                {planetStruggles.map((row, index) => (
+                  <tr key={index} className={index % 2 === 0 ? 'bg-gray-50' : 'bg-white'}>
+                    <td className="border border-gray-300 px-2 py-2 font-semibold text-amber-700">{row.numbers}</td>
+                    <td className="border border-gray-300 px-2 py-2 font-semibold text-gray-800">{row.planets}</td>
+                    <td className="border border-gray-300 px-2 py-2 text-gray-700 break-words">{row.area}</td>
+                    <td className="border border-gray-300 px-2 py-2 text-gray-700 break-words">{row.signs}</td>
+                    <td className="border border-gray-300 px-2 py-2 font-semibold text-blue-700 whitespace-nowrap">{row.end}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {/* Table 2: Struggles by Plane */}
+        <div>
+          <h3 className="text-base font-bold text-gray-700 mb-2 text-center">
+            Struggles by Plane
+          </h3>
+          <div className="overflow-x-auto">
+            <table className="w-full border border-gray-400 rounded-lg overflow-hidden bg-white text-xs leading-tight">
+              <thead className="bg-blue-100">
+                <tr>
+                  <th className="border border-gray-300 px-2 py-2 text-left font-bold text-gray-700">S. No.</th>
+                  <th className="border border-gray-300 px-2 py-2 text-left font-bold text-gray-700">Grid</th>
+                  <th className="border border-gray-300 px-2 py-2 text-left font-bold text-gray-700">Plane</th>
+                  <th className="border border-gray-300 px-2 py-2 text-left font-bold text-gray-700">Struggle End</th>
+                </tr>
+              </thead>
+              <tbody>
+                {planeStruggles.map((row, index) => (
+                  <tr key={index} className={index % 2 === 0 ? 'bg-gray-50' : 'bg-white'}>
+                    <td className="border border-gray-300 px-2 py-2 font-semibold text-gray-800">{row.sNo}</td>
+                    <td className="border border-gray-300 px-2 py-2 font-semibold text-amber-700">{row.grid}</td>
+                    <td className="border border-gray-300 px-2 py-2 font-semibold text-gray-800">{row.plane}</td>
+                    <td className="border border-gray-300 px-2 py-2 font-semibold text-blue-700 whitespace-nowrap">{row.end}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {/* Bottom Back Button */}
+        <div className="text-center pt-2">
           <Button
             onClick={onBack}
-            variant="outline"
-            size="sm"
-            className="absolute top-4 right-4 flex items-center gap-2"
+            className="bg-amber-600 hover:bg-amber-700 text-white font-bold px-4 py-1 text-sm"
           >
-            <ArrowLeft size={16} />
-            Back
+            Back to Grid
           </Button>
-          
-          <CardTitle className="text-2xl font-bold text-gray-700 mb-2">
-            Age of Struggle End Analysis
-          </CardTitle>
-          <div className="text-center mb-4">
-            <p className="font-semibold text-gray-800 text-lg">{userName}</p>
-            <p className="text-gray-600">{new Date(dateOfBirth).toLocaleDateString()}</p>
-          </div>
-        </CardHeader>
-
-        <CardContent className="space-y-8 p-6">
-          {/* Table 1: Struggles by Planet */}
-          <div>
-            <h3 className="text-xl font-bold text-gray-700 mb-4 text-center">
-              Struggles by Planet
-            </h3>
-            <div className="overflow-x-auto">
-              <table className="w-full border-2 border-gray-400 rounded-lg overflow-hidden bg-white">
-                <thead className="bg-amber-100">
-                  <tr>
-                    <th className="border border-gray-400 px-3 py-3 text-left font-bold text-gray-700 text-sm">Numbers</th>
-                    <th className="border border-gray-400 px-3 py-3 text-left font-bold text-gray-700 text-sm">Planets</th>
-                    <th className="border border-gray-400 px-3 py-3 text-left font-bold text-gray-700 text-sm">Area of Struggle</th>
-                    <th className="border border-gray-400 px-3 py-3 text-left font-bold text-gray-700 text-sm">Struggle Signs</th>
-                    <th className="border border-gray-400 px-3 py-3 text-left font-bold text-gray-700 text-sm">Struggle End</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {planetStruggles.map((row, index) => (
-                    <tr key={index} className={index % 2 === 0 ? 'bg-gray-50' : 'bg-white'}>
-                      <td className="border border-gray-400 px-3 py-3 font-semibold text-amber-700 text-sm">{row.numbers}</td>
-                      <td className="border border-gray-400 px-3 py-3 font-semibold text-gray-800 text-sm">{row.planets}</td>
-                      <td className="border border-gray-400 px-3 py-3 text-gray-700 text-sm">{row.area}</td>
-                      <td className="border border-gray-400 px-3 py-3 text-gray-700 text-sm">{row.signs}</td>
-                      <td className="border border-gray-400 px-3 py-3 font-semibold text-blue-700 text-sm">{row.end}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          {/* Table 2: Struggles by Plane */}
-          <div>
-            <h3 className="text-xl font-bold text-gray-700 mb-4 text-center">
-              Struggles by Plane
-            </h3>
-            <div className="overflow-x-auto">
-              <table className="w-full border-2 border-gray-400 rounded-lg overflow-hidden bg-white">
-                <thead className="bg-blue-100">
-                  <tr>
-                    <th className="border border-gray-400 px-3 py-3 text-left font-bold text-gray-700 text-sm">S. No.</th>
-                    <th className="border border-gray-400 px-3 py-3 text-left font-bold text-gray-700 text-sm">Grid</th>
-                    <th className="border border-gray-400 px-3 py-3 text-left font-bold text-gray-700 text-sm">Plane</th>
-                    <th className="border border-gray-400 px-3 py-3 text-left font-bold text-gray-700 text-sm">Struggle End</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {planeStruggles.map((row, index) => (
-                    <tr key={index} className={index % 2 === 0 ? 'bg-gray-50' : 'bg-white'}>
-                      <td className="border border-gray-400 px-3 py-3 font-semibold text-gray-800 text-sm">{row.sNo}</td>
-                      <td className="border border-gray-400 px-3 py-3 font-semibold text-amber-700 text-sm">{row.grid}</td>
-                      <td className="border border-gray-400 px-3 py-3 font-semibold text-gray-800 text-sm">{row.plane}</td>
-                      <td className="border border-gray-400 px-3 py-3 font-semibold text-blue-700 text-sm">{row.end}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          {/* Bottom Back Button */}
-          <div className="text-center pt-4">
-            <Button
-              onClick={onBack}
-              className="bg-amber-600 hover:bg-amber-700 text-white font-bold px-6 py-2"
-            >
-              Back to Grid
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
-    </div>
+        </div>
+      </CardContent>
+    </Card>
   );
 };
