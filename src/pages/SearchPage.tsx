@@ -1,6 +1,6 @@
 import { SearchTables } from '@/components/SearchTables';
 import { CelestialHeader } from '@/components/CelestialHeader';
-import PlanetGridFooter from '@/components/PlanetGridFooter';
+
 
 const SearchPage = () => {
   return (
@@ -17,7 +17,15 @@ const SearchPage = () => {
         </div>
       </main>
 
-      <PlanetGridFooter />
+      {/* Rashi and Planet Relationships Footer */}
+      <footer className="w-full">
+        <img 
+          src="/lovable-uploads/04d81580-67df-432a-b65b-5ff4f1b07658.png" 
+          alt="Rashi and Planet Relationships Chart"
+          className="w-full h-auto object-contain max-w-none"
+          style={{ minWidth: '800px' }}
+        />
+      </footer>
     </div>
   );
 };

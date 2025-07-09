@@ -64,9 +64,17 @@ const Index = () => {
         )}
       </main>
 
-      {/* Footer */}
-      <footer className="text-center py-8 text-gray-500 text-sm">
-        <p>© 2024 OM - Sacred Numerology Application</p>
+      {/* Rashi and Planet Relationships Footer */}
+      <footer className="w-full">
+        <img 
+          src="/lovable-uploads/04d81580-67df-432a-b65b-5ff4f1b07658.png" 
+          alt="Rashi and Planet Relationships Chart"
+          className="w-full h-auto object-contain max-w-none"
+          style={{ minWidth: '800px' }}
+        />
+        <div className="text-center py-4 text-gray-500 text-sm">
+          <p>© 2024 OM - Sacred Numerology Application</p>
+        </div>
       </footer>
     </div>
   );

@@ -13,7 +13,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { UserManagementModal } from '@/components/UserManagementModal';
 import { Edit, Plus, Trash2 } from 'lucide-react';
-import PlanetGridFooter from '@/components/PlanetGridFooter';
+
 
 const Dashboard = () => {
   const [userData, setUserData] = useState(null);
@@ -394,7 +394,15 @@ const Dashboard = () => {
         isMainUser={managementModal.userData?.relation === 'SELF'}
       />
 
-      <PlanetGridFooter />
+      {/* Rashi and Planet Relationships Footer */}
+      <footer className="w-full">
+        <img 
+          src="/lovable-uploads/04d81580-67df-432a-b65b-5ff4f1b07658.png" 
+          alt="Rashi and Planet Relationships Chart"
+          className="w-full h-auto object-contain max-w-none"
+          style={{ minWidth: '800px' }}
+        />
+      </footer>
     </div>
   );
 };
