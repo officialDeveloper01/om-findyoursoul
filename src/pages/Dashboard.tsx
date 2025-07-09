@@ -395,12 +395,11 @@ const Dashboard = () => {
       />
 
       {/* Rashi and Planet Relationships Footer */}
-      <footer className="w-full">
+      <footer className="w-full mt-8 pt-6 border-t border-gray-200">
         <img 
           src="/lovable-uploads/04d81580-67df-432a-b65b-5ff4f1b07658.png" 
           alt="Rashi and Planet Relationships Chart"
-          className="w-full h-auto object-contain max-w-none"
-          style={{ minWidth: '800px' }}
+          className="w-full h-auto object-contain"
         />
       </footer>
     </div>
