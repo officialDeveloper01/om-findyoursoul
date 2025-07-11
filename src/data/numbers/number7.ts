@@ -341,7 +341,7 @@ export const number7Data = {
         "• Forgetfulness, disorientation, or scattered thoughts",
         "• Nervous system problems or mental agitation",
         "• Difficulty expressing ideas clearly",
-        "• Withdrawal from social life"
+        "• Withdrawal from social life",
         "Positive",
         "• Deep spiritual transformation and inner awakening",
         "• Detachment from material desires",
