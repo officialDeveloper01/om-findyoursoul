@@ -2,7 +2,7 @@ import { useState, useCallback } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { UserDataForm } from '@/components/UserDataForm';
 import { LoshoGrid } from '@/components/LoshoGrid';
-
+import { PlanetLetterAssociations } from '@/components/PlanetLetterAssociations';
 import { CelestialHeader } from '@/components/CelestialHeader';
 import { CelestialLoader } from '@/components/CelestialLoader';
 import { Badge } from '@/components/ui/badge';
@@ -401,6 +401,13 @@ const Dashboard = () => {
           alt="Rashi and Planet Relationships Chart"
           className="w-full h-auto object-contain"
         />
+        
+        {/* Planet & Letter Associations */}
+        <PlanetLetterAssociations />
+        
+        <div className="text-center py-4 text-muted-foreground text-sm">
+          <p>© 2024 OM - Sacred Numerology Application</p>
+        </div>
       </footer>
     </div>
   );

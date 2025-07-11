@@ -1,5 +1,6 @@
 import { SearchTables } from '@/components/SearchTables';
 import { CelestialHeader } from '@/components/CelestialHeader';
+import { PlanetLetterAssociations } from '@/components/PlanetLetterAssociations';
 
 
 const SearchPage = () => {
@@ -24,6 +25,13 @@ const SearchPage = () => {
           alt="Rashi and Planet Relationships Chart"
           className="w-full h-auto object-contain"
         />
+        
+        {/* Planet & Letter Associations */}
+        <PlanetLetterAssociations />
+        
+        <div className="text-center py-4 text-muted-foreground text-sm">
+          <p>© 2024 OM - Sacred Numerology Application</p>
+        </div>
       </footer>
     </div>
   );

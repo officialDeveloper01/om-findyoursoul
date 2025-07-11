@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { UserDataForm } from '@/components/UserDataForm';
 import { LoshoGrid } from '@/components/LoshoGrid';
 import { calculateLoshoGrid } from '@/utils/gridCalculator';
+import { PlanetLetterAssociations } from '@/components/PlanetLetterAssociations';
 
 const Index = () => {
   const [userData, setUserData] = useState(null);
@@ -71,6 +72,10 @@ const Index = () => {
           alt="Rashi and Planet Relationships Chart"
           className="w-full h-auto object-contain"
         />
+        
+        {/* Planet & Letter Associations */}
+        <PlanetLetterAssociations />
+        
         <div className="text-center py-4 text-gray-500 text-sm">
           <p>© 2024 OM - Sacred Numerology Application</p>
         </div>
