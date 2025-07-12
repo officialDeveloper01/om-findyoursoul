@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -67,6 +68,14 @@ export const RelativeForm = ({ onUpdate, onRemove, index, initialData = {} }: Re
   }, [formData, onUpdate, index]);
 
   const isFormValid = formData.fullName && formData.dateOfBirth && formData.timeOfBirth && formData.placeOfBirth && formData.relation;
+  
+  // Check which fields are missing
+  const missingFields = [];
+  if (!formData.fullName) missingFields.push('Full Name');
+  if (!formData.relation) missingFields.push('Relation');
+  if (!formData.dateOfBirth) missingFields.push('Date of Birth');
+  if (!formData.timeOfBirth) missingFields.push('Time of Birth');
+  if (!formData.placeOfBirth) missingFields.push('Place of Birth');
 
   return (
     <Card className="relative shadow-md border border-amber-200">
@@ -83,8 +92,12 @@ export const RelativeForm = ({ onUpdate, onRemove, index, initialData = {} }: Re
       <CardHeader className="pb-4">
         <CardTitle className="text-lg font-light text-amber-700">
           Family Member #{index + 1}
-          {isFormValid && (
+          {isFormValid ? (
             <span className="ml-2 text-sm text-green-600">✓ Complete</span>
+          ) : (
+            <span className="ml-2 text-sm text-orange-600">
+              Missing: {missingFields.join(', ')}
+            </span>
           )}
         </CardTitle>
       </CardHeader>
@@ -95,7 +108,7 @@ export const RelativeForm = ({ onUpdate, onRemove, index, initialData = {} }: Re
             <div className="space-y-2">
               <Label htmlFor={`fullName-${index}`} className="flex items-center gap-2 text-gray-700">
                 <User size={16} />
-                Full Name
+                Full Name <span className="text-red-500">*</span>
               </Label>
               <Input
                 id={`fullName-${index}`}
@@ -103,17 +116,17 @@ export const RelativeForm = ({ onUpdate, onRemove, index, initialData = {} }: Re
                 value={formData.fullName}
                 onChange={(e) => handleInputChange('fullName', e.target.value)}
                 placeholder="Enter full name"
-                className="border-gray-200 focus:border-amber-400 focus:ring-amber-400"
+                className={`border-gray-200 focus:border-amber-400 focus:ring-amber-400 ${!formData.fullName ? 'border-orange-300' : ''}`}
                 required
               />
             </div>
 
             <div className="space-y-2">
               <Label htmlFor={`relation-${index}`} className="flex items-center gap-2 text-gray-700">
-                Relation
+                Relation <span className="text-red-500">*</span>
               </Label>
               <Select value={formData.relation} onValueChange={(value) => handleInputChange('relation', value)}>
-                <SelectTrigger className="border-gray-200 focus:border-amber-400 focus:ring-amber-400">
+                <SelectTrigger className={`border-gray-200 focus:border-amber-400 focus:ring-amber-400 ${!formData.relation ? 'border-orange-300' : ''}`}>
                   <SelectValue placeholder="Select relation" />
                 </SelectTrigger>
                 <SelectContent>
@@ -129,21 +142,21 @@ export const RelativeForm = ({ onUpdate, onRemove, index, initialData = {} }: Re
             <div className="space-y-2">
               <Label htmlFor={`dateOfBirth-${index}`} className="flex items-center gap-2 text-gray-700">
                 <Calendar size={16} />
-                Date of Birth
+                Date of Birth <span className="text-red-500">*</span>
               </Label>
               <Input
                 id={`dateOfBirth-${index}`}
                 type="date"
                 value={formData.dateOfBirth}
                 onChange={(e) => handleInputChange('dateOfBirth', e.target.value)}
-                className="border-gray-200 focus:border-amber-400 focus:ring-amber-400"
+                className={`border-gray-200 focus:border-amber-400 focus:ring-amber-400 ${!formData.dateOfBirth ? 'border-orange-300' : ''}`}
                 required
               />
             </div>
 
             <div className="space-y-2">
               <Label htmlFor={`timeOfBirth-${index}`} className="flex items-center gap-2 text-gray-700">
-                Time of Birth
+                Time of Birth <span className="text-red-500">*</span>
               </Label>
               <TimeInput
                 value={formData.timeOfBirth}
@@ -154,7 +167,7 @@ export const RelativeForm = ({ onUpdate, onRemove, index, initialData = {} }: Re
             <div className="space-y-2 md:col-span-2">
               <Label htmlFor={`placeOfBirth-${index}`} className="flex items-center gap-2 text-gray-700">
                 <MapPin size={16} />
-                Place of Birth
+                Place of Birth <span className="text-red-500">*</span>
               </Label>
               <Input
                 id={`placeOfBirth-${index}`}
@@ -162,7 +175,7 @@ export const RelativeForm = ({ onUpdate, onRemove, index, initialData = {} }: Re
                 value={formData.placeOfBirth}
                 onChange={(e) => handleInputChange('placeOfBirth', e.target.value)}
                 placeholder="City, State, Country"
-                className="border-gray-200 focus:border-amber-400 focus:ring-amber-400"
+                className={`border-gray-200 focus:border-amber-400 focus:ring-amber-400 ${!formData.placeOfBirth ? 'border-orange-300' : ''}`}
                 required
               />
             </div>
