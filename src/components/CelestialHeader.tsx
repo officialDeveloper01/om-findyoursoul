@@ -76,7 +76,7 @@ export const CelestialHeader = () => {
           <div className="text-center fade-in flex-1 flex flex-col items-center px-2">
             <div className="mb-1">
               <img 
-                src="/lovable-uploads/app-icon.png" 
+                src="/assets/app-icon.png" 
                 alt="Ganesh Om Logo" 
                 className="w-8 h-8 sm:w-12 sm:h-12 md:w-16 md:h-16 object-contain"
               />

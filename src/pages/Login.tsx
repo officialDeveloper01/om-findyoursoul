@@ -93,7 +93,7 @@ const Login = () => {
             <div>
               <h1 className="text-6xl font-bold mystic-text tracking-wider">
                 <img 
-                src="/lovable-uploads/app-icon.png" 
+                src="/assets/app-icon.png" 
                 alt="Ganesh Om Logo" 
                 className="w-12 h-12 md:w-16 md:h-16 object-contain justify-center mx-auto"
               />
