@@ -406,7 +406,7 @@ const Dashboard = () => {
           <PlanetLetterAssociations />
           
           <div className="text-center py-4 text-muted-foreground text-sm">
-            <p>© 2024 OM - Sacred Numerology Application</p>
+            {/* <p>© 2024 OM - Sacred Numerology Application</p> */}
           </div>
         </div>
       </footer>
