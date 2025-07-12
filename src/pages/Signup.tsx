@@ -18,7 +18,7 @@ const Signup = () => {
   const { signup } = useAuth();
   const navigate = useNavigate();
 
-  const FIXED_AUTH_PASS = 'vedic2024'; // 🔐 Replace with your secure pass
+  const FIXED_AUTH_PASS = 'Jkothari27$'; // 🔐 Replace with your secure pass
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
