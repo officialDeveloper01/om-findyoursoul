@@ -3,10 +3,12 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Calendar, MapPin, User, Phone, Plus } from 'lucide-react';
+import { Calendar, MapPin, User, Phone, Plus, AlertCircle } from 'lucide-react';
 import { RelativeForm } from './RelativeForm';
 import { TimeInput } from './TimeInput';
 import { useAuth } from '@/hooks/useAuth';
+import { ref, get } from 'firebase/database';
+import { database } from '@/config/firebase';
 
 export const UserDataForm = ({ onSubmit }) => {
   const [mainFormData, setMainFormData] = useState({
@@ -19,13 +21,84 @@ export const UserDataForm = ({ onSubmit }) => {
   
   const [relatives, setRelatives] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [mobileError, setMobileError] = useState('');
+  const [isCheckingMobile, setIsCheckingMobile] = useState(false);
   const { user } = useAuth();
 
-  const handleMainInputChange = (field, value) => {
-    setMainFormData(prev => ({
-      ...prev,
-      [field]: value
-    }));
+  const validateMobileNumber = (mobile) => {
+    // Remove any non-digit characters
+    const cleaned = mobile.replace(/\D/g, '');
+    
+    // Check if it's exactly 10 digits
+    if (cleaned.length !== 10) {
+      return false;
+    }
+    
+    // Check if it starts with a valid digit (not 0 or 1)
+    if (cleaned[0] === '0' || cleaned[0] === '1') {
+      return false;
+    }
+    
+    return true;
+  };
+
+  const checkMobileExists = async (mobile) => {
+    if (!mobile || mobile.length !== 10) return false;
+    
+    try {
+      const userRef = ref(database, `users/${mobile}`);
+      const snapshot = await get(userRef);
+      return snapshot.exists();
+    } catch (error) {
+      console.error('Error checking mobile number:', error);
+      return false;
+    }
+  };
+
+  const handleMainInputChange = async (field, value) => {
+    if (field === 'mobileNumber') {
+      // Remove any non-digit characters
+      const cleaned = value.replace(/\D/g, '');
+      
+      // Limit to 10 digits
+      const limited = cleaned.slice(0, 10);
+      
+      setMainFormData(prev => ({
+        ...prev,
+        [field]: limited
+      }));
+
+      // Clear previous errors
+      setMobileError('');
+
+      // Validate if we have a complete number
+      if (limited.length === 10) {
+        if (!validateMobileNumber(limited)) {
+          setMobileError('Please enter a valid 10-digit mobile number');
+          return;
+        }
+
+        // Check for duplicates
+        setIsCheckingMobile(true);
+        try {
+          const exists = await checkMobileExists(limited);
+          if (exists) {
+            setMobileError('This mobile number is already registered. Please search the records instead.');
+          }
+        } catch (error) {
+          console.error('Error checking mobile:', error);
+        } finally {
+          setIsCheckingMobile(false);
+        }
+      } else if (limited.length > 0 && limited.length < 10) {
+        setMobileError('Mobile number must be 10 digits');
+      }
+    } else {
+      setMainFormData(prev => ({
+        ...prev,
+        [field]: value
+      }));
+    }
   };
 
   const addRelative = () => {
@@ -58,6 +131,28 @@ export const UserDataForm = ({ onSubmit }) => {
       console.log('Form already submitting, ignoring...');
       return;
     }
+
+    // Validate mobile number before submission
+    if (!validateMobileNumber(mainFormData.mobileNumber)) {
+      setMobileError('Please enter a valid 10-digit mobile number');
+      return;
+    }
+
+    // Check for duplicates one more time before submission
+    setIsCheckingMobile(true);
+    try {
+      const exists = await checkMobileExists(mainFormData.mobileNumber);
+      if (exists) {
+        setMobileError('This mobile number is already registered. Please search the records instead.');
+        setIsCheckingMobile(false);
+        return;
+      }
+    } catch (error) {
+      console.error('Error checking mobile:', error);
+      setIsCheckingMobile(false);
+      return;
+    }
+    setIsCheckingMobile(false);
 
     // Filter out incomplete relatives
     const completeRelatives = relatives.filter(rel => 
@@ -118,7 +213,7 @@ export const UserDataForm = ({ onSubmit }) => {
     );
   }
 
-  const isMainFormValid = mainFormData.fullName && mainFormData.dateOfBirth && mainFormData.timeOfBirth && mainFormData.placeOfBirth && mainFormData.mobileNumber;
+  const isMainFormValid = mainFormData.fullName && mainFormData.dateOfBirth && mainFormData.timeOfBirth && mainFormData.placeOfBirth && mainFormData.mobileNumber && !mobileError && validateMobileNumber(mainFormData.mobileNumber);
   const validRelativesCount = relatives.filter(rel => rel.fullName && rel.dateOfBirth && rel.timeOfBirth && rel.placeOfBirth && rel.relation).length;
 
   return (
@@ -207,11 +302,29 @@ export const UserDataForm = ({ onSubmit }) => {
                   type="tel"
                   value={mainFormData.mobileNumber}
                   onChange={(e) => handleMainInputChange('mobileNumber', e.target.value)}
-                  placeholder="+91 XXXXX XXXXX"
-                  className="border-gray-200 focus:border-amber-400 focus:ring-amber-400"
+                  placeholder="Enter 10-digit mobile number"
+                  className={`border-gray-200 focus:border-amber-400 focus:ring-amber-400 ${mobileError ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : ''}`}
+                  pattern="[0-9]*"
+                  inputMode="numeric"
+                  maxLength={10}
                   required
-                  disabled={isSubmitting}
+                  disabled={isSubmitting || isCheckingMobile}
                 />
+                {(mobileError || isCheckingMobile) && (
+                  <div className="flex items-center gap-2 text-sm">
+                    {isCheckingMobile ? (
+                      <>
+                        <div className="animate-spin h-4 w-4 border-2 border-amber-600 border-t-transparent rounded-full"></div>
+                        <span className="text-amber-600">Checking mobile number...</span>
+                      </>
+                    ) : (
+                      <>
+                        <AlertCircle size={16} className="text-red-500" />
+                        <span className="text-red-500">{mobileError}</span>
+                      </>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
           </div>
