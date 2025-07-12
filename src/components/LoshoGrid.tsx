@@ -352,6 +352,9 @@ export const LoshoGrid = ({ gridData, userData }) => {
           <span className={`text-sm font-bold ${analysis.result.includes('Good') ? 'text-green-600' : analysis.result.includes('Challenging') ? 'text-red-600' : 'text-yellow-600'}`}>
             {analysis.result} - <span className="text-gray-800 font-semibold font-medium text-sm">{analysis.outcome}</span>
           </span>
+        </div><div className="flex items-center gap-2">
+          <span className="text-gray-600 font-medium text-sm">Destiny Ratio:</span>
+          <span className="text-gray-800 font-semibold text-sm">{analysis.destinyRatio}</span>
         </div>
         <div className="flex items-center gap-2">
           <span className="text-gray-600 font-medium text-sm">Struggle End Age:</span>
