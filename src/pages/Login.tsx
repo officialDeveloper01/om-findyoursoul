@@ -5,7 +5,10 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { useAuth } from '@/hooks/useAuth';
+import { sendPasswordResetEmail } from 'firebase/auth';
+import { auth } from '@/config/firebase';
 import { Mail, Lock, Sparkles, Star } from 'lucide-react';
 
 const Login = () => {
@@ -13,6 +16,11 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [resetEmail, setResetEmail] = useState('');
+  const [resetLoading, setResetLoading] = useState(false);
+  const [resetError, setResetError] = useState('');
+  const [resetSuccess, setResetSuccess] = useState(false);
+  const [isResetModalOpen, setIsResetModalOpen] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
 
@@ -29,6 +37,40 @@ const Login = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handlePasswordReset = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setResetLoading(true);
+    setResetError('');
+    setResetSuccess(false);
+
+    try {
+      await sendPasswordResetEmail(auth, resetEmail);
+      setResetSuccess(true);
+      setResetEmail('');
+    } catch (error: any) {
+      let errorMessage = 'An error occurred. Please try again.';
+      
+      if (error.code === 'auth/user-not-found') {
+        errorMessage = 'No account found with this email address.';
+      } else if (error.code === 'auth/invalid-email') {
+        errorMessage = 'Please enter a valid email address.';
+      } else if (error.code === 'auth/too-many-requests') {
+        errorMessage = 'Too many requests. Please try again later.';
+      }
+      
+      setResetError(errorMessage);
+    } finally {
+      setResetLoading(false);
+    }
+  };
+
+  const handleResetModalClose = () => {
+    setIsResetModalOpen(false);
+    setResetEmail('');
+    setResetError('');
+    setResetSuccess(false);
   };
 
   return (
@@ -119,7 +161,72 @@ const Login = () => {
                 {loading ? 'Signing In...' : 'Enter Sacred Space'}
               </Button>
 
-              <div className="text-center">
+              <div className="text-center space-y-2">
+                <Dialog open={isResetModalOpen} onOpenChange={setIsResetModalOpen}>
+                  <DialogTrigger asChild>
+                    <button 
+                      type="button"
+                      className="text-amber-600 hover:text-amber-700 text-sm font-medium transition-colors"
+                    >
+                      Forgot Password?
+                    </button>
+                  </DialogTrigger>
+                  <DialogContent className="sacred-card max-w-md">
+                    <DialogHeader>
+                      <DialogTitle className="text-xl font-light text-slate-700 text-center">
+                        Reset Password
+                      </DialogTitle>
+                    </DialogHeader>
+                    <div className="mt-4">
+                      {resetSuccess ? (
+                        <div className="text-center space-y-4">
+                          <div className="text-green-600 text-sm p-3 bg-green-50 rounded-lg border border-green-200">
+                            A reset link has been sent to your email address. Please check your inbox.
+                          </div>
+                          <Button 
+                            onClick={handleResetModalClose}
+                            className="w-full sacred-button text-white"
+                          >
+                            Close
+                          </Button>
+                        </div>
+                      ) : (
+                        <form onSubmit={handlePasswordReset} className="space-y-4">
+                          {resetError && (
+                            <div className="text-red-600 text-sm text-center p-3 bg-red-50 rounded-lg border border-red-200">
+                              {resetError}
+                            </div>
+                          )}
+                          
+                          <div className="space-y-2">
+                            <Label htmlFor="resetEmail" className="flex items-center gap-2 text-slate-700">
+                              <Mail size={16} />
+                              Email Address
+                            </Label>
+                            <Input
+                              id="resetEmail"
+                              type="email"
+                              value={resetEmail}
+                              onChange={(e) => setResetEmail(e.target.value)}
+                              placeholder="Enter your email"
+                              className="border-amber-200 focus:border-amber-400 focus:ring-amber-400/20"
+                              required
+                            />
+                          </div>
+
+                          <Button 
+                            type="submit" 
+                            className="w-full sacred-button text-white"
+                            disabled={resetLoading}
+                          >
+                            {resetLoading ? 'Sending...' : 'Send Reset Link'}
+                          </Button>
+                        </form>
+                      )}
+                    </div>
+                  </DialogContent>
+                </Dialog>
+
                 <p className="text-slate-600">
                   New seeker?{' '}
                   <Link to="/signup" className="text-amber-600 hover:text-amber-700 font-medium transition-colors">
