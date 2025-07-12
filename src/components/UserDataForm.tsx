@@ -29,11 +29,6 @@ export const UserDataForm = ({ onSubmit }) => {
     // Remove any non-digit characters
     const cleaned = mobile.replace(/\D/g, '');
     
-    // Check if it's exactly 10 digits
-    if (cleaned.length !== 10) {
-      return false;
-    }
-    
     // Check if it starts with a valid digit (not 0 or 1)
     if (cleaned[0] === '0' || cleaned[0] === '1') {
       return false;
