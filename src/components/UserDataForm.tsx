@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -9,6 +10,7 @@ import { TimeInput } from './TimeInput';
 import { useAuth } from '@/hooks/useAuth';
 import { ref, get } from 'firebase/database';
 import { database } from '@/config/firebase';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 
 export const UserDataForm = ({ onSubmit }) => {
   const [mainFormData, setMainFormData] = useState({
@@ -23,6 +25,7 @@ export const UserDataForm = ({ onSubmit }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [mobileError, setMobileError] = useState('');
   const [isCheckingMobile, setIsCheckingMobile] = useState(false);
+  const [validationError, setValidationError] = useState('');
   const { user } = useAuth();
 
   const validateMobileNumber = (mobile) => {
@@ -50,7 +53,51 @@ export const UserDataForm = ({ onSubmit }) => {
     }
   };
 
+  const validateMainForm = () => {
+    const requiredFields = [
+      { field: 'fullName', label: 'Full Name' },
+      { field: 'dateOfBirth', label: 'Date of Birth' },
+      { field: 'timeOfBirth', label: 'Time of Birth' },
+      { field: 'placeOfBirth', label: 'Place of Birth' },
+      { field: 'mobileNumber', label: 'Mobile Number' }
+    ];
+
+    const missingFields = requiredFields.filter(({ field }) => !mainFormData[field] || mainFormData[field].trim() === '');
+    
+    if (missingFields.length > 0) {
+      return `Please fill in all required fields in the main form: ${missingFields.map(f => f.label).join(', ')}`;
+    }
+
+    if (mainFormData.mobileNumber && !validateMobileNumber(mainFormData.mobileNumber)) {
+      return 'Please enter a valid 10-digit mobile number';
+    }
+
+    return null;
+  };
+
+  const validateRelatives = () => {
+    if (relatives.length === 0) return null;
+
+    const requiredFields = ['fullName', 'relation', 'dateOfBirth', 'timeOfBirth', 'placeOfBirth'];
+    
+    for (let i = 0; i < relatives.length; i++) {
+      const relative = relatives[i];
+      const missingFields = requiredFields.filter(field => !relative[field] || relative[field].trim() === '');
+      
+      if (missingFields.length > 0) {
+        return `Please complete all fields in Family Member #${i + 1}: ${missingFields.join(', ')}`;
+      }
+    }
+
+    return null;
+  };
+
   const handleMainInputChange = async (field, value) => {
+    // Clear validation error when user starts typing
+    if (validationError) {
+      setValidationError('');
+    }
+
     if (field === 'mobileNumber') {
       // Remove any non-digit characters
       const cleaned = value.replace(/\D/g, '');
@@ -97,6 +144,13 @@ export const UserDataForm = ({ onSubmit }) => {
   };
 
   const addRelative = () => {
+    // Validate main form before allowing to add relatives
+    const mainFormError = validateMainForm();
+    if (mainFormError) {
+      setValidationError(mainFormError);
+      return;
+    }
+
     setRelatives(prev => [...prev, {
       fullName: '',
       dateOfBirth: '',
@@ -111,6 +165,11 @@ export const UserDataForm = ({ onSubmit }) => {
   };
 
   const updateRelative = (relativeData, index) => {
+    // Clear validation error when user updates relative data
+    if (validationError) {
+      setValidationError('');
+    }
+    
     setRelatives(prev => prev.map((rel, i) => i === index ? relativeData : rel));
   };
 
@@ -118,7 +177,7 @@ export const UserDataForm = ({ onSubmit }) => {
     e.preventDefault();
     
     if (!user) {
-      alert('Please sign in to save records.');
+      setValidationError('Please sign in to save records.');
       return;
     }
     
@@ -127,9 +186,22 @@ export const UserDataForm = ({ onSubmit }) => {
       return;
     }
 
-    // Validate mobile number before submission
-    if (!validateMobileNumber(mainFormData.mobileNumber)) {
-      setMobileError('Please enter a valid 10-digit mobile number');
+    // Comprehensive validation
+    const mainFormError = validateMainForm();
+    if (mainFormError) {
+      setValidationError(mainFormError);
+      return;
+    }
+
+    const relativesError = validateRelatives();
+    if (relativesError) {
+      setValidationError(relativesError);
+      return;
+    }
+
+    // Check for mobile number errors
+    if (mobileError) {
+      setValidationError(mobileError);
       return;
     }
 
@@ -140,6 +212,7 @@ export const UserDataForm = ({ onSubmit }) => {
       if (exists) {
         setMobileError('This mobile number is already registered. Please search the records instead.');
         setIsCheckingMobile(false);
+        setValidationError('This mobile number is already registered. Please search the records instead.');
         return;
       }
     } catch (error) {
@@ -149,7 +222,7 @@ export const UserDataForm = ({ onSubmit }) => {
     }
     setIsCheckingMobile(false);
 
-    // Filter out incomplete relatives
+    // Filter out incomplete relatives (this shouldn't happen now due to validation)
     const completeRelatives = relatives.filter(rel => 
       rel.fullName && 
       rel.dateOfBirth && 
@@ -163,11 +236,11 @@ export const UserDataForm = ({ onSubmit }) => {
       {
         ...mainFormData,
         relation: 'SELF',
-        createdBy: user.uid // Add user ID to each entry
+        createdBy: user.uid
       },
       ...completeRelatives.map(rel => ({
         ...rel,
-        createdBy: user.uid // Add user ID to each entry
+        createdBy: user.uid
       }))
     ];
 
@@ -175,15 +248,17 @@ export const UserDataForm = ({ onSubmit }) => {
     console.log('Complete relatives found:', completeRelatives.length);
     
     setIsSubmitting(true);
+    setValidationError('');
     
     try {
       await onSubmit({
         phoneNumber: mainFormData.mobileNumber,
         entries,
-        userId: user.uid // Include user ID in the submission
+        userId: user.uid
       });
     } catch (error) {
       console.error('Error submitting form:', error);
+      setValidationError('An error occurred while saving. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
@@ -213,6 +288,18 @@ export const UserDataForm = ({ onSubmit }) => {
 
   return (
     <div className="space-y-6">
+      {/* Validation Error Alert */}
+      {validationError && (
+        <div className="max-w-2xl mx-auto">
+          <Alert variant="destructive">
+            <AlertCircle className="h-4 w-4" />
+            <AlertDescription>
+              {validationError}
+            </AlertDescription>
+          </Alert>
+        </div>
+      )}
+
       {/* Main User Form */}
       <Card className="max-w-2xl mx-auto shadow-lg border-0 bg-white/80 backdrop-blur-sm">
         <CardHeader className="text-center pb-6">
@@ -229,7 +316,7 @@ export const UserDataForm = ({ onSubmit }) => {
               <div className="space-y-2">
                 <Label htmlFor="fullName" className="flex items-center gap-2 text-gray-700">
                   <User size={16} />
-                  Full Name
+                  Full Name <span className="text-red-500">*</span>
                 </Label>
                 <Input
                   id="fullName"
@@ -246,7 +333,7 @@ export const UserDataForm = ({ onSubmit }) => {
               <div className="space-y-2">
                 <Label htmlFor="dateOfBirth" className="flex items-center gap-2 text-gray-700">
                   <Calendar size={16} />
-                  Date of Birth (DD-MM-YYYY)
+                  Date of Birth (DD-MM-YYYY) <span className="text-red-500">*</span>
                 </Label>
                 <Input
                   id="dateOfBirth"
@@ -261,7 +348,7 @@ export const UserDataForm = ({ onSubmit }) => {
 
               <div className="space-y-2">
                 <Label htmlFor="timeOfBirth" className="flex items-center gap-2 text-gray-700">
-                  Time of Birth
+                  Time of Birth <span className="text-red-500">*</span>
                 </Label>
                 <TimeInput
                   value={mainFormData.timeOfBirth}
@@ -273,7 +360,7 @@ export const UserDataForm = ({ onSubmit }) => {
               <div className="space-y-2">
                 <Label htmlFor="placeOfBirth" className="flex items-center gap-2 text-gray-700">
                   <MapPin size={16} />
-                  Place of Birth
+                  Place of Birth <span className="text-red-500">*</span>
                 </Label>
                 <Input
                   id="placeOfBirth"
@@ -290,7 +377,7 @@ export const UserDataForm = ({ onSubmit }) => {
               <div className="space-y-2">
                 <Label htmlFor="mobileNumber" className="flex items-center gap-2 text-gray-700">
                   <Phone size={16} />
-                  Mobile Number
+                  Mobile Number <span className="text-red-500">*</span>
                 </Label>
                 <Input
                   id="mobileNumber"
