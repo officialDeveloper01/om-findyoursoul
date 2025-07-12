@@ -4,14 +4,14 @@ import { getAuth } from 'firebase/auth';
 import { getDatabase } from 'firebase/database';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDt0CTq2JvJPBSx0JzGLdCWbjYOCDidURg",
-  authDomain: "project-om-c0c6e.firebaseapp.com",
-  databaseURL: "https://project-om-c0c6e-default-rtdb.firebaseio.com/",
-  projectId: "project-om-c0c6e",
-  storageBucket: "project-om-c0c6e.firebasestorage.app",
-  messagingSenderId: "250167357713",
-  appId: "1:250167357713:web:dee22e46f08f9598b0dcb0",
-  measurementId: "G-HVZ590S9VH"
+  apiKey: "AIzaSyCOC-PpuFJKb2IQnrsaZP8njV02oXzodQ0",
+  authDomain: "om-findyoursoul.firebaseapp.com",
+  databaseURL: "https://om-findyoursoul-default-rtdb.firebaseio.com",
+  projectId: "om-findyoursoul",
+  storageBucket: "om-findyoursoul.firebasestorage.app",
+  messagingSenderId: "628824145805",
+  appId: "1:628824145805:web:a48f9b352101e64c3147c4",
+  measurementId: "G-CY7JSKFLGT"
 };
 
 let app;
