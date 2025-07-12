@@ -44,20 +44,57 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       }
     });
 
-    // Handle tab close - clear auth data
+    // Set flag before page unloads (reload, navigation, or close)
     const handleBeforeUnload = () => {
-      sessionStorage.removeItem('authUser');
-      if (user) {
-        signOut(auth).catch(console.error);
+      // Set a flag to indicate the page is being unloaded
+      sessionStorage.setItem('pageUnloading', 'true');
+    };
+
+    // Handle actual unload - check if it's a real tab close
+    const handleUnload = () => {
+      // Small delay to check if this is a reload or actual close
+      setTimeout(() => {
+        // If the flag is still there after a brief delay, it means the page wasn't reloaded
+        // and this is likely a tab close
+        const isUnloading = sessionStorage.getItem('pageUnloading');
+        if (isUnloading && user) {
+          sessionStorage.removeItem('authUser');
+          signOut(auth).catch(console.error);
+        }
+      }, 100);
+    };
+
+    // Clear the unloading flag when page loads/reloads
+    const handleLoad = () => {
+      sessionStorage.removeItem('pageUnloading');
+    };
+
+    // Handle visibility change (when tab becomes hidden)
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'hidden') {
+        // Page is being hidden, set flag
+        sessionStorage.setItem('pageUnloading', 'true');
+      } else {
+        // Page is visible again, clear flag (user came back)
+        sessionStorage.removeItem('pageUnloading');
       }
     };
 
-    // Handle browser/tab close
+    // Add event listeners
     window.addEventListener('beforeunload', handleBeforeUnload);
+    window.addEventListener('unload', handleUnload);
+    window.addEventListener('load', handleLoad);
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    // Clear flag on component mount (page load/reload)
+    sessionStorage.removeItem('pageUnloading');
 
     return () => {
       unsubscribe();
       window.removeEventListener('beforeunload', handleBeforeUnload);
+      window.removeEventListener('unload', handleUnload);
+      window.removeEventListener('load', handleLoad);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
   }, [user]);
 
